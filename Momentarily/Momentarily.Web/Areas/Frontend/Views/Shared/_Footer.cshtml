@@ -1,116 +1,0 @@
-﻿ <!--footer section-->
-<footer class="footer">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-3 col-sm-12 col-xs-12 full">
-                <div class="footerDesc">
-                    <h5>momentarily</h5>
-                    <p>A peer-to-peer marketplace for people and businesses to share their belongings for an affordable price, or borrow something for the moment.</p>
-                </div>
-            </div>
-            <div class="col-md-8 col-md-offset-1 col-sm-12 col-xs-12 ">
-                <div class="row">
-                    <div class="col-md-4 col-sm-4 col-xs-4 full">
-                        <div class="footerDesc">
-                            <h5>Company</h5>
-                            <ul>
-                                <li><a href="@Url.Action("Index", "Home")" id="btn_home" "><i class="fa fa-caret-right" aria-hidden="true"></i> Home</a></li>
-                                <li><a href="@Url.Action("AboutUs", "Home")"><i class="fa fa-caret-right" aria-hidden="true"></i> About Us</a></li>
-                                <li><a href="@Url.Action("FAQ", "Home")"><i class="fa fa-caret-right" aria-hidden="true"></i>  FAQ</a></li>
-                                <!--  <li><a href="#"><i class="fa fa-caret-right" aria-hidden="true"></i> Videos</a></li>
-                                   <li><a href="#"><i class="fa fa-caret-right" aria-hidden="true"></i> Blog</a></li>
-                                   <li><a href="/contactus"><i class="fa fa-caret-right" aria-hidden="true"></i> Help</a></li> -->
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-sm-4 col-xs-4 full">
-                        <div class="footerDesc">
-                            <h5>Quick Links</h5>
-                            <ul>
-                                <li><a href="@Url.Action("HowItWorks", "Home")"><i class="fa fa-caret-right" aria-hidden="true"></i> How it Works </a></li>
-                                <li><a href="@Url.Action("Create", "Listing")"><i class="fa fa-caret-right" aria-hidden="true"></i> Share </a></li>
-                                <li><a href="" id="becomeBorrower"><i class="fa fa-caret-right" aria-hidden="true"></i> Borrow </a></li>
-                                <li><a href="@Url.Action("ContactUs", "Home")"><i class="fa fa-caret-right" aria-hidden="true"></i>  Help</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-sm-4 col-xs-4 full">
-                        <div class="footerDesc">
-                            <h5>Contact Us</h5>
-                            <ul>
-                                <li><a href="mailto:hello@momentarily.com"><i class="fa fa-envelope" aria-hidden="true"></i> hello@momentarily.com</a></li>
-                            </ul>
-                            <ul class="socialLinks">
-                                <li><a href="https://www.instagram.com/momentarily/" target="_blank" title="Instagram"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
-                                <li><a href="https://www.facebook.com/momentarily" target="_blank" title="facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-                                <li>
-                                    <a href="https://twitter.com/momentarilycom" target="_blank" title="
-                                 Twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                                </li>
-                                <li><a href="https://www.youtube.com/momentarily" target="_blank" title="Youtube"><i class="fa fa-youtube-play" aria-hidden="true"></i></a></li>
-
-                                <li id="pintrest"><a href="https://www.pinterest.com/momentarilycom/" target="_blank" title="pinterest"><i class="fa fa-pinterest-p" aria-hidden="true"></i></a></li>
-
-
-
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</footer>
-<!---->
-<div class="copyright">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="copyrightDesc">
-                    <ul>
-                        <li><a href="/termsofuse">Terms &amp; Conditions</a></li>
-                        <li><a href="/privacypolicy" class="ppBtn"><img src="~/Content/TemplateImg/images/privacy-policy_icon.png" alt="image" /> Privacy Policy</a></li>
-
-
-                    </ul>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="copyrightDesc">
-                    <p>@DateTime.Now.Year <b>momentarily</b><sup id="trademark">TM</sup></p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<style>
-    .copyrightDesc ul li a.ppBtn {
-        opacity: 1 !important;
-        text-transform: uppercase;
-        font-size: 14px;
-        cursor: pointer;
-    }
-
-        .copyrightDesc ul li a.ppBtn img {
-            width: 14px;
-            margin-right: 2px;
-            position: relative;
-            top: -1px;
-        }
-
-</style>
-
-<script>
-        $(document).on('click', '#becomeBorrower', function () {                $.ajax({            url: "/Search/CheckVersion",            type: "Get",            success: function (data) {                if (data == "True" || data == "true") {                    $('#exampleModalBeta').modal('show');                }                else {                    window.location.href = '/Search/Map';                }            },            error: function () {                toastr.info("Error Occurred");            }        })    });
-</script>
-
-@*<script>
-    
-    //$(document).ready(function () {
-
-    //    $('#pintrest').click(function () {
-    //        window.open('https://www.pinterest.com/momentarilycom/', '_blank');
-    //    })
-    //})
-</script>*@
-

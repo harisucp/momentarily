@@ -1,9 +1,0 @@
-﻿@using Apeek.Common
-<ul>
-    <li class="@(Shape.PageName == PageName.UserEmail.ToString() ? "act" : null)">@Html.RouteLink(t("Email"), QuickUrl.RouteUserEmail() )</li>
-    <li class="@(Shape.PageName == PageName.UserPwd.ToString() ? "act" : null)">@Html.RouteLink(t("Пароль"), QuickUrl.RouteUserPwd() )</li>
-    @if (!IsProduction)
-    {
-        <li class="@(Shape.PageName == PageName.UserAccountAssociations.ToString() ? "act" : null)">@Html.RouteLink(t("Associations"), QuickUrl.RouteUserAccountAssociacions())</li>
-    }
-</ul>
