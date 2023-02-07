@@ -14,7 +14,7 @@ Momentarily.ViewModels.dll
 Sandy.Net/bin/
 Momentarily/Momentarily.ViewModels/bin/
 Momentarily/Momentarily.ViewModels/obj/
-
+Momentarily/Momentarily.Web/Momentarily.Web.csproj
 Sandy.Net/obj/
 Apeek.ViewModels.pdb
 Apeek.ViewModels.dll
@@ -75,8 +75,8 @@ Doodja/Doodja.Web.API/obj/Debug
 Doodja/Tests/Doodja.Test/bin
 Doodja/Doodja.Web/Content/Images/Good
 Doodja/Doodja.Web/Content/Images/User
-
-
+Doodja/Doodja.Web.API/Doodja.Web.API.csproj.user
+Doodja/Doodja.Web/Doodja.Web.csproj.user
 Apeek.v12.suo
 Vprostir/Vprostir.Web.API/bin/
 Vprostir/Vprostir.Web.API/obj/
@@ -111,12 +111,12 @@ Doodja/Blog/BlogEngine/BlogEngine.Core/bin/Debug
 Doodja/Blog/BlogEngine/BlogEngine.Core/obj/Debug
 Doodja/Blog/BlogEngine/BlogEngine.NET/bin
 Doodja/Blog/BlogEngine/BlogEngine.NET/obj/Debug
-
+Doodja/Blog/BlogEngine/BlogEngine.NET/BlogEngine.NET.csproj.user
 Doodja/Blog/BlogEngine/BlogEngine.Tests/obj/Debug
 Doodja/Blog/BlogEngine/BlogEngine.Tests/bin/Debug
 Doodja/PinPayments
 Doodja/Utils/EventManager/Doodja.Cron/bin/Debug
-
+Vprostir/Vprostir.Web/Vprostir.Web.csproj.user
 Vprostir/Vprostir.Web
 .vs/config/applicationhost.config
 .vs/Apeek/v14/.suo
@@ -161,7 +161,7 @@ Sandy.Net/bin
 Momentarily/Momentarily.ViewModels/bin
 Momentarily/Momentarily.ViewModels/obj
 
-
+Momentarily/Momentarily.Web/Momentarily.Web.csproj.user
 Momentarily/Momentarily.Web/Content/Images/Good
 Momentarily/Momentarily.Web/Content/Images/User
 Momentarily/BraintreePayments/bin/Debug
