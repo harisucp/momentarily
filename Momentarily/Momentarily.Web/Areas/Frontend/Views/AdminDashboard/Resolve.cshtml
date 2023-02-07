@@ -1,0 +1,188 @@
+﻿@model Momentarily.ViewModels.Models.ResolvedDisputeViewModel
+@{
+    Layout = "~/Areas/Frontend/Views/Shared/_AdminDashboardLayoutNew.cshtml";
+}
+<style>
+    .backcolor {
+        background: #ccc;
+    }
+</style>
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+@using (Html.BeginForm("Resolve", "AdminDashboard", FormMethod.Post, new { @id = "ResolveDispute" }))
+{
+    <div class="page-header non-printable">
+        <div class="row align-items-end">
+            <div class="col-lg-8">
+                <div class="page-header-title">
+                    <div class="d-inline">
+                        <h4>Resolve Dispute</h4>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="page-header-breadcrumb">
+                    <ul class="breadcrumb-title parentModulesInner">
+                        <li class="breadcrumb-item">
+                            <a href="/AdminDashboard/"> <i class="feather icon-home"></i> </a>
+                        </li>
+                        <li class="breadcrumb-item"><a href="">Resolve Dispute</a> </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="page-body">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-block">
+                        <div class="row non-printable">
+                            @Html.HiddenFor(x => x.RequestId)
+                            @Html.HiddenFor(x => x.DisputeId)
+
+                            <div class="col-md-4" style="pointer-events:none">
+                                <div class="form-group">
+                                    <label for="exampleInputOldPassword1">Total Paid Amount</label>
+                                    <div class="inputContainer">
+                                        @Html.TextBoxFor(x => x.TotalPaidAmount, new { @class = "backcolor form-control", autocomplete = "off" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4" style="pointer-events:none">
+                                <div class="form-group">
+                                    <label for="exampleInputOldPassword1">Amount Limit To Pay</label>
+                                    <div class="inputContainer">
+                                        @Html.TextBoxFor(x => x.AmountLimitToPay, new { @class = "backcolor form-control", autocomplete = "off" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4" style="pointer-events:none">
+                                <div class="form-group">
+                                    <label for="exampleInputOldPassword1">Momentarily Share</label>
+                                    <div class="inputContainer">
+                                        @Html.TextBoxFor(x => x.MomentarilyShare, new { @class = "backcolor form-control", autocomplete = "off" })
+                                    </div>
+                                </div>
+                            </div>
+
+                        
+
+                        </div>
+
+
+                        <div class="row non-printable">
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="exampleInputOldPassword1">Borrower Share</label>
+                                    <div class="inputContainer">
+                                        @Html.TextBoxFor(x => x.BorrowerShare, new { @class = "form-control", autocomplete = "off", @type = "number" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="exampleInputOldPassword1">Owner Share</label>
+                                    <div class="inputContainer">
+                                        @Html.TextBoxFor(x => x.OwnerShare, new { @class = "form-control", autocomplete = "off" ,  @type = "number"  })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="exampleInputOldPassword1">Final Rental Status</label>
+                                    <div class="inputContainer">
+                                        @Html.DropDownList("FinalRentalReason",
+                                          new SelectList(ViewBag.Reasons, "Value", "Text", Model.FinalRentalReason),
+                                          "Select Reason",
+                                          new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label for="exampleInputOldPassword1">Description</label>
+                                    <div class="inputContainer">
+                                        @Html.TextAreaFor(x => x.Description, new { @class = "form-control", autocomplete = "off" })
+                                    </div>
+                                </div>
+
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <div class="inputContainer text-right">
+                                        <button type="button" id="submitpayment" style="background-color:#cf2d1e; border-color: #fff;" class="btn btn-primary">Submit and Pay</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+
+    $(document).ready(function () {
+        $('#submitpayment').click(function () {
+            debugger
+            var borrowerShare = document.getElementById('BorrowerShare').value;
+            var OwnerShare = document.getElementById('OwnerShare').value;
+            var FinalRentalReason = document.getElementById('FinalRentalReason').value;
+            var description = document.getElementById('Description').value;
+            var Limit = document.getElementById('AmountLimitToPay').value;
+            if (borrowerShare == "")
+            {
+                borrowerShare = "0"
+            }
+            if (OwnerShare == "") {
+                OwnerShare = "0"
+            }
+
+            if ((+borrowerShare + +OwnerShare) > Limit) {
+                alert("The sum of Borrower Share and Owner Share cannot be greater than the Amount Limit To Pay ");
+                return;
+            }
+            if (borrowerShare <= 0 && OwnerShare <= 0)
+            {
+                alert("No amount entered for sharer and borrower! Rental will close without any payment");
+            }
+
+            if (FinalRentalReason == "" || FinalRentalReason == null)
+            {
+                alert("Please Select Final Rental Status!");
+                return;
+            }
+
+            if (description == "" || description == null)
+            {
+                alert("Description Required!");
+                return;
+            }
+
+            var confirmPayment = confirm("Are you sure?")
+
+            if (confirmPayment) {
+                $('#ResolveDispute').submit();
+            }
+            else {
+                return;
+            }
+
+        })
+    });
+</script>

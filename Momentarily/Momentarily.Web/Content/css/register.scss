@@ -1,0 +1,102 @@
+﻿input[type=password]::-ms-clear {    color: red;}
+
+#hr {
+    background-color: #bdc0c2;
+    height: 1px;
+    margin: 30px 0 29px;
+    display: block;
+}
+.sign-in-page {
+    background: #fefefe;
+    padding-bottom: 1px;
+
+    .title-block {
+        margin-bottom: 18px;
+        height: 100%;
+
+        h1 {
+            line-height: 32px;
+            font-size: 22px;
+            font-weight: normal;
+            font-style: normal;
+            font-stretch: normal;
+            color: #575f62;
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 18px;
+        }
+    }
+
+   
+
+
+
+    .btn {
+        line-height: 16px;
+        border-radius: 2px;
+
+        .btn-red {
+            background-color: #cf2d1e;
+            border-color: #cf2d1e;
+        }
+    }
+
+    .btn.btn-blue {
+        background-color: #3C5A99;
+        border-color: #3b579d;
+    }
+
+    .btn-blue {
+        color: #fff;
+    }
+
+    .btn-blue:hover {
+        color: #fff;
+    }
+
+    .link-red {
+        color: #cf2d1e;
+    }
+
+    .input-information {
+        font-size: 13px;
+        font-weight: normal;
+        font-style: normal;
+        font-stretch: normal;
+        text-align: center;
+        color: #9b9b9b;
+        width: calc(100% - 30px);
+        padding: 0 15px;
+        display: inline-block;
+    }
+
+    p {
+        font-size: 14px;
+        font-weight: normal;
+        font-style: normal;
+        font-stretch: normal;
+        color: #4a4a4a;
+
+        &.message {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+    }
+}
+.inputContainer {
+    position: relative;
+}
+
+/*.pswd {
+    padding-left: 25px; 
+}*/
+
+.btnShowHide {
+    color: #9b9b9b;
+    text-decoration: none !important;
+    cursor: pointer;
+    right: 5px;
+    position: absolute;
+    top: 5px;
+    z-index: 5;
+}

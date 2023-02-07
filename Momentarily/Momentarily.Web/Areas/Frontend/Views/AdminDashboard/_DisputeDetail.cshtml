@@ -1,0 +1,72 @@
+﻿@model Momentarily.ViewModels.Models.DisputeViewModel
+<style>
+    #tdDisputeDetail, th, td {
+        border: 1px solid black;
+    }
+</style>
+<table  class="table table-bordered table-striped" id="tdDisputeDetail">
+
+    <tr class="col-md-12">
+        <td>Request Id</td>
+        <td>@Html.DisplayFor(model => model.RequestId)</td>
+    </tr>
+    <tr>
+        <td>Dispute Created By</td>
+        <td>@Html.DisplayFor(model => model.DisputeCreatedByName)</td>
+    </tr>
+    <tr>
+        <td>Last Status</td>
+        <td>@Html.DisplayFor(model => model.LastStatusName)</td>
+    </tr>
+    <tr>
+        <td>Reason</td>
+        <td>@Html.DisplayFor(model => model.ReasonName)</td>
+    </tr>
+
+    <tr>
+        <td>Dispute Create Date</td>
+        <td>@Model.DisputeCreatedDate.ToString("MM-dd-yyyy") </td>
+    </tr>
+    <tr>
+        <td>Borrower Name</td>
+        <td>@Html.DisplayFor(model => model.BorrowerName)</td>
+    </tr>
+    <tr>
+        <td>Owner Name</td>
+        <td>@Html.DisplayFor(model => model.OwnerName)</td>
+    </tr>
+    <tr>
+        <td>Rental Amount</td>
+        <td>@Html.DisplayFor(model => model.CustomerCost)</td>
+    </tr>
+ 
+    <tr>
+        <td>Dilivery Cost</td>
+        <td>@Html.DisplayFor(model => model.DiliveryCost)</td>
+    </tr>
+    <tr>
+        <td>Shipping Distance</td>
+        <td>@Html.DisplayFor(model => model.ShippingDistance)</td>
+    </tr>
+    <tr>
+        <td>SecurityDeposit</td>
+        <td>@Html.DisplayFor(model => model.SecurityDeposit)</td>
+    </tr>
+    <tr>
+        <td>DiscountAmount</td>
+        <td>@Html.DisplayFor(model => model.DiscountAmount)</td>
+    </tr>
+
+    <tr>
+        <td>Rental Start</td>
+        <td> @Model.RentalStartDate.ToString("MM-dd-yyyy") @Model.RentalStartTime</td>
+    </tr>
+    <tr>
+        <td>Rental End </td>
+        <td> @Model.RentalStartDate.ToString("MM-dd-yyyy") @Model.RentalEndTime</td>
+    </tr>
+    <tr>
+        <td>Description</td>
+        <td>@Html.DisplayFor(model => model.Description)</td>
+    </tr>
+</table>

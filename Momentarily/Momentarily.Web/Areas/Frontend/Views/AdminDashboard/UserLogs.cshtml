@@ -1,0 +1,216 @@
+﻿@model  IEnumerable<Momentarily.ViewModels.Models.LogEntryViewModel>
+
+@{
+    Layout = "~/Areas/Frontend/Views/Shared/_AdminDashboardLayoutNew.cshtml";
+}
+
+
+
+<div class="page-header non-printable">
+    <div class="row align-items-end">
+        <div class="col-lg-8">
+            <div class="page-header-title">
+                <div class="d-inline">
+                    <h4>User Logs</h4>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="page-header-breadcrumb">
+                <ul class="breadcrumb-title parentModulesInner">
+                    <li class="breadcrumb-item">
+                        <a href="/AdminDashboard/"> <i class="feather icon-home"></i> </a>
+                    </li>
+                    <li class="breadcrumb-item"><a href="">User Logs</a> </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="page-body">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-block">
+                    @foreach (var item in Model)
+                    {
+                        <div class="userLogBtn">
+
+                            <button type="button" id="btnExportToCsv" onclick="ExportLogs(@item.UserId)" style="background-color:#cf2d1e; border-color: #fff; float:right!important;" class="btn btn-primary">EXPORT TO CSV</button>
+                            <button type="button" id="ClearLogs" onclick="location.href='@Url.Action("ClearLogs", "AdminDashboard", new { id =item.UserId })'" style="background-color:#cf2d1e; border-color: #fff; float:right!important;" class="btn btn-primary">Clear All Logs</button>
+
+                        </div>
+                        break;
+                    }
+                        <hr>
+
+                        <div id="iduserCoupons">
+                            <div class="card-block">
+                                <div class="row">
+                                    <div class="table-responsive">
+                                        <table id="userlogstable" class="table table-bordered table-striped itemscoupons">
+                                            <thead>
+                                                <tr>
+                                                    <th>Log Id</th>
+                                                    <th>Create Date</th>
+                                                    <th>Source Name</th>
+                                                    <th>Severity</th>
+                                                    <th>Session Id</th>
+                                                    <th>IP Address</th>
+                                                    <th>Message</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                @foreach (var item in Model)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @item.Id
+                                                        </td>
+                                                        <td>
+                                                            @item.CreateDate.ToString("MM-dd-yyyy")
+                                                        </td>
+                                                        <td>
+                                                            @item.SourceName
+                                                        </td>
+                                                        <td>
+                                                            @item.Severity
+                                                        </td>
+                                                        <td>
+                                                            @item.SessionId
+                                                        </td>
+                                                        <td>
+                                                            @item.IpAddress
+                                                        </td>
+
+                                                        <td>
+                                                            <a href="#" id="logmsg" title="Show Message" onclick="showmessage(this);"><b> @item.Message</b> </a>
+                                                        </td>
+
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div id="divLoading">
+    <p>
+        Loading. Please wait...<br />
+        <span>
+            <img src="~/Content/Images/circleloadinganimationOrignal.gif" alt="image" />
+        </span>
+    </p>
+
+</div>
+
+
+
+
+<link href="~/plugins/datatables-bs4/css/dataTables.bootstrap4.css" rel="stylesheet" />
+@*<script src="//code.jquery.com/jquery-1.10.2.js"></script>*@
+<script src="~/plugins/jquery/jquery.js"></script>
+<style>
+    #divLoading {
+        margin: 0px;
+        padding: 0px;
+        position: fixed;
+        right: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        background-color: #666666;
+        z-index: 30001;
+        opacity: .8;
+        filter: alpha(opacity=70);
+        display: none
+    }
+
+        #divLoading p {
+            position: fixed;
+            top: 30%;
+            left: 45%;
+            color: White;
+        }
+
+        #divLoading span > img {
+            padding-left: 44px;
+        }
+
+
+    #logmsg:focus {
+        color: #fc0000;
+    }
+    #logmsg:hover {
+        color: #fc0000;
+    }
+    .userLogBtn {
+        display: flex;
+        justify-content: flex-end;
+    }
+    @@media(max-width:575px){
+        .userLogBtn {
+            display: flex;
+            justify-content: flex-start;
+            flex-direction: row;
+        }
+        .userLogBtn button {
+            font-size: 13px ;
+            padding: 10px 14px ;
+        }
+    }
+</style>
+<script>
+
+    $(document).ready(function () {
+        $('#userlogstable').DataTable({
+
+        });
+
+      
+    });
+
+    function showmessage(data) {
+        debugger;
+        alert(data.innerText);
+    }
+
+   function ExportLogs(id) {
+       $('#divLoading').show();
+            $.ajax({
+                cache: false,
+                type: 'POST',
+                url: '@Url.Action("ExportLogs", "AdminDashboard")',
+                data: {userId: id },
+                success: function (data) {
+                    window.location = '/AdminDashboard/Download?fileGuid=' + data.FileGuid
+                        + '&filename=' + data.FileName;
+                    $('#divLoading').hide();
+                    toastr.success('Successfully downloaded .xlsx file.')
+                },
+                error: function (data) {
+                    $('#divLoading').hide();
+                    toastr.error('Something went wrong !')
+                }
+            });
+        }
+
+</script>
+
+
+
+

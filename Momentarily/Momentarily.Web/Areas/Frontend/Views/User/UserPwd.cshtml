@@ -1,0 +1,53 @@
+﻿@model Apeek.Common.IShape<Apeek.ViewModels.Models.UserPwdModel>
+
+@{
+    Layout = "~/Areas/Frontend/Views/Shared/_AccountMenuLayout.cshtml";
+}
+
+<div class="content">
+    <div class="container account">
+        <div class="row">
+            <div class="col-md-9 col-md-offset-3">
+                <div class="profile-page">
+                    <div class="account-sub-menu separated-block">
+                        <div class="account-sub-menu-items col-md-3"><a href="@QuickUrl.UserProfileUrl()">My profile</a></div>
+                        <div class="account-sub-menu-items col-md-3"><a href="@QuickUrl.UserEmailUrl()">Change email</a></div>
+                        <div class="account-sub-menu-items active col-md-3"><a href="@QuickUrl.UserPwdUrl()">Change password</a></div>
+                        <div class="account-sub-menu-items col-md-3"><a href="@Url.Action("BankInfo","User")">Payment Details</a></div>
+                    </div>
+                    @using (Html.BeginForm())
+                    {
+                        <div class="title-block separated-block">
+                            <h1 class="left-align">
+                                Password
+                            </h1>
+                        </div>
+                        @Html.Partial("_Errors", Model)
+                        <div class="form-block col-md-5">
+                            <div class="form-group">
+                                <label>New password</label>
+                                <label class="right-align">Minimum 6 Characters</label>
+                                <div class="inputContainer">
+                                    @Html.PasswordFor(m => m.ViewModel.NewPassword, new { @class = "form-control account-input" })
+                                    <a class="btnShowHide" id="btnShowHide1" onclick="showHideFunctionalityInReset1()">SHOW</a>
+                                    @Html.ValidationMessageFor(m => m.ViewModel.NewPassword, null, new { @class = "error-labels" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Confirm new password</label>
+                                <div class="inputContainer">
+                                    @Html.PasswordFor(m => m.ViewModel.ConfirmPassword, new { @class = "form-control account-input" })
+                                    <a class="btnShowHide" id="btnShowHide2" onclick="showHideFunctionalityInReset2()">SHOW</a>
+                                    @Html.ValidationMessageFor(m => m.ViewModel.ConfirmPassword, null, new { @class = "error-labels" })
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-green">Save new password</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        </div>
+</div>
+
+@Scripts.Render("~/Scripts/Account")

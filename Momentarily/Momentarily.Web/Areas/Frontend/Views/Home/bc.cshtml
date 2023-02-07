@@ -1,0 +1,23 @@
+﻿@{
+    Layout = "~/Areas/Frontend/Views/Shared/_NoLayout.cshtml";
+
+}
+
+<p class="redirect">Redirecting to momentarily<br />Please Wait...</p>
+
+<style>
+    .redirect {
+        font-weight: 900;
+        margin: 50px;
+        text-align-last: center;
+        font-size: 25px;
+        color: #49525c;
+    }
+</style>
+@Scripts.Render("~/Scripts/Libs/jquery")
+<script>
+    $(document).ready(function(){
+    window.location.href="@HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority)";
+
+    });
+</script>

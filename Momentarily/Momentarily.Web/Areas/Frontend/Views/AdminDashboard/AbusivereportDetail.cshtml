@@ -1,0 +1,130 @@
+﻿@*@model IEnumerable<Momentarily.ViewModels.Models.ReportAbuseModel>*@
+@model Momentarily.ViewModels.Models.ReportAbuseVM
+@{
+
+
+    Layout = "~/Areas/Frontend/Views/Shared/_AdminDashboardLayoutNew.cshtml";
+}
+
+
+<div class="page-header">
+    <div class="row align-items-end">
+        <div class="col-lg-8">
+            <div class="page-header-title">
+                <div class="d-inline">
+                    <h4>Reported Items Detail</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="page-header-breadcrumb">
+                <ul class="breadcrumb-title parentModulesInner">
+                    <li class="breadcrumb-item">
+                        <a href="/AdminDashboard"> <i class="feather icon-home"></i> </a>
+                    </li>
+                   
+                    <li class="breadcrumb-item"><a href="/AdminDashboard/AbusiveReports">Back To Abusive Item List</a> </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="page-body">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+
+                <div class="card-block">
+                    <div class="row">
+                        <div class="table-responsive">
+                            <table id="tb_abusivereportDetail" class="table table-hover table-borderless">
+                                <thead>
+                                    <tr>
+                                        <th>Product Name</th>
+                                        <th>UserName</th>
+                                        <th>Last Reported</th>
+                                        <th>Count</th>
+                                        <th>Status</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @for (int i = 0; i < Model.reportAbuseDetalList.Count; i++)
+                                    {
+                                        <tr id="@("row"+ Model.reportAbuseDetalList[i].Id)">
+                                            <td>
+                                                @Html.ActionLink(Model.reportAbuseDetalList[i].ItemName, "Item", "Search", new { id = Model.reportAbuseDetalList[i].GoodId }, new { title = Model.reportAbuseDetalList[i].ItemName, target = "_blank" })
+                                                @*@Html.HiddenFor(x => Model.reportAbuseDetalList[i].GoodId)*@
+                                            </td>
+                                            <td>
+                                                @Html.ActionLink(Model.reportAbuseDetalList[i].UserName, "UserPublicProfile", "User", new { id = Model.reportAbuseDetalList[i].UserId }, new { title = Model.reportAbuseDetalList[i].UserName, target = "_blank" })
+                                                @*@Html.HiddenFor(x => Model.reportAbuseDetalList[i].UserId)*@
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(x => Model.reportAbuseDetalList[i].ModDate)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(x => Model.reportAbuseDetalList[i].count)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(x => Model.reportAbuseDetalList[i].GlobalCodeName)
+                                            </td>
+
+                                        </tr>
+                                    }
+
+                                    @*@foreach (var item in Model)
+                                        {
+
+                                            <tr id="@("row"+item.Id)">
+                                                <td>
+                                                    @Html.ActionLink(item.ItemName, "Item", "Search", new { id = item.GoodId }, new { title = item.ItemName, target = "_blank" })
+                                                    @Html.HiddenFor(x => item.GoodId)
+                                                </td>
+                                                <td>
+                                                    @Html.ActionLink(item.UserName, "UserPublicProfile", "User", new { id = item.UserId }, new { title = item.UserName, target = "_blank" })
+                                                    @Html.HiddenFor(x => item.UserId)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(x => item.ModDate)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(x => item.count)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(x => item.GlobalCodeName)
+                                                </td>
+
+                                            </tr>
+                                        }*@
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<link href="~/plugins/datatables-bs4/css/dataTables.bootstrap4.css" rel="stylesheet" />
+<script src="~/plugins/jquery/jquery.js"></script>
+<script src="~/plugins/datatables/jquery.dataTables.js"></script>
+<script src="~/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+
+<link href="~/Content/ToastMessage/toastr.css" rel="stylesheet" />
+<script src="~/Content/ToastMessage/toastr.min.js"></script>
+<script>
+
+    var table;
+    $(document).ready(function () {
+        table = $('#tb_abusivereportDetail').DataTable({
+            "order": [[2, "asc"]]
+        });
+    });
+
+
+</script>

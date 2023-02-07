@@ -1,0 +1,90 @@
+﻿@model IEnumerable<Momentarily.ViewModels.Models.StockMasterDetailVM>
+@{
+    Layout = "~/Areas/Frontend/Views/Shared/_AdminDashboardLayoutNew.cshtml";
+}
+
+
+    <div class="page-header non-printable">
+        <div class="row align-items-end">
+            <div class="col-lg-8">
+                <div class="page-header-title">
+                    <div class="d-inline">
+                        <h4>Stock Master</h4>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="page-header-breadcrumb">
+                    <ul class="breadcrumb-title">
+                        <li class="breadcrumb-item">
+                            <a href="/AdminDashboard/"> <i class="feather icon-home"></i> </a>
+                        </li>
+                        <li class="breadcrumb-item"><a href="#!">Stock Master</a> </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-body">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                        <div class="card-block">
+                            <div class="row">
+                                <div class="table-responsive">
+                                    <table id="stockmaster" class="table table-bordered table-striped itemstable">
+                                        <thead>
+                                            <tr>
+                                                <th>Good Name</th>
+                                                <th>Total Added</th>
+                                                <th>Ordered</th>
+                                                <th>Quantity Left</th>
+                                                <th>Updated On</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                           @foreach (var item in Model)
+                                           {
+                                            <tr>
+                                                <td>@item.CovidGoodName</td>
+                                                <td>@item.Total</td>
+                                                <td>@item.Ordered</td>
+                                                <td>@item.QuantityLeft</td>
+                                                <td>@item.ModDate.ToString("MM-dd-yyyy")</td>
+                                            </tr>
+                                           }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+
+
+
+
+<link href="~/plugins/datatables-bs4/css/dataTables.bootstrap4.css" rel="stylesheet" />
+<script src="~/plugins/jquery/jquery.js"></script>
+<script src="~/plugins/datatables/jquery.dataTables.js"></script>
+<script src="~/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#stockmaster').DataTable({
+            //"paging": true,
+            //"lengthChange": false,
+            //"searching": false,
+            //"ordering": true,
+            //"info": true,
+            //"autoWidth": false,
+            "order": [0, "desc"]
+        });
+      
+    });
+</script>

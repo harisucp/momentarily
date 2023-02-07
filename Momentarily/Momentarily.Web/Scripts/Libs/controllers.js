@@ -1,0 +1,4 @@
+angular.module('MomentarilyApp').controller('HomeController',HomeController);HomeController.$inject=['Categories','$location','$anchorScroll'];function HomeController(Categories,$location,$anchorScroll){var vm=this;vm.format='MM/DD/YYYY';vm.viewFormat='MM/DD/YYYY';vm.currentDate=moment().format(vm.format);vm.submitForm=submitForm;vm.scrolltoContent=scrolltoContent;vm.videos=Array.from(document.getElementsByClassName("video"));vm.textslides=Array.from(document.getElementsByClassName("text_slide"));vm.selectCategory=selectCategory;setValues();function setValues(){vm.availableItemTypes=Categories;vm.location={Name:"",Location:{}};}
+function submitForm($event,form){console.log("2");if(form.$invalid){$event.preventDefault();form.$submitted=true;}else{console.log(form);}}
+function scrolltoContent(){$location.hash('block-with-icons');$anchorScroll();}
+function selectCategory(categoryId){vm.itemTypeSelected=categoryId;}}

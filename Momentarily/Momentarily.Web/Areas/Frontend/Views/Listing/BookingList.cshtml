@@ -1,0 +1,58 @@
+﻿@model Apeek.Common.IShape<Apeek.ViewModels.Models.BookingListViewModel>
+
+@{
+    ViewBag.Title = "My Bookings";
+    Layout = "~/Areas/Frontend/Views/Shared/_AccountMenuLayout.cshtml";
+}
+
+<div class="content" ng-controller="BookingListController as list" ng-cloak>
+    <div class="container account booking listing">
+        <div class="row">
+            <div class="col-md-9 col-md-offset-3">
+                <div class="listing-container">
+                    <div class="title-block separated-block">
+                        <h1 class="left-align back">
+                            <span class="back-button">
+                                <a href="/Listing">
+                                    <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                                </a>
+                            </span>
+                            {{list.itemName}}
+                        </h1>
+                    </div>
+                    <div class="list-empty" ng-show="list.isEmpty()">You have no bookings listed!</div>
+                    <div class="list" ng-hide="list.isEmpty()">
+                        <div ng-repeat="request in list.requests" class="item">
+                            <div class="right-col">
+                                <div class="status" ng-class="request.StatusName | lowercase">
+                                    {{request.StatusName}}
+                                </div>
+                                <a href="/Listing/Booking/{{request.Id}}" class="btn btn-transparent">
+                                    View Details
+                                </a>
+                            </div>
+                            <div class="left-col">
+                                <div class="left-align">
+                                    <div class="name">#{{request.Id}}</div>
+                                </div>
+                                <div class="right-align">
+                                    <span class="dates">{{list.convertToDate(request.StartDate) | date: 'MM/dd/yyyy'}} - {{list.convertToDate(request.EndDate) | date: 'MM/dd/yyyy'}}</span>
+                                    <span class="price">${{request.SharerCost}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+</div>
+
+@Scripts.Render("~/Scripts/Listing")
+
+<script>
+    var angularConstants = {};
+    angularConstants = {
+        BookingList: JSON.parse('@Html.Raw(HttpUtility.JavaScriptStringEncode(Json.Encode(Model)))')
+    };
+</script>

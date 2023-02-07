@@ -1,0 +1,95 @@
+﻿@model IEnumerable<Apeek.ViewModels.Models.GoodRequestViewModel>
+@{
+    ViewBag.Title = "RentedItems";
+    Layout = "~/Areas/Frontend/Views/Shared/_AccountMenuLayout.cshtml";
+}
+
+<div class="content contentFooterOver">
+    <div class="account booking">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9 col-md-offset-3">
+                    <div class="background-container">
+                        <div class="title-block separated-block">
+                            <h1 class="left-align">Shared Items</h1>
+                        </div>
+                        @if (Model == null || Model.Count() == 0)
+                        {
+                            <div class="list-empty" ng-hide="booking.showBookingsList()">
+                                You have no items booked!
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="list sharedItemList">
+                                @foreach (var item in Model)
+                                {
+
+                                <div class="item clearfix">
+                                    <div class="right-col">
+                                        @if (item.StatusName == "Unknown" || item.StatusName == "Declined"  || item.StatusName == "Dispute" || item.StatusName == "Late"
+                                     || item.StatusName == "Damaged" || item.StatusName == "LateAndDamaged" || item.StatusName == "Canceled"
+                                     )
+                                        {
+                                            <div class="status" style="background-color: #cf2d1e !important;">
+                                                @item.StatusName
+                                            </div>
+                                        }
+                                        else if (item.StatusName == "CanceledByBorrower" || item.StatusName == "CanceledBySharer" || item.StatusName == "CanceledBySharerBeforePayment"
+                                     || item.StatusName == "CanceledByBorrowerBeforePayment")
+                                        {
+                                            <div class="status" style="background-color: #cf2d1e !important;">
+                                               Cancelled
+                                            </div>
+                                        }
+
+                                        else if (item.StatusName == "NotResponded")
+                                        {
+                                            <div class="status" style="background-color: #cf2d1e !important;">
+                                                Not Responded
+                                            </div>
+                                        }
+                                        else if (item.StatusName == "ReturnConfirmed")
+                                        {
+                                            <div class="status" style="background-color: #cf2d1e !important;">
+                                                Return Confirmed
+                                            </div>
+                                        }
+                                        else
+                                        {
+
+                                            <div class="status" style="background-color: #507943 !important;">
+                                                @item.StatusName
+                                            </div>
+                                        }
+                                        <a href="/Listing/Booking/@item.Id" class="btn btn-transparent">
+                                            View Details
+                                        </a>
+                                    </div>
+
+                                    <div class="left-col">
+                                        <div class="left-align">
+                                            <div class="userThumbImage"><img src="/Content/Images/Good/@item.GoodImageUrl" alt="image" class="img-responsive"></div>
+                                            <div class="name">@item.GoodName</div>
+                                            <div class="id">#@item.Id</div>
+                                        @*</div>
+                                        <div class="right-align">*@
+                                            <span class="dates">@item.StartDate.ToString("dd/MM/yyyy") - @item.EndDate.ToString("dd/MM/yyyy")</span>
+
+                                            @*<span class="price" style="visibility:hidden"></span>*@
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

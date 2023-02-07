@@ -1,0 +1,160 @@
+﻿@model Apeek.Common.IShape<IEnumerable<Apeek.ViewModels.Models.UserMessageViewModel>>
+@{
+    ViewBag.Title = "My Messages";
+    Layout = "~/Areas/Frontend/Views/Shared/_AdminDashboardLayoutNew.cshtml";
+}
+
+@Styles.Render("~/bundles/cssAccount")
+@Styles.Render("~/Content/css/messages")
+
+<style>
+    .message {
+        margin-bottom: 20px;
+        border: 1px solid #eee;
+        padding: 15px;
+        border-radius: 4px;
+        box-shadow: 0 1px 1px rgba(0,0,0,0.2);
+        display: flex;
+    }
+
+    .user-name-msg {
+        font-weight: bold;
+        font-size: 16px;
+    }
+
+    .thumbImage {
+        display: inline-block !important;
+        vertical-align: top;
+        margin: 0 9px 0 0;
+    }
+
+    .userpic {
+        height: 45px !important;
+        width: 45px !important;
+    }
+</style>
+
+
+<div class="page-header non-printable">
+    <div class="container">
+        <div class="row align-items-end">
+            <div class="col-lg-8">
+                <div class="page-header-title">
+                    <div class="d-inline">
+                        <h4>All Messages</h4>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="page-header-breadcrumb">
+                    <ul class="breadcrumb-title parentModulesInner">
+                        <li class="breadcrumb-item">
+                            <a href="/AdminDashboard/"> <i class="feather icon-home"></i> </a>
+                        </li>
+                        <li class="breadcrumb-item"><a href="">All Messages</a> </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="page-body">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-block">
+                        <div class="row">
+                            @if (Model.ViewModel.Count() <= 0)
+                            {
+                                <div class="list-empty">You have no message</div>
+                            }
+                            else
+                            {
+                                foreach (var item in Model.ViewModel)
+                                {
+
+                                    <div class="col-sm-6">
+                                        <div class="list">
+                                            <a href="/AdminDashboard/AdminConversation?userId=@item.AuthorId">
+                                                @if (item.IsRead)
+                                                {
+                                                    <div class=" message">
+                                                        <div class="thumbImage"> <img src="@item.AuthorProfilePictureUrl" class="userpic" alt="image" /></div>
+                                                        <div class="main-info">
+
+                                                            <div class="user-name-msg">@item.AuthorUserName</div>
+                                                            @if (item.IsSystem)
+                                                            {
+                                                                <div id="@item.Id" class="html">@item.Message</div>
+                                                            }
+                                                            @if (!item.IsSystem)
+                                                            {
+                                                                <div id="@item.Id" class="last-message html">@item.Message</div>
+                                                            }
+                                                            <div class="date"><b>@item.DateCreated.ToString("MM-dd-yyyy")</b></div>
+
+
+                                                        </div>
+
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class=" message new">
+                                                        <div class="thumbImage"> <img src="@item.AuthorProfilePictureUrl" class="userpic" alt="image" /></div>
+                                                        <div class="main-info">
+                                                            <div class="user-name-msg">@item.AuthorUserName</div>
+                                                            @if (item.IsSystem)
+                                                            {
+                                                                <div id="@item.Id" class="html">@item.Message</div>
+                                                            }
+                                                            @if (!item.IsSystem)
+                                                            {
+                                                                <div id="@item.Id" class="last-message html">@item.Message</div>
+                                                            }
+                                                            <div class="date"><b>@item.DateCreated.ToString("MM-dd-yyyy")</b></div>
+                                                        </div>
+
+                                                    </div>
+                                                }
+
+                                            </a>
+
+                                        </div>
+                                    </div>
+                                }
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*<script src="//code.jquery.com/jquery-1.10.2.js"></script>*@
+<script src="~/plugins/jquery/jquery.js"></script>
+<script src="~/Content/TemplateImg/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+        debugger
+        var html = document.getElementsByClassName('html');
+
+
+        for (var i = 0; i < html.length; i++) {
+            var mystring = new String(html[i].innerText);
+            mystring.replace(/(^")|("$)/g, '')
+            //mystring = mystring.substring(1, mystring.length - 1);
+            mystring.replace('View Booking Request', '')
+            document.getElementById(html[i].id).innerHTML = mystring;
+            var element = document.getElementById(html[i].id).innerText.replace('View Booking Request', '')
+
+            document.getElementById(html[i].id).innerHTML = element;
+        }
+
+
+    });
+
+</script>

@@ -1,0 +1,62 @@
+﻿@model Apeek.Entities.Entities.User
+
+@{
+    Layout = "~/Areas/Frontend/Views/Shared/_Layout.cshtml";
+}
+<body>
+    <section class="mainHeading tpHeaderSpace">
+        <div class="container">
+            <div class="row">
+                <!---->
+                <div class="col-sm-12">
+                    <div class="pageHeading">
+                        <h1>Welcome to momentarily</h1>
+                        <p>
+                            Let's get products differently!<br>
+                            What do you want to share with your community?
+                        </p>
+                    </div>
+                </div>
+                <!---->
+            </div>
+        </div>
+    </section>
+    <!---->
+    <section class="bannerSection">
+        <!-- <img src="images/bgimage.jpg" alt="image"/> -->
+        <div class="bannerContent">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        @using (Html.BeginForm("WelcomeUser", "User", FormMethod.Post))
+                        {
+                            <button type="submit" class="btn btn-red">Share Now</button>
+                            @Html.HiddenFor(x => x.Id);
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!---->
+    <footer class="copyright_1">
+        <div class="container">
+            <div class="row">
+                <!---->
+                <div class="copyrightDesc">
+                    <p>@DateTime.Now.Year <b>momentarily</b> <sup>TM</sup></p>
+                </div>
+                <!---->
+            </div>
+        </div>
+    </footer>
+    <!---->
+
+    @*@Scripts.Render("~/Scripts/Libs/Jquery341")*@
+    @*@Scripts.Render("~/Scripts/Libs/Bootstrap340")*@
+    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>*@
+    <!---->
+
+</body>

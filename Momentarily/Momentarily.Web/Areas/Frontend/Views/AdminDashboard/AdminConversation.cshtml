@@ -1,0 +1,568 @@
+﻿@model Apeek.Common.IShape<Apeek.ViewModels.Models.UserConversationViewModel>
+@{
+    ViewBag.Title = "My Conversation";
+    Layout = "~/Areas/Frontend/Views/Shared/_AdminDashboardLayoutNew.cshtml";
+}
+@Styles.Render("~/bundles/cssAccount")
+@Styles.Render("~/Content/css/messages")
+
+<style>
+    .conversation-list{
+    background-color:white;
+    }
+    .badge:empty {
+        display: none !important;
+    }
+    .mymessgaeimages {
+        float: right !important;
+    }
+    .mymessgaeimages img {
+        float: right !important;
+    }
+        .mymessgaeimages img.img-fluid {
+            max-width: 100%;
+            height: auto !important;
+        }
+    .messageText .mymessgaeThumbnail {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        flex-flow: wrap;
+        width:100%;
+    }
+    .messageText .mymessgaeimages {
+        float: right !important;
+        width: 20%;
+        display: flex;
+        padding: 5px;
+        height: 100px;
+        overflow: hidden;
+        align-items: center;
+        margin-bottom: 5px;
+    }
+        .messageText .mymessgaeimages span {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            outline: 1px solid #ccc;
+            border: 3px solid #fff;
+            justify-content: center;
+        }
+    .messageText .text {
+        margin-top: 15px;
+        font-size: 13px;
+    }
+
+    .chooseFileBtn {
+        display: inline-block;
+        position: relative;
+        background-color: #cf2d1e;
+        color: #fff;
+        width: 140px;
+        overflow: hidden;
+        height: 40px;
+        border-radius: 3px;
+    }
+    .chooseFileBtn:before {
+            position: absolute;
+            content: "Choose File";
+            display: flex;
+            align-items: center;
+            height: 40px;
+            justify-content: center;
+            width: 100%;
+            border-radius: 3px;
+    }
+        .chooseFileBtn input#files {
+            opacity: 0;
+            height: 40px;
+        }
+    .chooseFileBtnSection {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 20px 0;
+    }
+        .chooseFileBtnSection button#sendmsg {
+            margin: 0 !important;
+        }
+    @@media(max-width:575px){
+        .messageText .mymessgaeimages {
+            width: 25%;
+            height: 60px;
+        }
+    }
+   
+</style>
+<div class="page-header non-printable">
+    <div class="row align-items-end">
+        <div class="col-lg-8">
+            <div class="page-header-title">
+                <div class="d-inline">
+                    <h4>Conversation</h4>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="page-header-breadcrumb">
+                <ul class="breadcrumb-title parentModulesInner">
+                    <li class="breadcrumb-item">
+                        <a href="/AdminDashboard/"> <i class="feather icon-home"></i> </a>
+                    </li>
+                    <li class="breadcrumb-item"><a href="">Conversation</a> </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    #conversation-list {
+        width: 100%;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        margin-bottom: 15px;
+    }
+    .account.messages.conversationSection .backlink {
+        display: flex;
+        align-items: center;
+    }
+    .account.conversationSection .user-image {
+        margin-right: 10px;
+    }
+    .account.messages.conversationSection .profiler {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+    .account.messages.conversationSection a.default-link.float-right {
+        background-color: #cf2d1e;
+        color: #fff;
+        padding: 8px 15px;
+        text-transform: uppercase;
+    }
+    .account.messages.conversationSection a.default-link.float-right:hover {
+        background-color: rgba(240, 58, 58, 1);
+        color: #fff;
+    }
+    .account.messages.conversationSection .notify {
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+    }
+    .account.messages.conversationSection .notify i {
+        font-size: 20px;
+    }
+    .account.messages.conversationSection .sendText span.user-image {
+        margin: 0;
+    }
+
+    .account.messages.conversationSection span.user-image {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin: 0 10px;
+        display: inline-block;
+    }
+    .account.messages.conversationSection span.user-image img {
+        max-width: 100%;
+    }
+    .type-message button#sendmsg {
+        background-color: #cf2d1e;
+        color: #fff;
+        margin-top: 15px;
+        padding: 8px 20px
+    }
+
+    .type-message button#sendmsg:hover {
+        background-color: rgba(240, 58, 58, 1);
+        color: #fff;
+        margin-top: 15px;
+    }
+    .messageinfo {
+        padding: 10px 15px;
+        margin-bottom: 18px;
+    }
+
+    .user-name-msg {
+        font-weight: bold !important;
+    }
+
+    .main-info {
+        width: 30% !important;
+    }
+
+    .user-image-name {
+        width: 100% !important;
+    }
+
+    .date {
+        width: 100% !important;
+        display: inline !important;
+    }
+
+    .message-text {
+        width: 70% !important;
+    }
+
+    .conversation-list {
+        height: 310px !important;
+    }
+    .background-container {
+        padding-top: 15px;
+    }
+    .account.conversationSection .title-block.mbSpace {
+        background-color: white;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        border: #ccc solid 1px;
+        border-bottom: none !important;
+    }
+    @@media(max-width: 575px){ 
+        .account.conversationSection .notify {
+            position: absolute;
+            right: 0;
+            text-align: right;
+            width: auto;
+        }
+        .account.messages.conversationSection .profiler {
+            justify-content: flex-start;
+            margin-top: 20px;
+        }
+
+        .account.messages.conversationSection .sendText .col-12 {
+            margin: 0;
+            padding: 0;
+        }
+
+
+    }
+
+</style>
+
+<div class="content">
+    <div class="account messages conversationSection ">
+        <div class="row">
+            <div class="col-md-12  background-container">
+                <div class="title-block col-md-12 mbSpace">
+                    <div class="row">
+                        <div class="backlink col-md-3 col-sm-3 col-12">
+
+                            <span class="back-button">
+                                <a href="javascript:history.back()">
+                                    <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                                </a>
+                            </span>
+                            <span class="user-image"><img src="@Model.ViewModel.ReceiverImageUrl" alt="image" /> </span>
+                            @Model.ViewModel.ReceiverUserName
+
+                        </div>
+                        <div class="notify col-md-1 col-sm-2">
+                            <a href="" class="notification" id="message_notification">
+                                <i class="fa fa-bell" style="color: #cf2d1e">
+                                    <span class="badge" id="unread_count"></span>
+                                </i>
+                            </a>
+                        </div>
+                        <div class="profiler col-md-8 col-sm-6 col-12">
+                            <a href="/User/UserPublicProfile/@Model.ViewModel.ReceiverId" class="default-link  float-right">View profile</a>
+                        </div>
+                    </div>
+
+                </div>
+                @if (Model.ViewModel.Messages == null || Model.ViewModel.Messages.Count <= 0)
+                {
+                    <div class="conversation-list" id="conversation-list">
+                     <div class="list-empty">Your messages will be shown here.</div>
+                    </div>
+                }
+                else
+                {
+                        <div class="conversation-list" id="conversation-list">
+                            @if (Model.ViewModel.Messages != null)
+                            {
+                                foreach (var item2 in Model.ViewModel.Messages)
+                                {
+                                    <div class="messageinfo">
+                                        @if (item2.AuthorId == Model.ViewModel.AuthorId)
+                                        {
+                                            <div class="row message-user">
+                                                <div class="mainInfo col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                                    <a href="/User/UserPublicProfile/@item2.AuthorId" class="user-image-name" target="_blank">
+                                                        <div class="user-name-msg">You</div>
+                                                    </a>
+                                                    <div class="date">@item2.DateCreated</div>
+                                                </div>
+                                                <div class="messageText col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                                                    @if (!item2.IsSystem)
+                                                    {
+                                                        <div class="mymessgaeThumbnail">
+                                                            @if (item2.PathList != null && item2.PathList.Count > 0)
+                                                            {
+                                                                var host = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority);
+                                                                foreach (var path in item2.PathList)
+                                                                {
+                                                                    var fullpath = host + "/Content/MessageImages" + path;
+                                                                    <a href="@fullpath" target="_blank" class="mymessgaeimages"><span><img src="@fullpath" class="img-fluid"alt="image" /></span></a>
+                                                                }
+
+                                                            }
+                                                        </div>
+
+                                                        <div class="text">@item2.Message</div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="mymessgaeThumbnail">
+                                                            @if (item2.PathList != null && item2.PathList.Count > 0)
+                                                            {
+                                                                var host = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority);
+                                                                foreach (var path in item2.PathList)
+                                                                {
+                                                                    var fullpath = host + "/Content/MessageImages" + path;
+                                                                    <a href="@fullpath" target="_blank" class="mymessgaeimages"><span><img src="@fullpath" class="img-fluid" /></span></a>
+                                                                }
+
+                                                            }
+                                                        </div>
+                                                        <div>@item2.Message</div>
+                                                    }
+
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="row message-recipient" style="width:100%">
+                                                <div class="mainInfo col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                                    <a href="/User/UserPublicProfile/@item2.AuthorId" class="user-image-name" target="_blank">
+                                                        <div class="user-name-msg"> @item2.AuthorUserName</div>
+                                                    </a>
+                                                    <div class="date">@item2.DateCreated</div>
+                                                </div>
+                                                <div class="messageText col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                                                    @if (!item2.IsSystem)
+                                                    {
+                                                        <div class="mymessgaeThumbnail">
+                                                            @if (item2.PathList != null && item2.PathList.Count > 0)
+                                                            {
+                                                                var host = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority);
+                                                                foreach (var path in item2.PathList)
+                                                                {
+                                                                    var fullpath = host + "/Content/MessageImages" + path;
+                                                                    <a href="@fullpath" target="_blank" class="mymessgaeimages"><span><img src="@fullpath" class="img-fluid"alt="image" /></span></a>
+                                                                }
+
+                                                            }
+                                                        </div>
+                                                        <div class="text">@item2.Message</div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="mymessgaeThumbnail">
+                                                            @if (item2.PathList != null && item2.PathList.Count > 0)
+                                                            {
+                                                                var host = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority);
+                                                                foreach (var path in item2.PathList)
+                                                                {
+                                                                    var fullpath = host + "/Content/MessageImages" + path;
+                                             <a href="@fullpath" target="_blank" class="mymessgaeimages"><span><img src="@fullpath" class="img-fluid" /></span></a>
+                                                                }
+
+                                                            }
+                                                        </div>
+                                                        <div>@item2.Message</div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            }
+                        </div>
+                }
+                        <div class="type-message" style="border-top:none">
+                            <div class="col-md-12 col-12">
+                                <div class="sendText row" style="display:flex">
+                                    <div class=" col-md-4 col-12"> <span class="user-image"><img src="@Model.ViewModel.AuthorImageUrl" alt="image" /></span></div>
+                                    <div class="col-md-8 col-12">
+                                        @*@Html.TextAreaFor(x => x.ViewModel.Messages, new { @class = "form-control" })*@
+                                        <textarea class="form-control" cols="20" id="message" name="message" rows="2"></textarea>
+                                        <input type="hidden" name="AuthorId" id="AuthorId" value="@Model.ViewModel.AuthorId" />
+                                        <input type="hidden" name="ReceiverId" id="ReceiverId" value="@Model.ViewModel.ReceiverId" />
+
+                                        <div class="chooseFileBtnSection">
+                                            <div><input type="file" onclick="removefiles()" onchange="encodeImageFileAsURL(event)"
+                                                  id="files" name="files" multiple accept=".png, .jpg, .jpeg .gif" /></div>
+                                            <button type="button" id="sendmsg" class="btn btn-green">Send</button>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+   </div>
+</div>
+<script src="~/plugins/jquery/jquery.js"></script>
+@*<script src="//code.jquery.com/jquery-1.10.2.js"></script>*@
+<script src="~/Content/TemplateImg/js/bootstrap.min.js"></script>
+
+<script src="~/Scripts/Libs/moment.js"></script>
+<script>
+
+    var angularConstants = {};
+    angularConstants = {
+        Messages: JSON.parse('@Html.Raw(HttpUtility.JavaScriptStringEncode(Json.Encode(Model)))')
+    };
+
+    var filesarray = [];
+
+    function removefiles() {
+        filesarray = [];
+    }
+
+    function encodeImageFileAsURL(event) {
+        if (window.File && window.FileList && window.FileReader) {
+            var files = $("#files").prop("files");
+                for (var i = 0; i < files.length; i++) {
+                    (function (file) {
+                        if (file.type.indexOf("image") == 0) {
+                            var fileReader = new FileReader();
+                            fileReader.onload = function (f) {
+                                filesarray.push(f.target.result);
+                            }
+                            fileReader.readAsDataURL(file);
+                        }
+                    })(files[i]);
+                }
+        }
+        else {
+            alert('Error! Cannot upload files.');
+        }
+    }
+
+    $(document).ready(function () {
+
+        $('#sendmsg').click(function () {
+            var Message = document.getElementById("message").value;
+            var AuthorId = document.getElementById("AuthorId").value;
+            var ReceiverId = document.getElementById("ReceiverId").value;
+            if (Message == "") {
+                alert("Please enter the message")
+                $("#message").focus();
+                return false;
+            }
+            else {
+            $.ajax({
+                url: "/AdminDashboard/AdminConversation",
+                type: "Post",
+                data: { AuthorId: AuthorId, ReceiverId: ReceiverId, Message: Message, files: filesarray },
+                success: function (data) {
+                    if (data = "true" || data == "True") {
+                        window.location.href = '/AdminDashboard/AdminConversation?userId='+ ReceiverId;
+                    }
+                },
+                error: function () {
+                    alert("Error")
+                }
+
+                })
+            }
+        })
+
+        $('#conversation-list').scrollTop($('#conversation-list')[0].scrollHeight);
+        setInterval(function () {
+
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("GetUnreadMessages", "Message")",
+                contentType: "application/json; charset=utf-8",
+                data: { "userId": '@Model.ViewModel.ReceiverId' },
+                success: function (result) {
+                    console.log(result);
+
+                    $.each(result.messagelist, function (i) {
+                        ;
+                        var dated = moment(result.messagelist[i].DateCreated);
+
+                        // var dd = new Date(parseInt(result.messagelist[i].DateCreated));
+                        var time = new Date(dated).getHours() + ':' + new Date(dated).getMinutes();
+                        if (new Date(dated).getHours() >= 12) {
+                            time = time + ' PM'
+                        }
+                        else {
+                            time = time + ' AM'
+                        }
+                        var message = (result.messagelist[i].Message);
+                        var host = '@HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority)';
+                        message.replace(/\\/g, "");
+                        var imagesection = "";
+                        
+                        if (result.messagelist[i].PathList != null || result.messagelist[i].PathList.length > 0) {
+                            imagesection = imagesection + '<div class="mymessgaeThumbnail"> ';
+                            $.each(result.messagelist[i].PathList, function (key, path) {
+                                var fullpath = host + "/Content/MessageImages" + path;
+                                imagesection = imagesection + ' <a href="' + fullpath + '" target="_blank" class="mymessgaeimages"><span><img src ="' + fullpath + '" class="imgfluid" alt="image" /></span></a>';
+                                });
+
+                            imagesection = imagesection + '</div> ';
+                        }
+                        var html =
+                            '<div class="messageinfo newmsgs">'+
+                            '<div class="row message-user" ><div class="mainInfo col-lg-4 col-md-4 col-sm-12 col-xs-12">'+
+                            '<a href = "/User/UserPublicProfile/"' + result.messagelist[i].AuthorId+' class="user-image-name" target = "_blank" >'+
+                            '<div class="user-name-msg">' + result.messagelist[i].AuthorUserName +'</div> </a>'+
+
+                           '<div class="date">'+time+'</div>'+
+                               ' </div>'+
+                            '<div class="messageText col-lg-8 col-md-8 col-sm-12 col-xs-12">' + imagesection +
+
+                            '<div class="text">' + message + ' </div>' +
+                                '</div></div></div>'
+
+                        if ($("#conversation-list").scrollTop() + $("#conversation-list").innerHeight() >= $("#conversation-list")[0].scrollHeight) {
+
+                            $('#conversation-list').append(html);
+                            $('#conversation-list').scrollTop($('#conversation-list')[0].scrollHeight);
+                            $("#unread_count").html("");
+                        }
+                        else {
+                            $('#conversation-list').append(html);
+                            $("#unread_count").html("New");
+                        }
+                        //$('#conversation-list').scrollTop($('#conversation-list')[0].scrollHeight);
+
+                    });
+                }
+            });
+        }, 5000);
+
+
+        $("#conversation-list").scroll(function () {
+            if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
+                $("#unread_count").html("");
+            }
+        })
+
+        $('#message_notification').click(function () {
+            $('#conversation-list').scrollTop($('#conversation-list')[0].scrollHeight);
+            $("#unread_count").html("");
+        })
+    })
+</script>
+   <style>
+       .newmsgcolor {
+           background-color: #f0f8ff;
+       }
+       .newmsgs {
+           background-color: aliceblue;
+       }
+   </style>
