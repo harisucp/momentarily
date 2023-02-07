@@ -1,0 +1,49 @@
+﻿@model Apeek.Common.IShape<Apeek.ViewModels.Models.LoginModel>
+@*@{ Layout = "~/Views/Shared/_UserAccount.cshtml"; }*@
+@{
+    ViewBag.Title = "Log in";
+    string redirectTo = ViewBag.RedirectTo;
+}
+<div class="login">
+<h1>Войдите в систему</h1>
+<br/>
+    @if (Shape.IsError)
+    {
+        <div class="notification error">
+            <div class="icon"></div>
+            <div class="text">@t(Shape.Message)</div>
+        </div>
+    }
+@using (Html.BeginForm(QuickUrl.RouteLogin(redirectTo)))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <label>Телефон или email</label>
+    @Html.TextBoxFor(m => m.ViewModel.EmailAddressOrPhoneNum,new { placeholder = "0676754321"})
+    @Html.ValidationMessageFor(m => m.ViewModel.EmailAddressOrPhoneNum)
+    
+    <label>Пароль</label>
+    @Html.PasswordFor(m => m.ViewModel.Password)
+    @Html.ValidationMessageFor(m => m.ViewModel.Password)
+    @Html.RouteLink(t("Забыли пароль?"), QuickUrl.RouteRestorePwd(), new Dictionary<string,object> {{ "class", "remind" }})
+                          
+    <br/> 
+    <br/> 
+    <br/> 
+    <input type="submit" class="btn green" value="@t("Войти")"  style="width:100px;float:left;"/>@Html.RouteLink(t("Регистрация →"), QuickUrl.RouteCreatePerson(), new { @class = "reg" })
+    @*
+        @Html.CheckBoxFor(m => m.ViewModel.RememberMe)
+        @Html.LabelFor(m => m.ViewModel.RememberMe, new { @class = "checkbox" })
+    *@
+}
+    <br/>
+    <br/>
+    <br/>
+    @*<div style="width:210px">
+        <div class="page_label" style="display: block;margin: 30px 0;"><span>или</span></div>
+        <div class="social" id="socialLoginForm" style="text-align: center;">
+            @Html.Action("ExternalLoginsList", new {RedirectTo = redirectTo})
+        </div>
+    </div>*@
+</div>

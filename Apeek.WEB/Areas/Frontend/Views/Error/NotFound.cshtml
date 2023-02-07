@@ -1,0 +1,42 @@
+﻿@{
+    Layout = "_Frontend.cshtml";
+}
+<style>
+    
+    .error_img {
+        font-size: 120px;
+        float: left;
+        width: 300px;
+        text-align: right;
+        color: #8EA1AD;
+    }
+    .error_text {
+        float: left;
+        width: 600px;
+        margin-left: 50px;
+    }
+    .error_text h1 {
+        margin-bottom: 10px;
+    }
+    .error_text p {
+        padding-left: 5px;
+        line-height: 16px;  
+    }
+
+    .error_img, .error_text {
+        padding-top: 100px;
+    }
+    
+</style>
+<div id="container">
+    <div class="error_img">
+        404
+    </div>
+    <div class="error_text">
+        <h1>Такой страницы - не существует</h1>
+        <p>
+            Возможно, страница которую вы искали - была перемещена в другой раздел<br/>
+            Попробуйте перейти <a href="/">на главную страницу</a> - чтобы найти ее!
+        </p>
+    </div>
+</div>

@@ -1,0 +1,11 @@
+﻿@model ICollection<AuthenticationClientData>
+
+@if (Model.Count > 0)
+{
+    <h2>Вход с помощью</h2>
+    foreach (AuthenticationClientData p in Model)
+    {
+        string redirectTo = ViewBag.RedirectTo;
+        @Html.RouteLink(p.AuthenticationClient.ProviderName, new { action = "ExternalLogin", controller = "ExternalLogin", provider = p.AuthenticationClient.ProviderName, redirectTo = redirectTo })@:&nbsp;&nbsp;
+    }
+}

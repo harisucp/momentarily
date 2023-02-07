@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2A655367-80FA-4706-ADD8-E531D36B17CE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Apeek.NH.Repository</RootNamespace>
+    <AssemblyName>Apeek.NH.Repository</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Production|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Production\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="FluentNHibernate, Version=2.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentNHibernate.2.0.3.0\lib\net40\FluentNHibernate.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <HintPath>..\packages\NHibernate.4.0.4.4000\lib\net40\NHibernate.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Common\RepCache.cs" />
+    <Compile Include="Common\RepositoryAudit.cs" />
+    <Compile Include="Common\RepositoryClosureTree.cs" />
+    <Compile Include="DataAccessConfiguration.cs" />
+    <Compile Include="Common\IRepository.cs" />
+    <Compile Include="EntityMappingProvider.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Common\Repository.cs" />
+    <Compile Include="Common\RepositoryHelper.cs" />
+    <Compile Include="Repositories\IGoodShareDateRepository.cs" />
+    <Compile Include="Repositories\Impl\GoodShareDateRepository.cs" />
+    <Compile Include="Repositories\Impl\RepositoryCancelledRequest.cs" />
+    <Compile Include="Repositories\Impl\RepositorySendyList.cs" />
+    <Compile Include="Repositories\Impl\RepositoryCAMasterBulkEmail.cs" />
+    <Compile Include="Repositories\Impl\RepositoryChatAnswers.cs" />
+    <Compile Include="Repositories\Impl\RepositoryChatQuestions.cs" />
+    <Compile Include="Repositories\Impl\RepositoryChatTopics.cs" />
+    <Compile Include="Repositories\Impl\RepositoryCountries.cs" />
+    <Compile Include="Repositories\Impl\RepositoryCovidGood.cs" />
+    <Compile Include="Repositories\Impl\RepositoryCovidGoodOrder.cs" />
+    <Compile Include="Repositories\Impl\RepositoryCovidOrderPaymentDetail.cs" />
+    <Compile Include="Repositories\Impl\RepositoryDisputes.cs" />
+    <Compile Include="Repositories\Impl\RepositoryFAQ.cs" />
+    <Compile Include="Repositories\Impl\RepositoryFinalFeedback.cs" />
+    <Compile Include="Repositories\Impl\RepositoryGlobalCode.cs" />
+    <Compile Include="Repositories\Impl\RepositoryGoodBookingRank.cs" />
+    <Compile Include="Repositories\Impl\RepositoryGoodBooking.cs" />
+    <Compile Include="Repositories\Impl\RepositoryGoodImg.cs" />
+    <Compile Include="Repositories\Impl\RepositoryGoodRequest.cs" />
+    <Compile Include="Repositories\Impl\RepositoryGoodStartDateEndDate.cs" />
+    <Compile Include="Repositories\Impl\RepositoryLogEntry.cs" />
+    <Compile Include="Repositories\Impl\RepositoryMessageImages.cs" />
+    <Compile Include="Repositories\Impl\RepositoryPaymentTransaction.cs" />
+    <Compile Include="Repositories\Impl\RepositoryPaypalInfoPaymentDetail.cs" />
+    <Compile Include="Repositories\Impl\RepositoryPaypalPayment.cs" />
+    <Compile Include="Repositories\Impl\RepositoryReportAbuse.cs" />
+    <Compile Include="Repositories\Impl\RepositoryResolvedDisputeDetail.cs" />
+    <Compile Include="Repositories\Impl\RepositoryStockDetail.cs" />
+    <Compile Include="Repositories\Impl\RepositorySubscibes.cs" />
+    <Compile Include="Repositories\Impl\RepositoryUserCoupon.cs" />
+    <Compile Include="Repositories\Impl\RepositoryUserMessage.cs" />
+    <Compile Include="Repositories\Impl\RepositoryGoodCategory.cs" />
+    <Compile Include="Repositories\Impl\RepositoryGoodLocation.cs" />
+    <Compile Include="Repositories\Impl\RepositoryGoodProperty.cs" />
+    <Compile Include="Repositories\Impl\RepositoryGoodPropertyValue.cs" />
+    <Compile Include="Repositories\Impl\RepositoryGoodPropertyValueDefinition.cs" />
+    <Compile Include="Repositories\Impl\RepositoryUserGood.cs" />
+    <Compile Include="Repositories\Impl\RepositoryUserNotification.cs" />
+    <Compile Include="Repositories\Impl\RepositoryWebhookReponse.cs" />
+    <Compile Include="Repositories\IRepositoryCancelledRequest.cs" />
+    <Compile Include="Repositories\IRepositorySendyList.cs" />
+    <Compile Include="Repositories\IRepositoryCAMasterBulkEmail.cs" />
+    <Compile Include="Repositories\IRepositoryChatAnswers.cs" />
+    <Compile Include="Repositories\IRepositoryChatQuestions.cs" />
+    <Compile Include="Repositories\IRepositoryChatTopics.cs" />
+    <Compile Include="Repositories\IRepositoryCountries.cs" />
+    <Compile Include="Repositories\IRepositoryCovidGood.cs" />
+    <Compile Include="Repositories\IRepositoryCovidGoodOrder.cs" />
+    <Compile Include="Repositories\IRepositoryCovidOrderPaymentDetail.cs" />
+    <Compile Include="Repositories\IRepositoryDisputes.cs" />
+    <Compile Include="Repositories\IRepositoryFAQ.cs" />
+    <Compile Include="Repositories\IRepositoryFinalFeedback.cs" />
+    <Compile Include="Repositories\IRepositoryGlobalCode.cs" />
+    <Compile Include="Repositories\IRepositoryGoodBookingRank.cs" />
+    <Compile Include="Repositories\IRepositoryGoodBooking.cs" />
+    <Compile Include="Repositories\IRepositoryGoodCategory.cs" />
+    <Compile Include="Repositories\IRepositoryGoodImg.cs" />
+    <Compile Include="Repositories\IRepositoryGoodLocation.cs" />
+    <Compile Include="Repositories\IRepositoryGoodProperty.cs" />
+    <Compile Include="Repositories\IRepositoryGoodPropertyValue.cs" />
+    <Compile Include="Repositories\Impl\RepositoryCategory.cs" />
+    <Compile Include="Repositories\Impl\RepositoryGood.cs" />
+    <Compile Include="Repositories\Impl\RepositoryUser.cs" />
+    <Compile Include="Repositories\IRepositoryCategory.cs" />
+    <Compile Include="Repositories\IRepositoryGood.cs" />
+    <Compile Include="Repositories\IRepositoryGoodPropertyValueDefinition.cs" />
+    <Compile Include="Repositories\IRepositoryGoodRequest.cs" />
+    <Compile Include="Repositories\IRepositoryGoodStartDateEndDate.cs" />
+    <Compile Include="Repositories\IRepositoryLogEntry.cs" />
+    <Compile Include="Repositories\IRepositoryMessageImages.cs" />
+    <Compile Include="Repositories\IRepositoryPaymentTransaction.cs" />
+    <Compile Include="Repositories\IRepositoryPaypalInfoPaymentDetail.cs" />
+    <Compile Include="Repositories\IRepositoryPaypalPayment.cs" />
+    <Compile Include="Repositories\IRepositoryPhoneNumber.cs" />
+    <Compile Include="Repositories\IRepositoryReportAbuse.cs" />
+    <Compile Include="Repositories\IRepositoryResolvedDisputeDetail.cs" />
+    <Compile Include="Repositories\IRepositoryStockDetail.cs" />
+    <Compile Include="Repositories\IRepositorySubscibes.cs" />
+    <Compile Include="Repositories\IRepositoryUser.cs" />
+    <Compile Include="Repositories\IRepositoryUserCoupon.cs" />
+    <Compile Include="Repositories\IRepositoryUserGood.cs" />
+    <Compile Include="Repositories\IRepositoryUserMessage.cs" />
+    <Compile Include="Repositories\IRepositoryUserNotification.cs" />
+    <Compile Include="Repositories\Impl\RepositoryPhoneNumber.cs" />
+    <Compile Include="Repositories\IRepositoryWebhookResponse.cs" />
+    <Compile Include="Transformers\NHibernateExtensions.cs" />
+    <Compile Include="Transformers\ExpandoObjectResultSetTransformer.cs" />
+    <Compile Include="Transformers\TransformerValueList.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Apeek.Common\Apeek.Common.csproj">
+      <Project>{38a1088f-059c-49bb-89fb-2f7e2fefba73}</Project>
+      <Name>Apeek.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Apeek.Entities\Apeek.Entities.csproj">
+      <Project>{4AE6F284-57F5-4A84-A280-9F1FAB61DC7C}</Project>
+      <Name>Apeek.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Apeek.NH.DataAccessLayer\Apeek.NH.DataAccessLayer.csproj">
+      <Project>{e2391be5-f367-49fe-8c9b-43d19280226e}</Project>
+      <Name>Apeek.NH.DataAccessLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Apeek.ViewModels\Apeek.ViewModels.csproj">
+      <Project>{7251F05D-2DB3-49EE-A95D-CBC3701B768B}</Project>
+      <Name>Apeek.ViewModels</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

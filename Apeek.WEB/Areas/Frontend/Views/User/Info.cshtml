@@ -1,0 +1,216 @@
+﻿@using Apeek.Common.Controllers
+@using Apeek.Common.Extensions
+@using Apeek.Core.Services
+@model Apeek.ViewModels.Models.PersonViewModel
+
+@{Layout = "User.cshtml";}
+
+<script>
+
+    var logUrl="@QuickUrl.Api.LogUrl()";
+
+    function main() {
+
+        var cities = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            limit: 10,
+            prefetch: {
+                url: '@QuickUrl.Api.LocationUrl()',
+                filter: function(list) {
+                    return $.map(list, function(city) { return { name: city }; });
+                }
+            }
+        });
+
+        cities.initialize();
+
+        $('#city').typeahead(
+            {
+                hint: true,
+                highlight: true,
+                minLength: 1
+            },
+            {
+                name: 'cities',
+                displayKey: 'name',
+                source: cities.ttAdapter()
+            }
+        );
+        
+        $('#tel').bind('input', function () {
+
+            var inputText = $(this).val();
+            $(this).val(inputText.replace(/[^\d]/, ''));
+
+        });
+
+       
+
+        $('#add_tel').click(function() { //add new phone
+            var input = $(this).parent().find('.tel_input:last');
+           
+            var newInput = input.clone();
+            
+            newInput.attr('name', replaceNameId(input.attr('name'))).attr('value', '').insertAfter(input);
+            var newHidden=input.prev().clone();
+            newHidden.attr('name', replaceNameId(newHidden.attr('name'))).attr('value', 0).insertBefore(newInput);
+            
+            
+            toogleRemove();
+        });
+        
+        function replaceNameId(name) {
+           
+            var i = name.lastIndexOf('].');
+            var id = parseInt(name.slice(i - 1, i));
+            return  name.slice(0, i - 1) + (++id) + name.slice(i, name.length);
+        }
+
+        function toogleRemove() {
+            if ($('.tel_input').length <= 1)
+                $('.remove_input').hide();
+            else
+                $('.remove_input').show();
+        }
+        $('.remove_input').click(function () {
+            var input = $('.tel_input:last');
+
+            $(input).prev().remove();
+            $(input).remove();
+            if ($('.tel_input').length <= 1)
+                $(this).hide();
+            return false;
+        });
+        
+        toogleRemove();
+        
+        
+        /* TOOLTIPS SECTION*/
+
+        $('#Person_IsCompany,#isCompany').tooltipster({
+            interactive: true,
+            content: $('.create_tips #Person_IsCompany'),
+            theme: 'tophands_theme',
+            position: 'top',
+            maxWidth: 300,
+            offsetX: 80
+        });
+
+        $('#city').tooltipster({
+            interactive: true,
+            content: $('.create_tips #city'),
+            theme: 'tophands_theme',
+            position: 'right'
+        });
+
+        $('#name').tooltipster({
+            interactive: true,
+            content: $('.create_tips #name'),
+            theme: 'tophands_theme',
+            maxWidth: 300,
+            position: 'right'
+        });
+
+        $('#tel').tooltipster({
+            interactive: true,
+            content: $('.create_tips #tel'),
+            theme: 'tophands_theme',
+            maxWidth: 350,
+            position: 'right'
+        });
+        $('#desc').tooltipster({
+            interactive: true,
+            content: $('.create_tips #desc'),
+            theme: 'tophands_theme',
+            maxWidth: 350,
+            position: 'right'
+        });
+    }
+</script>
+<style>
+    .tel_input {
+      
+    }
+    .remove_input {
+        color: red;
+        padding: 0px 2px;
+        text-decoration: none;
+    }
+    .remove_input:hover {
+        text-decoration: underline;
+       
+    }
+    .userLink{
+        padding: 5px 0px;
+        font-size: 12px;
+        display: block;
+        text-decoration: underline;
+
+    }
+    .userLink:hover{
+        text-decoration: underline;
+    }
+
+</style>
+<div class="info tab" ng-controller="aboutMain">
+    @if (Shape.Result.HasValue)
+    {
+        if (Shape.Result.Value)
+        {
+            <div class="notification ok">
+                <div class="icon"></div>
+                <div class="text">@t("Изменения сохранены")</div>
+            </div>
+
+        }
+        else
+        {
+            <div class="notification error">
+                <div class="icon"></div>
+                <div class="text">@t("Ошибка! Изменения не сохранены")</div>
+            </div>
+        }
+    }
+
+
+    <h1 style="font-size: 24px;">Контактная информация
+    @if (ContextService.AuthenticatedUser.LocationId.HasValue)
+    {
+        <a class="userLink" href="@QuickUrl.UserAbsoluteUrl(GetUrl(Shape.Person.Id, @Shape.Person.Url), ContextService.AuthenticatedUser.SubDomainUrl, ContextService.AuthenticatedUser.LocationUrl, ContextService.AuthenticatedUser.LocationId)" target="_blank">
+            Посмотреть мою страницу
+        </a>
+        <br />
+    }
+    </h1>
+
+    <label>Мое фото</label>
+    <div class="imageContainer">
+        @*http://tophands.com/Template/images/logo.png*@
+        <s3-upload thumb="@Shape.Images.ImageUrlThumb(0, false)" slot=0 width=" 108" height="81" primary="1" surl="@QuickUrl.Api.WriteImageUrl()" gurl="@QuickUrl.Api.ImageUrl()"></s3-upload>
+    </div>
+    @using (Html.BeginFormAntiForgeryPost())
+    {
+        Html.RenderPartial("UserInfoForm", Model);
+    }
+
+
+</div>
+<div class="create_tips" style="display:none;">
+    <div id="Person_IsCompany" class="tip">
+        Поставте галочку если у вас есть более одного сотрудника
+    </div>
+    <div id="city" class="tip">
+        Укажите населенный пункт где вы предоставляете обычно свои услуги
+    </div>
+    <div id="name" class="tip">
+        Если Вы часное лицо -  укажите просто свое имя, в противном случае - название компании (напр. ООО “Спецстрой”)
+    </div>
+    <div id="tel" class="tip">
+        Введите контактные телефоны, желательно хотя бы один мобильный, чтобы восстановить доступ
+    </div>
+    <div id="desc" class="tip">
+        Например<br />________<br />Одной из отличительных черт нашего салона, является наличие собственной постижерной мастерской,
+        превосходное месторасположения,парковка и уютный интерьер
+    </div>
+</div>

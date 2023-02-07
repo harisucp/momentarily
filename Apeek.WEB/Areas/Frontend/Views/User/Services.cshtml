@@ -1,0 +1,248 @@
+﻿
+@using Apeek.Common.Extensions
+@model Apeek.Common.IShape<Apeek.ViewModels.Models.LocationBrowseModel>
+
+@{Layout = "User.cshtml";}
+
+<script>
+    var userServicesUrl = "@QuickUrl.Api.UserServiceUrl()";
+    var autoCompleteUrl = "@QuickUrl.Api.ServicesUrl()";
+    var signUrl = "@QuickUrl.Api.WriteImageUrl()";
+    var uploadUrl = "@QuickUrl.Api.ImageUrl()";
+    var renameUrl="@QuickUrl.Api.ChangeUserServiceUrl()";
+    var logUrl="@QuickUrl.Api.LogUrl()";
+    @if (Shape.ViewModel != null)
+    {
+        @:var hasLocation = true;
+            }
+    else
+    {
+        @:var hasLocation = false;
+            }
+</script>
+
+
+
+
+<div class="tab">
+
+    <div class="priceList ngRoot">
+        <!--     <script type="text/ng-template" id="priceLine.html">
+
+
+        </script>-->
+        <!--List view-->
+
+        <script type="text/ng-template" id="listService.html">
+            @if (Shape.ViewModel != null)
+            {
+                <div class="add_service" ng-init="baseUrl = '@QuickUrl.UserServiceAbsoluteUrl(Shape.ViewModel.SubDomain, "")/'">
+
+                    <h2 style="margin: 5px 0px;">Введите название услуги (2-4 слова)</h2>
+
+                    <div class="service_selection">
+                        <form>
+                            <input id="dropdown" type-limit="64"  type="text" ng-model="selected" typeahead="service for service in autocompleteServices | filter:$viewValue | limitTo:8" typeahead-focus-first="false" placeholder="начните со слов: ремонт, чистка, замена и других" typeahead-on-select="onServiceAutoComplete()" autocomplete="off">
+                            <input id="addBtn" ng-click="select(1)" type="submit" value="Добавить" class="btn red" />
+                        </form>
+                    </div>
+                    <div  style="margin: 5px 5px;color: #8EA1AD;font-size: 11px;">Введите конкретную услугу БЕЗ ЦЕНЫ и БЕЗ ГОРОДА</div>
+                    <br />
+                    <br />
+                    <div ng-hide="allServices.length==0" colspan="2" class="subheader">
+
+                        <span>
+                            <a  href="javascript:void(0);" ng-click="filters.tab='all';filters.prop='none'"  ng-class="{act:filters.tab=='all'}" class="all">Мои услуги ({{(allServices | tableFilter:'all').length}})</a>
+                        </span>
+                        <span ng-show="(allServices | tableFilter:'approve').length">
+                            &nbsp;|&nbsp;
+                            <a href="javascript:void(0);" ng-click="filters.tab='approve';filters.prop='none'"  ng-class="{act:filters.tab=='approve'}" class="approve">На проверке ({{(allServices | tableFilter:'approve').length}})</a>
+                        </span>
+                        <span ng-show="(allServices | tableFilter:'rejected').length">
+                            &nbsp;|&nbsp;
+                            <a href="javascript:void(0);" ng-click="filters.tab='rejected';filters.prop='none'"  ng-class="{act:filters.tab=='rejected'}" class="rejected">Отклонены ({{(allServices | tableFilter:'rejected').length}})</a>
+                        </span>
+                    </div>
+
+                    <table class="service_table {{filters.tab}}" cellspacing="0" >
+                        <tr>
+                            <td colspan="2" style="border:none;height:auto;padding:0px 0px 10px 0px;"  >
+                                <div class="table_tips" ng-show="(filters.tab=='rejected')">
+                                    <h2 >Переименуйте название услуг!</h2>
+                                    <p>Модератор отклонил название некоторых услуг,<br> потому что название: </p>
+                                    <ol>
+                                        <li>должно обозначать одно действие</li>
+                                        <li>не должно содержать цены,название города и общих форм</li>
+                                        <li>должно однозначно восприниматся другим человеком</li>
+                                        <li>не должно обозначать товар</li>
+                                    </ol>
+                                </div>
+                                <div class="table_tips" ng-show="filters.tab == 'approve'">
+                                    Услуги отправлены на проверку модератору<br>
+                                    Вам придет уведомление по Email о результатах проверки
+                                </div>
+                            </td>
+                        </tr>
+                        <tr><th class="header1">Услуга</th><th class="header2">Цена</th></tr>
+                        <tr><td colspan="2" class="filters">
+                            <span ng-show="(allServices | tableFilter:filters.tab | tableFilter:'none').length">
+                                <a href="javascript:void(0);" ng-click="filters.prop='none'" ng-class="{act:filters.prop=='none'}">Все ({{(allServices | tableFilter:filters.tab | tableFilter:'none').length}})</a>
+                            </span>
+                            <span ng-show="(allServices | tableFilter:filters.tab | tableFilter:'desc').length">
+                                &nbsp;|&nbsp;
+                                <a href="javascript:void(0);" ng-click="filters.prop='desc'"  ng-class="{act:filters.prop=='desc'}">Нет описания ({{(allServices | tableFilter:filters.tab | tableFilter:'desc').length}})</a>
+                            </span>
+                            <span ng-show="(allServices | tableFilter:filters.tab | tableFilter:'photo').length">
+                                &nbsp;|&nbsp;
+                                <a href="javascript:void(0);" ng-click="filters.prop='photo'"  ng-class="{act:filters.prop=='photo'}">Нет фото ({{(allServices | tableFilter:filters.tab | tableFilter:'photo').length}})</a>
+                            </span>
+                            <span ng-show="(allServices | tableFilter:filters.tab | tableFilter:'price').length">
+                                &nbsp;|&nbsp;
+                                <a href="javascript:void(0);" ng-click="filters.prop='price'"  ng-class="{act:filters.prop=='price'}">Нет цены ({{(allServices | tableFilter:filters.tab | tableFilter:'price').length}})</a>
+                            </span>
+                        </td></tr>
+                        <tr ng-repeat="item in allServices | tableFilter:filters.tab | tableFilter:filters.prop">
+                            <td colspan="2" ng-controller="priceLineCtrl">
+                                <div ng-show="deleting" class="deleting">
+                                    Удаление &nbsp;<span class="loading red"></span>
+                                </div>
+                                <div ng-class="{priceLine:1,editable:editable}" ng-hide="deleting">
+
+                                    <div class="bar" ng-class="{act:editable}">
+                                        <span id="serviceName">
+                                            <a href="javascript:void(0);" ng-hide="editableName" ng-click="toggle(localItem.ServiceId)" ng-style="{'text-decoration':!localItem.ServiceId ? 'none':'underline'}">
+                                                {{localItem.Name}}
+                                                <span  ng-show="saving || !localItem.ServiceId" class="loading" ng-class="{red:editable}"></span>
+                                            </a>
+                                            <span ng-click="editableName=true" ng-hide="editableName" class="edit_btn" title="Редактировать название услуги"></span>
+                                            <input type="text" ng-model="localItem.Name" ng-blur="editNameEnd()" type-limit="64" type-limit-hide="1" ng-show="editableName" focus-on-show ng-enter />
+                                        </span>
+                                        <div class="priceStatic" ng-hide="!localItem.ServiceId">
+                                            <span ng-click="editPriceStart()" ng-hide="editablePrice" ng-bind-html="htmlPrice()"></span>
+                                            <input static-input="editablePrice" price-cursor="1" type-limit="24" type-limit-hide="1" typeahead="o for o in autoComplete($viewValue) | limitTo:4" ng-blur="editPriceEnd()"  typeahead-on-select="priceSelected($item, $model, $label)"  delay-blur="300" type="text"  ng-show="editablePrice" ng-model="localItem.RawPrice" typeahead-focus-first="false">
+                                        </div>
+                                    </div>
+
+                                    <div ng-show="editable">
+                                        <div class="middle">
+                                            <div class="descStatic">
+                                                <label>Заголовок страницы</label>
+                                                <input type="text" id="header" type-limit="64" ng-model="localItem.Header"  ng-blur="editHeaderEnd()" placeholder="Введите заголовок для страницы услуги" title="Укажите заголовок более подробно"/>
+                                                <label>Описание услуги</label>
+                                                <textarea autoexpand  type-limit="1000"  static-input="editableDesc" ng-click="editableDesc=true" ng-blur="editDescEnd()" ng-model="localItem.Description" placeholder="Ваша услуга получит отдельну страницу - если добавить описание здесь"></textarea>
+                                                <label>Добавить фото</label>
+                                                <div class="thumbs_container">
+                                                   <s3-upload ng-repeat="items in [1,2,3,4,5,6,7,8]" slot="{{$index}}" thumb="{{getThumb(localItem.Images,$index)}}" width="81" height="61" primary="{{$index+1}}" sid={{localItem.ServiceId}} surl="@QuickUrl.Api.WriteImageUrl()" gurl="@QuickUrl.Api.ImageUrl()" ></s3-upload>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="actions">
+                                            <div class="showLinks">
+                                                <label>Категория каталога</label>
+                                                 <a class="link2page" ng-click="follow2page('Browse')" ng-show="localItem.BrowseUrl" target="_blank" href="{{localItem.BrowseUrl}}">{{localItem.CategoryName}}</a>
+                                                 <div class="value" ng-hide="localItem.BrowseUrl">Будет доступна после модерации</div>
+                                                <label>Страница услуги</label>
+                                                <a class="link2page"  ng-show="localItem.Description" ng-click="follow2page('Service')"  target="_blank"  href="{{baseUrl+localItem.PersonServiceUrl}}">{{localItem.Header}}</a>
+                                                <div class="value" ng-hide="localItem.Description">Добавьте описание - чтобы перейти на страницу услуги</div>
+                                            </div>
+
+                                            <a class="delete_service" href="javascript:void(0);" ng-click="delete(localItem.ServiceId)">Удалить услугу</a>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="border:none;">
+                                <div class="promt" ng-hide="userServices.length">
+                                    У вас нету ни одной услуги!<br />
+                                    Начните вводить первые буквы, чтобы получить подсказку
+                                </div>
+
+                                <div class="promt" ng-show="filters.tab == 'all' && filters.prop == 'none'">
+                                    Больше услуг - больше шансов получить клиента!<br />
+                                </div>
+
+                                <div class="promt" ng-show="filters.prop == 'desc' && (allServices | tableFilter:'desc').length>0">
+                                    Добавляйте короткое описание к услуге!<br />
+                                    Каждая услуга с описанием получает - отдельную страницу<br />
+                                    Отдельная страница - увеличивает вашы шансы получить клиента<br />
+                                </div>
+
+                                <div class="promt" ng-show="filters.prop == 'desc' && (allServices | tableFilter:filters.tab | tableFilter:'desc').length==0">
+                                    Поздравляем!<br />
+                                    У вас нету услуг без описания<br />
+                                </div>
+
+                                <div class="promt" ng-show="filters.prop == 'price' && (allServices | tableFilter:filters.tab | tableFilter:'price').length>0">
+                                    Услуги без цен - попадают в конец списка<br />
+                                    Укажите цену - и получите больше телефоных звонков!<br />
+                                    Можно использовать: «10грн», «от 10грн», «10-20грн» и «10.5грн/м2»<br />
+                                </div>
+
+                                <div class="promt" ng-show="filters.prop == 'price' && (allServices | tableFilter:filters.tab | tableFilter:'price').length==0">
+                                    Ваши услуги - теперь все с ценами<br />
+                                    Так деражать!<br />
+                                </div>
+
+                            </td>
+                        </tr>
+
+                    </table>
+                    <div style="height: 80px;"></div>
+
+
+                </div>
+
+            }
+
+        </script>
+
+        <!--Add location screen -->
+        <script type="text/ng-template" id="addLocation.html">
+            <h2>У вас не указан город</h2>
+            @Html.RouteLink("Добавьте город", QuickUrl.RouteUserInfo()), чтобы иметь возможность редактировать свой прайс-лист
+        </script>
+        <ng-view></ng-view>
+    </div>
+    </div>
+@*    @using (Html.BeginForm("UploadServiceImages", "User", FormMethod.Post,
+        new { enctype = "multipart/form-data", id = "imageUploadForm" }))
+    {  
+        <label for="file">Upload Image:</label> 
+        <input type="file" name="file" id="file" style="width: 100%;" /> 
+        <input type="submit" value="Upload" class="submit" /> 
+    }
+
+
+<script language="javascript">
+    function main(){
+        $('#imageUploadForm').on('submit', (function (e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+
+            $.ajax({
+                type: 'POST',
+                url: $(this).attr('action'),
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    console.log("success");
+                    console.log(data);
+                },
+                error: function (data) {
+                    console.log("error");
+                    console.log(data);
+                }
+            });
+        }));
+
+        $("#ImageBrowse").on("change", function () {
+            $("#imageUploadForm").submit();
+        });
+    };
+</script>*@
+

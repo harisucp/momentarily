@@ -1,0 +1,431 @@
+﻿<script>
+
+    function main() {
+
+        /* Cookie for popup dialog*/
+        var userEmail = '@User.EmailAddress';
+
+        
+        if (!$.cookie('email') || $.cookie('email') != userEmail) {
+            if (userEmail) {
+                $.cookie('email', userEmail, { expires: 30 * 6, path: '/', domain: '.' + window.location.hostname });
+            }
+        }
+
+
+
+        $('.my_profile ul a').hover(function () {
+            createLayout($(this).attr('rel'));
+        }, function () {
+            removeLayout($(this).attr('rel'));
+        });
+
+        $('.block.original .info, .block.original .services').hover(function () {
+            createLayout($(this).attr('class'));
+        }, function () {
+            removeLayout($(this).attr('class'));
+        });
+
+        $('#show_adv').click(function () {
+            $('#adv_example').toggle();
+        });
+    }
+
+    function createLayout(attr) {
+        var target_selector = '.block.original .' + attr;
+        // $('.my_profile ul a[rel="' + attr + '"]').text()
+        var newLink = $("<a/>", {
+            class: 'layout',
+            href: $('.my_profile ul a[rel="' + attr + '"]').attr('href'),
+            html: "<span>изменить</span>"
+
+        });
+        $(target_selector).append(newLink);
+    }
+
+    function removeLayout(attr) {
+        var target_selector = '.' + attr;
+        $('.layout', target_selector).remove();
+    };
+
+</script>
+
+@using Apeek.Common.Controllers
+@using Apeek.Common.Extensions
+@using Apeek.Core.Services
+@model Apeek.Common.IShape<Apeek.ViewModels.Models.PersonBrowseModel>
+@{Layout = "User.cshtml";}
+
+
+
+@*    if (Shape.ViewModel.PersonId != 0)
+    {
+        Html.RenderPartial("~/Areas/Frontend/Views/Person/Person.cshtml", Shape.ViewModel);
+    }
+*@
+
+@{
+    var hasAnyService = false;
+    var hasContactInfo = false;
+    double score = 0;
+   // var percent = 0;
+
+
+    if (Shape.ViewModel.Services.Count > 0){
+        hasAnyService = true;
+        score++;
+    }
+    
+    if (!string.IsNullOrWhiteSpace(Shape.ViewModel.PersonFullName)){
+        hasContactInfo = true;
+        score++;
+    }
+
+    if (Shape.ViewModel.PhoneNumbers.Count>0){
+        score++;
+    }
+    if (Shape.ViewModel.Location != null){
+        score++; 
+    }    
+    if (!string.IsNullOrWhiteSpace(Shape.ViewModel.PersonDescription)){
+        score++;
+    }
+
+    double percent = Math.Round(score/5*100);
+}
+
+
+<div class="account">
+      <div style="height:30px"></div>
+    <div class="right">
+        <div class="my_profile">
+            <h2 style="margin: 0px;">Ваш профиль</h2>
+            <p style="color:#c7d2d6;font-size:11px;">Укажите полную информацию о себе и своих услугах, чтобы больше людей имели возможность найти вас</p>
+            <div class="progress">
+                <div class="ready" style="width:@percent%;"></div>
+                <div class="text">@percent%</div>
+            </div>
+            <ul>
+                <li ><div class="icon @(hasContactInfo ? "ready" : null)"></div>@Html.RouteLink(t("Контактная информация"), QuickUrl.RouteUserInfo(), new Dictionary<string, object> { { "rel", "info" } })</li>
+        <li><div class="icon @(hasAnyService ? "ready" : null)"></div>@Html.RouteLink(t("Прайс-лист"), QuickUrl.RouteUserServices(), new Dictionary<string, object> { { "rel", "services" } })</li>
+    </ul>
+</div>
+
+@if (ContextService.AuthenticatedUser.LocationId.HasValue && @Shape.ViewModel.Verified)
+{
+<a class="company_link btn red" href="@QuickUrl.UserAbsoluteUrl(GetUrl(Shape.ViewModel.PersonId, @Shape.ViewModel.PersonUrl), ContextService.AuthenticatedUser.SubDomainUrl, ContextService.AuthenticatedUser.LocationUrl, ContextService.AuthenticatedUser.LocationId)" target="_blank">Страница фирмы</a>
+}
+    </div>
+    <div class="left">
+      
+
+        <div style="margin: 0 0 15px 0px;padding: 0 0 0px 0px;">
+            <h1 style="margin: 0px;font-size:24px;">Мое объявление</h1>
+            @if (ContextService.AuthenticatedUser.LocationId.HasValue)
+            {
+                <span style="font-size: 11px;">Примерно так видят ваше объявление потенциальные клиенты.</span>
+            }
+        </div>
+
+        @if(!(hasContactInfo && hasAnyService)){
+            <div class="tip_attension"><div class="icon attension" style="margin-top:-3px;"></div>В данный момент ваше объявление не отображается на сайте. Заполните пустые поля</div>
+        }
+
+
+        <div class="browse">
+            @* original *@
+            <div class="block original">
+                <div class="info">
+                    <div class="img">
+                        <img src="@Shape.ViewModel.Images.MainImageUrlThumb()" />
+                    </div>
+                    @{ string fullName = @Shape.ViewModel.PersonFullName; }
+
+                    <div class="title">
+                        <span>
+                            @if (!string.IsNullOrWhiteSpace(fullName))
+                            {
+                                @fullName
+                            }
+                            else
+                            {
+                                @:[Название не указано]
+                            }
+
+                            @*  @Html.RouteLink(fullName, new {controller = "Person", action = "Person", url = @GetUrl(@Shape.Id, @Shape.Url)})*@
+                        </span>
+                    </div>
+                    <div class="static">
+                        <div class="row">
+                            <div class="label">Адрес:</div>
+                            <div class="value"><b>
+                                                   @if (Shape.ViewModel.Location != null)
+                                                   {
+                                                       @Shape.ViewModel.Location.LocationName
+                                                   }
+                                                   else
+                                                   {
+                                                       @:[Город не указано]
+                                                   }
+                                               </b>,
+                                 @if (Shape.ViewModel.AddressLine1 != null)
+                                                   {
+                                                       @Shape.ViewModel.AddressLine1
+                                                   }
+                                                   else
+                                                   {
+                                                       @:[Улицу не указано]
+                                                   }
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="label">Телефон:</div>
+                            <div class="value">
+                                @{
+                                    if (Shape.ViewModel.PhoneNumbers.Count > 0)
+                                    {
+                                        foreach (var pn in Shape.ViewModel.PhoneNumbers)
+                                        {
+                                            @pn.PhoneNumber@:
+                                        }
+                                    }
+                                    else
+                                    {
+                                        @:[Телефон не указано]
+                                    }
+                                }
+
+                            </div>
+                        </div>
+                       @* <div class="row">
+                            <div class="label">Сайт:</div>
+                            <div class="value">
+                                @{
+                                    if (!Shape.ViewModel.Website.IsEmpty())
+                                    {
+                                        @Shape.ViewModel.Website
+                                    }
+                                    else
+                                    {
+                                        @:[Сайт не указано]
+                                    }
+                                }
+
+                            </div>
+                        </div>*@
+
+                    </div>
+                    <div class="desc">
+
+                        @{
+                            if (@Shape.ViewModel.PersonDescription.IsEmpty())
+                            {
+                                if (Shape.ViewModel.Services.Count > 0)
+                                {
+                                    foreach (var s in @Shape.ViewModel.Services)
+                                    {
+                                        @s.ServiceName@:,
+                                    }
+                                }
+                                else
+                                {
+                                    @:[Описание отсутствует]
+                                }
+                            }
+                            else
+                            {
+                                @Shape.ViewModel.PersonDescription.RemoveBr(200)
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="services">
+
+                    @if (Shape.ViewModel.Services.Count > 0)
+                    {
+                        <ul class="company_price">
+
+
+                            @foreach (var s in @Shape.ViewModel.Services)
+                            {
+
+                                <li  @(ContextService.ServiceId.HasValue && s.ServiceId == ContextService.ServiceId.Value ? "class=curr" : null)>
+
+                                    <div class="outter">
+                                        <div class="inner">
+                                            <div class="service">
+                                                <span>
+                                                    @s.ServiceName
+                                                </span>
+                                            </div>
+                                            <div class="price">
+
+
+                                                @if(s.FromPrice.HasValue && s.ToPrice.HasValue){
+                                                    @Math.Round(s.FromPrice.Value,3)@:-@Math.Round(s.ToPrice.Value,3)<span class="currency">@s.Metric</span>
+
+                                                }else{
+                                                    if (s.FromPrice.HasValue && !s.ToPrice.HasValue){
+                                                        <span class="currency">от</span>@Math.Round(s.FromPrice.Value, 3)<span class="currency">@s.Metric</span>
+                                                    }else{
+                                                        if (s.Price.HasValue){
+                                                            @Math.Round(s.Price.Value, 3)<span class="currency">@s.Metric</span>
+                                                        }else{
+                                                           // @:(пусто)
+                                                        }
+                                                    }
+                                                }
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </li>
+
+                            }
+
+                        </ul>
+                    }
+                    else
+                    {
+                        @:<div style="text-align:center;font-size:12px;"><br /><b>Прайс-лист отсутствует!</b><br /><br/>Добавте несколько услуг,<br/> чтобы люди могли вас находить</div>
+                    }
+
+
+                </div>
+
+            </div>
+
+            @* END  original*@
+
+            <br/><br/>
+            <a id="show_adv"  href="javascript:void(0);" class="btn blue" style="display: inline;">Показать пример объявления</a>
+            <br/><br/><br/>
+            <div  id="adv_example"  class="block" style="display: none;">
+            <div class="info">
+                <div class="img">
+                    <img src="@Shape.ViewModel.Images.MainImageUrlThumb()" />
+                </div>
+                <div class="title">
+                    <span>
+                        Салон красоты Афродита
+                    </span>
+                </div>
+                <div class="static">
+                    <div class="row">
+                        <div class="label">Адрес:</div>
+                        <div class="value"><b>Киев</b></div>
+                    </div>
+                    <div class="row">
+                        <div class="label">Телефон:</div>
+                        <div class="value"><a href="javascript:void(0);" class="phone_numbers" data="
+					    0444287575 
+					    ">
+                                               0444287XXX</a>
+                        </div>
+                    </div>
+                   @* <div class="row">
+                        <div class="label">Сайт:</div>
+                        <div class="value">
+                            <a href="http://google.com" target="_blank">moysait.ua</a>
+                        </div>
+                    </div>*@
+                </div>
+                <div class="desc">
+                    Одной из отличительных черт нашего салона, является наличие собственной постижерной мастерской, работающей исключительно с волосами славянского происхождения.
+                    Превосходное месторасположения, предоставляемая парковка, уютный интерьер, гостеприимство и, конечно же, высокое качество сервиса и услуг.
+                </div>
+            </div>
+            <div class="services">
+                <ul class="company_price">
+                    <li>
+                        <div class="outter">
+                            <div class="inner">
+                                <div class="service">
+                                    <span>
+                                        Завивка ресниц
+                                    </span>
+                                </div>
+                                <div class="price">
+                                    300<span class="currency">грн</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="outter">
+                            <div class="inner">
+                                <div class="service">
+                                    <span>
+                                        Биоламинирование волос
+                                    </span>
+                                </div>
+                                <div class="price">
+                                    450-700<span class="currency">грн</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="outter">
+                            <div class="inner">
+                                <div class="service">
+                                    <span>
+                                        Восстановление волос
+                                    </span>
+                                </div>
+                                <div class="price">
+                                    <span class="currency">от</span>150<span class="currency">грн</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="outter">
+                            <div class="inner">
+                                <div class="service">
+                                    <span>
+                                        Бразильское выпрямление волос
+                                    </span>
+                                </div>
+                                <div class="price">
+                                    90<span class="currency">грн/час</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li >
+                        <div class="outter">
+                            <div class="inner">
+                                <div class="service">
+                                    <span>
+                                        Выведение формы бровей
+                                    </span>
+                                </div>
+                                <div class="price">
+                                    200<span class="currency">грн</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li >
+                        <div class="outter">
+                            <div class="inner">
+                                <div class="service">
+                                    <span>
+                                        Биогелевое укутывание ногтей
+                                    </span>
+                                </div>
+                                <div class="price">
+                                    30<span class="currency">грн/шт</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
