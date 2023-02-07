@@ -1,0 +1,679 @@
+﻿@model Apeek.ViewModels.Models.Impl.UserCouponVM
+
+@{
+    Layout = "~/Areas/Frontend/Views/Shared/_AdminDashboardLayoutNew.cshtml";
+}
+
+
+@using (Html.BeginForm("GenerateCoupon", "AdminDashboard", FormMethod.Post, new { @id = "User_GenerateCoupon" }))
+{
+    <div class="page-header non-printable">
+        <div class="row align-items-end">
+            <div class="col-lg-8">
+                <div class="page-header-title">
+                    <div class="d-inline">
+                        <h4>Generate Coupon</h4>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="page-header-breadcrumb">
+                    <ul class="breadcrumb-title parentModulesInner">
+                        <li class="breadcrumb-item">
+                            <a href="/AdminDashboard/"> <i class="feather icon-home"></i> </a>
+                        </li>
+                        <li class="breadcrumb-item"><a href="#!">Generate Coupon</a> </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-body">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+
+                    <div class="card-block">
+
+                        <div class="row non-printable">
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="exampleInputCouponType">Coupon Type</label>
+                                    <div class="inputContainer">
+
+                                        @Html.DropDownList("CouponType", (IEnumerable<SelectListItem>)ViewData["DDLCoupons"], "Select Coupon Type", new { @class = "form-control" })
+                                        @Html.HiddenFor(x => Model.Id)
+                                        @Html.HiddenFor(x => Model.CouponType)
+                                        @*@Html.HiddenFor(x => Model.CouponDiscountType)*@
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+
+                                <div class="form-group">
+                                    <label for="exampleInputOldPassword1">Coupon Code</label>
+                                    <div class="inputContainer refreshField">
+                                        @Html.TextBoxFor(x => x.CouponCode, new { @class = "form-control", @autocomplete = "off" })
+                                        @Html.HiddenFor(x => Model.CouponCode)
+                                        <a class="btnGenerateAutomaticCoupon" title="Generate Code" id="btnGenerateAutomaticCoupon" onclick="GenerateAutomaticCoupon()"><i class="fa fa-sync"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <span>
+                                        @Html.RadioButtonFor(x => x.CouponDiscountType, 1,new {@class = "percentageSign" })
+                                        <label for="discount1">Percentage</label>
+                                    </span>
+                                    <span>
+                                        @Html.RadioButtonFor(x => x.CouponDiscountType, 2, new { @class = "dollorSign" })
+                                        <label for="discount2">Amount</label>
+                                    </span>
+                                    <div id="switchIcon" class="inputContainer perClass">
+                                        @Html.TextBoxFor(x => x.CouponDiscount, new { @class = "form-control", @autocomplete = "off" })
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row non-printable">
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="exampleInput">Expiry Date</label>
+                                    <div class="inputContainer">
+                                        @Html.TextBoxFor(x => x.ExpiryDate, "{0:MM/dd/yyyy}", new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="exampleInputOldPassword1" style="visibility:hidden">Blank</label>
+                                    <div class="inputContainer noExpiryDivAlign">
+                                        @Html.CheckBoxFor(m => m.NoExpiryDateStatus)
+                                        No Expiry Date For Coupon
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="exampleInputOldPassword1" style="visibility:hidden">Blank</label>
+                                    <div class="inputContainer text-right">
+                                        @if (Model.Id != 0)
+                                        {
+                                            <button type="button" id="btnSubmit" style="background-color:#cf2d1e; border-color: #fff;" class="btn btn-primary">MODIFY </button>
+                                        }
+                                        else
+                                        {
+                                            <button type="button" id="btnSubmit" style="background-color:#cf2d1e; border-color: #fff;" class="btn btn-primary">SUBMIT </button>
+
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <hr class="row">
+                        <div id="iduserCoupons">
+
+                            <div class="card-block">
+                                <div class="row">
+                                    <div class="table-responsive">
+                                        <table id="requestuserCoupons" class="table table-bordered table-striped itemscoupons">
+                                            <thead>
+                                                <tr>
+                                                    <th>Coupon Type</th>
+                                                    <th>Coupon Code</th>
+                                                    @*<th>Percentage/Dollar</th>*@
+                                                    <th>Discount Amount</th>
+                                                    <th>Expiry Date</th>
+                                                    <th>Expiry Status</th>
+                                                    <th>Blocked</th>
+                                                    <th>Edit</th>
+                                                    <th>Delete</th>
+                                                    <th>Block/Unblock</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                @foreach (var item in Model.userCouponVMsList)
+                                                {
+                                                    var withpercentageDollor = (dynamic)null;
+                                                    if (item.CouponDiscountTypeInPercentage == "%")
+                                                    {
+                                                        withpercentageDollor = item.CouponDiscount + item.CouponDiscountTypeInPercentage;
+                                                    }
+                                                    else
+                                                    {
+                                                        withpercentageDollor = item.CouponDiscountTypeInPercentage + item.CouponDiscount ;
+                                                    }
+
+                                                <tr id="@("row"+item.Id)">
+
+                                                    <td>
+                                                        @Html.DisplayFor(x => item.CouponTypeName)
+                                                        @Html.HiddenFor(x => item.CouponType)
+                                                        @Html.HiddenFor(x => item.Id)
+                                                        @Html.HiddenFor(x => item.Status)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(x => item.CouponCode)
+                                                    </td>
+                                                    @*<td>
+            @Html.DisplayFor(x => item.CouponDiscountTypeInPercentage)
+        </td>*@
+                                                    <td>
+                                                        @Html.DisplayFor(x => withpercentageDollor)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(x => item.ExpiryDate)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(x => item.NoExpiryDateStatusInString)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(x => item.StatusString)
+                                                    </td>
+
+                                                    <td  style="text-align:center;">
+                                                        <a href="@Url.Action("GenerateCoupon","AdminDashboard",new { @id = item.Id})" title="Edit"><i class="fa fa-pencil-alt"></i></a>
+                                                    </td>
+
+                                                    <td  style="text-align:center;">
+                                                        <a href="" onclick="DeleteCoupon(@item.Id)" title="Delete"><i class="fa fa-trash-alt"></i></a>
+                                                    </td>
+
+                                                    <td  style="text-align:center;">
+                                                        <label class="switch">
+                                                            @if (item.Status == false)
+                                                            {
+                                                                <input type="checkbox" id="userblockId" title="block/unblock" class="prettycheckbox" onclick="CouponBlocked(@item.Id,event)">}
+
+                                                            else
+                                                            {<input type="checkbox" id="userblockId" title="block/unblock" class="prettycheckbox" checked onclick="CouponBlocked(@item.Id,event)">}
+
+                                                            <span class="slider round"></span>
+                                                        </label>
+                                                    </td>
+
+
+                                                </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="divLoading">
+        <p>
+            Loading. Please wait...<br />
+            <span>
+                <img src="~/Content/Images/circleloadinganimationOrignal.gif" alt="image" />
+            </span>
+        </p>
+
+    </div>
+}
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
+<link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+
+<script src="~/AdminContent/Admity/js/canvasjs.min.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="~/plugins/jquery/jquery.js"></script>
+<script src="~/plugins/jquery-ui/jquery-ui.js"></script>
+<script src="~/AdminContent/html2canvas.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@1.5.3/dist/jspdf.min.js"></script>
+<link href="~/Content/ToastMessage/toastr.css" rel="stylesheet" />
+<script src="~/Content/ToastMessage/toastr.min.js"></script>
+
+<link href="~/plugins/datatables-bs4/css/dataTables.bootstrap4.css" rel="stylesheet" />
+<script src="~/plugins/datatables/jquery.dataTables.js"></script>
+<script src="~/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+
+
+
+<style>
+
+    #divLoading {
+        margin: 0px;
+        padding: 0px;
+        position: fixed;
+        right: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        background-color: #666666;
+        z-index: 30001;
+        opacity: .8;
+        filter: alpha(opacity=70);
+        display: none
+    }
+
+        #divLoading p {
+            position: fixed;
+            top: 30%;
+            left: 45%;
+            color: White;
+        }
+
+        #divLoading span > img {
+            padding-left: 44px;
+        }
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 23px;
+        height: 12px;
+        position: relative;
+        top: 4px;
+    }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 10px;
+            width: 10px;
+            left: 2px;
+            bottom: 1px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+    input:checked + .slider {
+        background-color: #32CD32;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+        left: -15px;
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+
+    input:checked + .slider {
+        background-color: #32CD32 !important;
+    }
+
+
+
+    .dollorSign, .perClass { position: relative;
+    }
+    .perClass input, .dollorSign input {        padding-left: 35px;
+    }
+    .inputContainer.perClass:before {
+        position: absolute;
+        content: "%";
+        left: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        font-weight: bold;
+        color: #000;
+    }
+
+    .inputContainer.dollorSign:before {
+        position: absolute;
+        content: "$";
+        left: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        font-weight: bold;
+        color: #000;
+    }
+    .inputContainer.perClass:after, .inputContainer.dollorSign:after {
+        position: absolute;
+        content: "";
+        width: 1px;
+        height: 100%;
+        background-color: #ccc;
+        top: 0;
+        left: 30px;
+    }
+
+    .noExpiryDivAlign {
+        padding-top: 5px;
+    }
+
+    .gj-datepicker-bootstrap [role=right-icon] button {
+        height: 35px !important;
+    }
+
+    /*table th, tr > td {
+        border: thin solid black;
+        text-align: center;
+        font-weight: bold;
+        font-size: larger;
+    }*/
+
+
+
+    .inputContainer.refreshField {
+        position: relative;
+    }
+
+    .refreshField #btnGenerateAutomaticCoupon {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 40px;
+        height: 34px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-left: 1px solid #eee;
+        cursor: pointer;
+        background-color: #cf2d1e;
+        color: #fff;
+    }
+   
+  .fa-trash-alt:before {
+            color: #cf2d1e;
+        }
+      .fa-pencil-alt:before {
+            color: blue;
+        }
+
+</style>
+
+
+<script>
+
+    $(document).ready(function () {
+        $('#requestuserCoupons').DataTable({
+
+        });
+
+        var messageShow = '@TempData["CouponMsg"]';
+        if (messageShow != '') {
+            toastr.success(messageShow)
+        }
+
+        var deletemessage = '@TempData["DeleteMsg"]';
+        if (deletemessage != '') {
+            toastr.error(deletemessage)
+        }
+
+    });
+
+        $('#ExpiryDate').datepicker({
+            uiLibrary: 'bootstrap4',
+            minDate: 0
+
+        });
+
+
+        $('#ExpiryDate').on('click', function (e) {
+            e.preventDefault();
+            $(this).attr("autocomplete", "off");
+        });
+
+        $("#btnSubmit").on('click', function () {
+            
+            var couponType = $("#CouponType").val();
+            var couponCode = $("#CouponCode").val();
+            var CouponDiscountType = $('input[name=CouponDiscountType]:checked').val();
+            var CouponDiscount = $("#CouponDiscount").val();
+            var ExpiryDate = $("#ExpiryDate").val();
+
+            if (couponType == "") {
+                toastr.info('Please Select Coupon Type.')
+                $("#CouponType").focus();
+                return false;
+            }
+            else if (couponCode == "") {
+                toastr.info('Please Enter Coupon Code.')
+                $("#CouponCode").focus();
+                return false;
+            }
+            else if (CouponDiscountType == "1" && CouponDiscount <= 0) {
+                toastr.info('Please Enter Coupon Discount.')
+                $("#CouponDiscount").focus();
+                return false;
+            }
+            else if (CouponDiscountType == "2" && CouponDiscount <= 0) {
+                toastr.info('Please Enter Coupon Discount.')
+                $("#CouponDiscount").focus();
+                return false;
+            }
+            else if (CouponDiscountType == "1" && CouponDiscount > 50) {
+                toastr.error('Discount cannot be greater than 50%')
+                $("#CouponDiscount").focus();
+                return false;
+            }
+            else if (CouponDiscountType == "2" && CouponDiscount > 50) {
+                toastr.error('Discount cannot be greater than $50')
+                $("#CouponDiscount").focus();
+                return false;
+            }
+
+            else {
+                $("#User_GenerateCoupon").submit();
+            }
+
+        });
+
+
+    var _couponId = $("#Id").val();
+    if (_couponId > 0) {
+        var _couponDiscountType = $("#CouponDiscountType").val();
+        if (_couponDiscountType == 1) {
+            $('#switchIcon').addClass('perClass');
+            $('#switchIcon').removeClass('dollorSign');
+        }
+        else {
+            $('#switchIcon').removeClass('perClass');
+            $('#switchIcon').addClass('dollorSign'); 
+        }
+    }
+
+
+    $("input[name='CouponDiscountType']").change(function () {
+        var dt = $(this).val();
+        if (dt == 1) {
+            $('#switchIcon').addClass('perClass');
+            $('#switchIcon').removeClass('dollorSign');
+        }
+        else {
+            
+            $('#switchIcon').removeClass('perClass');
+            $('#switchIcon').addClass('dollorSign'); 
+           
+        }
+      
+    });
+
+
+    $("#CouponDiscount").keydown(function (event) {
+        if (event.shiftKey == true) {
+            event.preventDefault();
+        }
+        if ((event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105) || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 190) {
+
+        } else {
+            event.preventDefault();
+        }
+
+        if ($(this).val().indexOf('.') !== -1 && event.keyCode == 190)
+            event.preventDefault();
+
+    });
+
+
+    function CouponBlocked(id, e) {
+        var checkedValue = e.target.checked;
+        var id = id;
+        $.ajax({
+            url: "/AdminDashboard/BlockedCoupon",
+            type: "Get",
+            dataType: "json",
+            data: { CouponId: id, checkedValue: checkedValue },
+            success: function (data) {
+                
+                if (data == 1 && checkedValue == true) {
+                    
+                    var td = $(e.target.parentNode.parentNode.parentNode)[0].children[5];
+                    td.innerText = "Y";
+                    toastr.warning('Coupon Blocked Successfully.')
+                }
+                else {
+                    var td = $(e.target.parentNode.parentNode.parentNode)[0].children[5];
+                    td.innerText = "N";
+                    toastr.success('Coupon Unblocked Successfully.')
+                }
+            },
+            error: function () {
+                toastr.error('Something went wrong !')
+            }
+
+        })
+    }
+
+
+    function DeleteCoupon(id) {
+
+        var userConfirms = confirm("Are You sure You want to delete this coupon?");
+        if (userConfirms) {
+            $.ajax({
+                url: "/AdminDashboard/DeleteCoupon",
+                type: "Get",
+                data: { Id: id },
+                success: function (data) {
+                    if (data == "true" || data == "True") {
+                        //alert(data)
+                        //$('#row' + id).css("display", "none");
+                        //toastr.warning('Coupon deleted successfully.')
+                    }
+                    else {
+                        //toastr.error('Something went wrong !')
+
+                    }
+                },
+                error: function () {
+                    alert("Error")
+                }
+
+            })
+        }
+        else {
+
+        }
+    }
+
+
+
+        //$("#btnSubmit").on('click', function () {
+        //    
+        //    var couponType = $("#CouponType").val();
+        //    var couponCode = $("#CouponCode").val();
+        //    var CouponDiscountType = $('input[name=couponType]:checked').val();
+        //    var CouponDiscount = $("#CouponDiscount").val();
+        //    var ExpiryDate = $("#ExpiryDate").val();
+        //    var NoExpiryDateStatus = $('#NoExpiryDateStatus:checked').val();
+
+        //    //$('#divLoading').show();
+        //    //$.ajax({
+        //    //    url: "/AdminDashboard/GenerateCoupon",
+        //    //    type: "Post",
+        //    //    dataType: "json",
+        //    //    //data: { CouponCode: startRentalDate },
+        //    //    success: function (data) {
+        //    //        $("#CouponCode").val(data);
+        //    //        $('#divLoading').hide();
+        //    //    },
+        //    //    error: function () {
+        //    //        toastr.error('Something went wrong !')
+        //    //    }
+        //    //})
+
+
+
+        //});
+
+
+
+        function GenerateAutomaticCoupon() {
+            var couponValue = $("#CouponCode").val();
+
+            if (couponValue != '') {
+                $("#CouponCode").val('');
+            }
+            $('#divLoading').show();
+            $.ajax({
+                url: "/AdminDashboard/AutomaticallyGenerateCouponCode",
+                type: "Post",
+                dataType: "json",
+                //data: { CouponCode: startRentalDate },
+                success: function (data) {
+                    $("#CouponCode").val(data);
+                    $('#divLoading').hide();
+                },
+                error: function () {
+                    toastr.error('Something went wrong !')
+                }
+            })
+
+
+
+        }
+
+</script>
+
+
+

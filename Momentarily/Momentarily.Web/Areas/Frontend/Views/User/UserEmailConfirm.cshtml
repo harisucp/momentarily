@@ -1,0 +1,64 @@
+﻿@model Apeek.Entities.Entities.User 
+@{
+    ViewBag.Title = "UserEmailConfirm";
+    Layout = "~/Areas/Frontend/Views/Shared/_Layout.cshtml";
+}
+
+@if (!User.IsUserConfirmed)
+{
+    <div class="content mainClass">
+        <div class="container-full confirm-email">
+            <div class="container background-container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1>Account activation</h1>
+                        @if (Model.Verified == false && Model.IsMobileVerified == true)
+                        {
+                            <div class="alerts">
+                                <div class="alert-error">
+                                    Your Email Id was not verified.
+                                </div>
+                            </div>
+                        }
+                        else if (Model.Verified == true && Model.IsMobileVerified == false)
+                        {
+                            <div class="alerts">
+                                <div class="alert-error">
+                                    Your Mobile Number was not verified.
+                                </div>
+                            </div>
+                        }
+                        else if (Model.Verified == false && Model.IsMobileVerified == false)
+                        {
+                            <div class="alerts">
+                                <div class="alert-error">
+                                    Your account was not activated.
+                                </div>
+                            </div>
+                        }
+                        
+                       Please, click the button below to activate your account.
+                        @using (@Html.BeginForm("UserEmailConfirmResend", "User", FormMethod.Post))
+                        {
+                            <button type="submit" id="send" class="btn btn-green send-button">Resend Verification</button>
+                        }
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <ul class="login-links">
+                            <li> <a href="@QuickUrl.HomeUrl()">Home</a> </li>
+                            <li> <a href="@QuickUrl.UserProfileUrl()">My account</a> </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script>
+    $('#send').click(function () {
+        $('#send').css('pointer-events','none');
+    })
+
+</script>

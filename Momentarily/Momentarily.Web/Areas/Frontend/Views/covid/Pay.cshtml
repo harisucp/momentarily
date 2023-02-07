@@ -1,0 +1,79 @@
+﻿@model Momentarily.ViewModels.Models.OrderPayResult
+@{
+    ViewBag.Title = "Pay";
+    Layout = "~/Areas/Frontend/Views/Shared/_LayoutNew.cshtml";
+}
+<div class="content contentFooterOver">
+    <div class="container account">
+        <div class="col-md-6 col-md-offset-3 col-sm-12 payment-page">
+            <div class="aertMessageSection">
+                <div class="title-block separated-block">
+                    <h1 class="left-align back">
+                        <span class="back-button">
+                            <a href="/Booking">
+                                <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                            </a>
+                        </span>
+                        Pay for Order
+                    </h1>
+                </div>
+                <div class="form-group">
+                    @Html.Partial("_OrderPaymentResult", Model)
+                </div>
+                <a href="/covid" class="btn btn-green backToPrev">Go Back</a>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .payment-page {
+        margin-top: 15%;
+        text-align: center;
+    }
+
+    .aertMessageSection {
+        background-color: #fff;
+        border-radius: 5px;
+        overflow: hidden;
+        box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+
+        .aertMessageSection .title-block {
+            margin: 0;
+        }
+
+            .aertMessageSection .title-block h1 {
+                margin: 0;
+                background-color: #cf2d1e;
+                color: #fff;
+                font-size: 25px;
+                padding: 12px 15px;
+            }
+
+        .aertMessageSection span.back-button {
+            display: none;
+        }
+
+    .successMessage {
+        padding: 50px 15px 20px;
+        font-size: 18px;
+        margin-top: 50px;
+        margin: 0;
+        background-color: transparent;
+        color: #595958;
+    }
+
+    .backToPrev {
+        max-width: 160px;
+        width: 100%;
+        font-size: 16px;
+        margin: 20px auto;
+        display: inherit;
+    }
+
+    .alert-error {
+        color: #595958;
+        background-color: #fff;
+        border-color: #cf2d1e;
+    }
+</style>

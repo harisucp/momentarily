@@ -1,0 +1,253 @@
+﻿@using Newtonsoft.Json
+@model Apeek.Common.IShape<Momentarily.ViewModels.Models.Braintree.PayoutDetailsModel>
+@{
+    Layout = "~/Areas/Frontend/Views/Shared/_AccountMenuLayout.cshtml";
+}
+<div class="content">
+    <div class="container account" ng-controller="UserBankInfoController as bank">
+        <div class="row">
+            <div class="col-md-9 col-md-offset-3">
+                <div class="profile-page">
+                    <div class="account-sub-menu separated-block">
+                        <div class="account-sub-menu-items col-md-3"><a href="@QuickUrl.UserProfileUrl()">My profile</a></div>
+                        <div class="account-sub-menu-items col-md-3"><a href="@QuickUrl.UserEmailUrl()">Change email</a></div>
+                        <div class="account-sub-menu-items col-md-3"><a href="@QuickUrl.UserPwdUrl()">Change password</a></div>
+                        <div class="account-sub-menu-items active col-md-3"><a href="@Url.Action("BankInfo","User")">Payment Details</a></div>
+                    </div>
+                    <div class="title-block separated-block">
+                        <h1 class="left-align">
+                            Payment Details
+                        </h1>
+                    </div>
+                    @using (Html.BeginForm("BankInfo", "User", FormMethod.Post, new { @id = "myForm" }))
+                    {
+                        <div class="form-block col-md-12">
+                            <input type="hidden" name="ViewModel.UserId" value="@Shape.ViewModel.UserId" />
+                            <p>Please enter either your Paypal phone number or email information below to receive payments for reservations made through our secure system.</p>
+                            @*<div class="row">
+                                    <div class="form-group col-md-5">
+                                        <label>Locality</label>
+                                        @Html.TextBoxFor(m => m.ViewModel.Locality, new { @class = "form-control account-input", required = "required" })
+                                        @Html.ValidationMessageFor(m => m.ViewModel.Locality, null, new { @class = "error-labels" })
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-5">
+                                        <label>Postal Code</label>
+                                        @Html.TextBoxFor(m => m.ViewModel.PostalCode, new { @class = "form-control account-input", required = "required" })
+                                        @Html.ValidationMessageFor(m => m.ViewModel.PostalCode, null, new { @class = "error-labels" })
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-5">
+                                        <label>Region</label>
+                                        @Html.TextBoxFor(m => m.ViewModel.Region, new { @class = "form-control account-input", required = "required" })
+                                        @Html.ValidationMessageFor(m => m.ViewModel.Region, null, new { @class = "error-labels" })
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-5">
+                                        <label>Street address</label>
+                                        @Html.TextBoxFor(m => m.ViewModel.StreetAddress, new { @class = "form-control account-input", required = "required" })
+                                        @Html.ValidationMessageFor(m => m.ViewModel.StreetAddress, null, new { @class = "error-labels" })
+                                    </div>
+                                </div>*@
+                            <div class="row">
+                                <div class="form-group col-md-5">
+                                    <label>PayPal Information</label>
+                                    @Html.DropDownListFor(n => n.ViewModel.PaymentType, new SelectList(ViewBag.PaymentType, "Value", "Text", Model.ViewModel.PaymentType), "Select Payment Type", new { @class = "form-control", required = "required" })
+                                    @Html.ValidationMessageFor(m => m.ViewModel.PaymentType, null, new { @class = "error-labels" })
+                                    @Html.HiddenFor(m => m.ViewModel.PaymentType)
+                                </div>
+                            </div>
+                            <div class="row" id="hideBusinessPhone">
+                                <div class="form-group col-md-5">
+                                    <label>Phone</label>
+                                    @Html.TextBoxFor(m => m.ViewModel.PhoneNumber, new { @class = "form-control account-input", @autocomplete ="off", @pattern = "[1-9]{1}[0-9]{9}", @maxlength = "10" })
+                                    <span id="errmsg"></span>
+                                    @Html.ValidationMessageFor(m => m.ViewModel.PhoneNumber, null, new { @class = "error-labels" })
+                                </div>
+                            </div>
+                            <div class="row" id="hideBusinessEmail">
+                                <div class="form-group col-md-5">
+                                    <label>Email</label>
+                                    @Html.TextBoxFor(m => m.ViewModel.PaypalBusinessEmail, new { @class = "form-control account-input" })
+                                    @Html.ValidationMessageFor(m => m.ViewModel.PaypalBusinessEmail, null, new { @class = "error-labels" })
+                                </div>
+                            </div>
+
+
+                            @*<div class="row" style="display:none">
+                                    <div class="form-group col-md-5">
+                                        <label>Account number</label>
+                                        @Html.TextBoxFor(m => m.ViewModel.AccountNumber, new { @class = "form-control account-input", required = "required" })
+                                        @Html.ValidationMessageFor(m => m.ViewModel.AccountNumber, null, new { @class = "error-labels" })
+                                    </div>
+                                </div>
+                                <div class="row" style="display:none">
+                                    <div class="form-group col-md-5">
+                                        <label>Routing number</label>
+                                        @Html.TextBoxFor(m => m.ViewModel.RoutingNumber, new { @class = "form-control account-input", required = "required" })
+                                        @Html.ValidationMessageFor(m => m.ViewModel.RoutingNumber, null, new { @class = "error-labels" })
+                                    </div>
+                                </div>*@
+                            @Html.Partial("_PaymentErrors", Model)
+                            <button type="submit" id="btnSubmit" class="btn btn-green">Save</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@Scripts.Render("~/Scripts/User")
+<script>
+    var angularConstants = {};
+    angularConstants = {
+        bankInfo: JSON.parse('@Html.Raw(JsonConvert.SerializeObject(Model.ViewModel))')
+    };
+
+    $(document).ready(function () {
+        $("#hideBusinessEmail").css("display", "none");
+        $("#hideBusinessPhone").css("display", "none")
+
+        var selected = $("#ViewModel_PaymentType option:selected").val();
+        if(selected ==15)
+        {
+            $("#hideBusinessEmail").css("display", "none");
+            $("#hideBusinessPhone").css("display", "block");
+        }
+        if (selected == 16) {
+            $("#hideBusinessPhone").css("display", "none");
+            $("#hideBusinessEmail").css("display", "block");
+        }
+
+    });
+
+    $("#ViewModel_PaymentType").change(function () {
+        var selectedValue = this.value;
+        if (selectedValue == 15) {
+            $("#hideBusinessEmail").css("display", "none");
+            $("#hideBusinessPhone").css("display", "block");
+            $("#ViewModel_PaypalBusinessEmail").val('');
+        }
+        else if (selectedValue == 16) {
+            $("#hideBusinessPhone").css("display", "none");
+            $("#hideBusinessEmail").css("display", "block");
+            $("#ViewModel_PhoneNumber").val('');
+
+        }
+        else {
+
+        }
+    });
+
+
+    $("#btnSubmit").on("click", function ()
+    {
+        debugger;
+        var type = $("#ViewModel_PaymentType").val();
+        var phone = $("#ViewModel_PhoneNumber").val();
+        var email = $("#ViewModel_PaypalBusinessEmail").val();
+
+        if (type == "" || type == "0")
+        {
+            alert("Please select payment type.");
+            return false;
+        }
+        else {
+            if(type=="15")
+            {
+                if (phone == "") {
+                    alert("Please enter mobile number register with Paypal.");
+                    $("#ViewModel_PhoneNumber").focus();
+                    return false;
+                }
+                else {
+                    if (phone.length >= 10) {
+                        $("#myForm").submit();
+                    }
+                    else {
+                        $("#errmsg").html("Value must contain 10 digits.").show().fadeOut(3000);
+                        $("#ViewModel_PhoneNumber").focus();
+                        return false;
+                    }
+                }
+            }
+            else {
+                if (email == "")
+                {
+                    alert("Please enter email register with Paypal");
+                    $("#ViewModel_PaypalBusinessEmail").focus();
+                    return false;
+                }
+                else  {
+                    $("#myForm").submit();
+                }
+
+            }
+
+        }
+       
+        
+      
+        
+    });
+
+
+    $("#ViewModel_PhoneNumber").keypress(function (e) {
+        debugger
+        //if the letter is not digit then display error and don't type anything
+        var lengthPhone = e.target.value.length;
+        if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+            //display error message
+            $("#errmsg").html("Please Enter Digits Only").show().fadeOut(3000);
+            return false;
+        }
+    });
+
+
+
+    //$("#btnSubmit").click(function () {
+    //    debugger
+    //    var email = $("#ViewModel_PaypalBusinessEmail").val();
+
+    //    //if (email == undefined || email == '') {
+    //    //    $("#ViewModel_PaypalBusinessEmail").focus();
+    //    //    $("#subscribe_msg_error2").css("display", "block");
+    //    //    $("#subscribe_msg_error").css("display", "none");
+    //    //    return;
+    //    //}
+    //    //else
+    //        if (!ValidateEmail(email)) {
+    //        $("#ViewModel_PaypalBusinessEmail").focus();
+    //        $("#subscribe_msg_error2").css("display", "none");
+    //        $("#subscribe_msg_error").css("display", "block");
+    //        return;
+    //    }
+    //  else {
+    //      $("#myForm").submit();
+    //      $("#subscribe_msg_error").css("display", "none");
+    //      $("#subscribe_msg_error2").css("display", "none");
+    //  }
+    //});
+
+
+    function ValidateEmail(email) {
+        var expr = /^([\w-\.]+)@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+        return expr.test(email);
+    };
+</script>
+<style>
+    #errmsg {
+        color: #A63232;
+        font-size: 11px;
+    }
+    #subscribe_msg_error {
+        margin-top: 30px;
+    }
+
+    #subscribe_msg_error2 {
+        margin-top: 30px;
+    }
+</style>

@@ -1,0 +1,25 @@
+﻿@model Apeek.Common.IShape<Apeek.ViewModels.Models.CreateUserEmailModel>
+
+<div class="create step2">
+    <div class="block">
+        <h1>@t("Введите свой email")</h1>
+        <p class="tips">@t("Что бы завершить процесс оформление заявки нам нужен Ваш email") <br />
+            @t("Таким образом вы всегда сможете получить доступ к Вашему объявлению")
+        </p>
+    </div>
+    <div class="block">
+        <br/> <br/>
+    </div>
+    <div class="block">
+        @using (Html.BeginFormAntiForgeryPost()){
+            
+            @Html.HiddenFor(x=>x.ViewModel.VerificationCode)
+            @Html.TextBoxFor(x=>x.ViewModel.Email,new{id="user_email",placeholder="shevchenko@gmail.com"}) 
+                <!-- <span class="validator ok"></span> -->
+            @Html.TValidationMessageFor(x => x.ViewModel.Email, t, new {@class="error", id="email_error"})
+            <div class="email_tips">@t("не используется  в рекламных целях")<br/>@t("не публикуется")</div>
+            <br/><br/>
+            <input type="submit" id="add_email" class="btn green" value='@t("Завершить")'/>
+        }
+    </div>
+</div>

@@ -1,0 +1,85 @@
+﻿.how-it-works-block {
+  .title-background {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    background-image: url(/Content/img/home_bg.jpg);
+    background-size: cover;
+    background-position: center;
+    height: 359px;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 50px;
+    .title-block {
+      position: absolute;
+      width: 96%;
+      top: 50%;
+      left: 50%;
+      -webkit-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+    }
+  }
+  .jumbotron-own {
+    h1, h2 {
+      text-align: center;
+    }
+    h1 {
+      margin: 50px 0 0;
+      font-size: 48px;
+    }
+    h2 {
+      margin-top: 5px;
+      margin-bottom: 30px;
+      font-size: 22px;
+    }
+    .ds-icon {
+      position: relative;
+      border: 2px solid;
+      height: 50px;
+      width: 50px;
+      border-radius: 50%;
+      margin-right: 20px;
+      color: #7AC943;
+      > i {
+        position: absolute;
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        top: 51%;
+        left: 50%;
+        font-size: 30px;
+      }
+    }
+    .media-body {
+      h3 {
+        font-size: 18px;
+        margin: 0;
+        margin-bottom: 3px;
+      }
+      p {
+        font-size: 14px;
+      }
+    }
+    .description-box {
+      h2 {
+        font-size: 22px;
+        margin-top: 0;
+        margin-bottom: 20px;
+      }
+      .media-block {
+        display: inline-block;
+        width: 100%;
+        margin-bottom: 10px;
+      }
+    }
+    .about-box .about-ps {
+      font-style: italic;
+    }
+  }
+  .input-style-how-it-work {
+    max-width: calc(100% - 145px);
+    display: inline-block;
+  }
+  .form-how-it-work {
+    margin-bottom: 35px;
+  }
+}

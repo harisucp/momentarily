@@ -1,0 +1,177 @@
+﻿@model Apeek.Common.IShape<Apeek.ViewModels.Models.RequestViewModel>
+
+@{
+    ViewBag.Title = "Good Request";
+
+    Layout = "~/Areas/Frontend/Views/Shared/_AccountMenuWithoutLayout.cshtml";
+}
+<style>
+     
+    .account.booking-request-pay .request-info-block .info-request .first-td {
+        width: 200px !important;
+        float: left !important;
+    }
+    .info-request .table > tbody > tr > td {
+        padding: 8px !important;
+    }
+
+</style>
+
+<div class="content" ng-controller="BookingRequestController as request" ng-cloak>
+    <div class="container account booking-request-pay">
+        <div class="row">
+            <div class="col-md-12 background-container">
+                <div class="title-block separated-block">
+                    <h1 class="left-align back">
+                        <span class="back-button">
+                            <a href="@Url.Action("Item", "Search", new { id = Model.ViewModel.GoodId })">
+                                <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                            </a>
+                        </span>
+                        Submit booking request
+                    </h1>
+                </div>
+                <div class="request-info-block clearfix">
+                    <div class="item-info separated-block">
+                        <div class="col-md-6">
+                            <div class="img left-align">
+                                <img src="{{request.item.GoodImageUrl}}" on-error-src="/Content/Img/error-bg.png" alt="image">
+                            </div>
+                            <div class="title-item right-align">
+                                <div class="title-text">{{request.item.GoodName}}</div>
+                                <div class="location">
+                                    {{request.item.GoodLocation}}
+                                </div>
+                                <div class="type ng-binding">{{request.item.GoodType}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="separated-block col-md-12">
+                        <div class="user-info" style="padding-bottom: 30px">
+                            <div class="user-image">
+                                <img ng-src="{{request.item.UserImageUrl}}" alt="">
+                            </div>
+                            <div class="user-name ng-binding">{{request.item.FirstName}}</div>
+                        </div>
+                        <div class="info-request">
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td class="first-td"><label>Start Date:</label></td>
+                                        <td class="second-td">{{request.convertToDate(request.item.StartDate) | date: 'MM/dd/yyyy'}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="first-td"><label>End Date:</label></td>
+                                        <td class="second-td">{{request.convertToDate(request.item.EndDate) | date: 'MM/dd/yyyy'}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="first-td"><label>Start Time:</label></td>
+                                        <td class="second-td">{{request.item.StartTime}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="first-td"><label>End Time:</label></td>
+                                        <td class="second-td">{{request.item.EndTime}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="first-td"><label>Days</label></td>
+                                        <td class="second-td">{{request.item.Days}}</td>
+                                    </tr>
+                                    <tr ng-if="request.item.ApplyForDelivery">
+                                        <td class="first-td"><label>ShippingAddress</label></td>
+                                        <td class="second-td">{{request.item.ShippingAddress}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="info-request col-md-12">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td class="first-td">
+                                        <label>${{request.item.PerDayCost | number: 2}} x {{request.item.Days}} {{request.item.Days === 1?"day":"days"}}</label>
+                                    </td>
+                                    <td class="second-td">${{request.item.DaysCost | number: 2}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="first-td">
+                                        <label>Service fee*</label>
+                                    </td>
+                                    <td class="second-td">${{request.item.ServiceFeeCost | number: 2}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="first-td">
+                                        <label>Charity</label>
+                                    </td>
+                                    <td class="second-td">${{request.item.CharityCost | number: 2}}</td>
+                                </tr>
+
+
+                                <tr ng-if="request.item.ApplyForDelivery">
+                                    <td class="first-td">
+                                        <label>Delivery</label>
+                                    </td>
+                                    <td class="second-td">${{request.item.DiliveryCost}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="first-td">
+                                        <label>Discount Amount</label>
+                                    </td>
+                                    <td class="second-td">${{request.item.CouponDiscount | number: 2}}</td>
+                                </tr>
+                                @*<tr>
+                                        <td>
+                                            <label>Coupon Code</label>
+                                        </td>
+                                        <td class="text-right">${{request.item.CouponCode}}</td>
+                                    </tr>*@
+                                <tr class="total-row">
+                                    <td class="first-td">Total</td>
+                                    <td class="second-td">${{request.item.Cost | number: 2}}</td>
+                                </tr>
+                                <tr class="security-deposit">
+                                    <td class="first-td">Security deposit**</td>
+                                    <td class="second-td">${{request.item.SecurityDeposit | number: 2}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-12">
+                        @using (Html.BeginForm())
+                        {
+                            <button class="btn btn-green" type="submit" ng-disabled="request.item.CurrentUserIsOwner">
+                                <span ng-bind="request.item.SharerAgreeToShareImmediately ? 'Pay for Booking' : 'Request to Book'"></span>
+                            </button>
+                            <div class="error-msg" ng-if="request.item.CurrentUserIsOwner">
+                                You can't book your own item
+                            </div>
+
+                            <div class="message-info">
+                                This helps us run our platform and offer service and support to the Seekers and Sharers in our community.
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/Scripts/Listing")
+<link href="~/Content/ToastMessage/toastr.css" rel="stylesheet" />
+<script src="~/Content/ToastMessage/toastr.min.js"></script>
+<script>
+    var angularConstants = {
+        BookingRequest: JSON.parse('@Html.Raw(HttpUtility.JavaScriptStringEncode(Json.Encode(Model)))')
+    };
+
+
+        var checkpaymentInfo = '@TempData["paymentDetailNotFound"]';
+    if(checkpaymentInfo =="False")
+    {
+        toastr.error("Please update the payment details first...");
+    }
+
+</script>
+
+

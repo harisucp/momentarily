@@ -1,0 +1,187 @@
+﻿@model Momentarily.ViewModels.Models.StockVM
+@{
+    Layout = "~/Areas/Frontend/Views/Shared/_AdminDashboardLayoutNew.cshtml";
+}
+<style>
+    #CovidGoodId {
+        background-color: #ccc !important;
+    }
+
+    #Description {
+        height: 36px;
+    }
+</style>
+
+@using (Html.BeginForm("UpdateStockDetail", "AdminDashboard", FormMethod.Post, new { @id = "Update_StockDetail" }))
+{
+    <div class="page-header non-printable">
+        <div class="row align-items-end">
+            <div class="col-lg-8">
+                <div class="page-header-title">
+                    <div class="d-inline">
+                        <h4>Update Stock Detail</h4>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="page-header-breadcrumb">
+                    <ul class="breadcrumb-title">
+                        <li class="breadcrumb-item">
+                            <a href="/AdminDashboard/"> <i class="feather icon-home"></i> </a>
+                        </li>
+                        <li class="breadcrumb-item"><a href="#!">Update Stock Detail</a> </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-body">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-block">
+                        <div class="row non-printable">
+
+                            <div class="col-md-6" style="pointer-events:none;">
+                                <div class="form-group">
+                                    <label for="exampleInputOldPassword1">Select Item</label>
+                                    <div class="inputContainer">
+                                        @Html.DropDownListFor(model => model.CovidGoodId, new SelectList(ViewBag.covidgoods, "CovidGoodId", "GoodName"), "Select Item", new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="exampleInputOldPassword1">Old Quantity</label>
+                                    <div class="inputContainer">
+                                        @Html.TextBoxFor(x => x.OldQuantity, new { @class = "form-control", autocomplete = "off", @readonly = "readonly" })
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="exampleInput">Description(Optional)</label>
+                                    <div class="inputContainer">
+
+                                        @Html.TextAreaFor(x => x.Description, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="exampleInputOldPassword1">Enter Quantity</label>
+                                    <div class="inputContainer">
+                                        @Html.TextBoxFor(x => x.Quantity, new { @class = "form-control", autocomplete = "off" })
+                                        @Html.HiddenFor(x => x.Id)
+                                        @Html.HiddenFor(x => x.CovidGoodId)
+                                        @Html.HiddenFor(x => x.CreateDate)
+                                        @Html.HiddenFor(x => x.CreateBy)
+                                        @Html.HiddenFor(x => x.ModBy)
+                                        @Html.HiddenFor(x => x.ModDate)
+                                        @Html.HiddenFor(x => x.QuantityLeft)
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="exampleInputOldPassword1" style="visibility:hidden">Blank</label>
+                                    <div class="inputContainer text-right">
+                                        <input type="button" id="btnSubmit" style="background-color:#cf2d1e; border-color: #fff;" value="Update" class="btn btn-primary" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+<div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px; top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001;  opacity: .8; filter: alpha(opacity=70);display:none">
+
+    <p style="position: fixed; top: 30%; left: 45%; color: White;">
+        Loading. Please wait...<br />
+        <span>
+            <img src="~/Content/Images/circleloadinganimationOrignal.gif" style="padding-left: 44px;">
+        </span>
+    </p>
+
+</div>
+@*<link href="~/plugins/datatables-bs4/css/dataTables.bootstrap4.css" rel="stylesheet" />*@
+@*<script src="//code.jquery.com/jquery-1.10.2.js"></script>*@
+<script src="~/plugins/jquery/jquery.js"></script>
+@*<script src="~/plugins/datatables/jquery.dataTables.js"></script>
+    <script src="~/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>*@
+<link href="~/Content/ToastMessage/toastr.css" rel="stylesheet" />
+<script src="~/Content/ToastMessage/toastr.min.js"></script>
+<script>
+    $(document).ready(function () {
+        
+        if ("@TempData["iserror"]" == "true" || "@TempData["iserror"]" == "True") {
+            toastr.info("Something Went Wrong!");
+        }
+    });
+
+    $('#btnSubmit').click(function () {
+        
+        var CovidGoodId = $('#CovidGoodId').val();
+        var OldQuantity = parseInt($('#OldQuantity').val());
+        var QuantityLeft =  parseInt($('#QuantityLeft').val());
+        var Quantity = parseInt($('#Quantity').val());
+        if (CovidGoodId == "") {
+           
+            alert("Please Select Item");
+            return false;
+        }
+        if (Quantity == "" || Quantity == "0") {
+            alert("Please Add Quantity");
+            $('#Quantity').focus();
+            return false;
+        }
+        if (Quantity == 0) {
+            alert("Quantity Cannot Be Zero");
+            $('#Quantity').focus();
+            return false;
+        }
+        if (Quantity < 0) {
+            alert("Quantity Cannot Be Less Than Zero");
+            $('#Quantity').focus();
+            return false;
+        }
+        if (Quantity == OldQuantity) {
+            $('#Update_StockDetail').submit();
+        }
+        else {
+            if (Quantity > OldQuantity) {
+               
+                alert("Qty cannot be greater then old quantity");
+                $('#Quantity').focus();
+                return false;
+            }
+            else {
+                var minimumvalue = parseInt(OldQuantity - QuantityLeft);
+                if (Quantity < minimumvalue) {
+                    
+                    alert("You can decrease only " + QuantityLeft + " items.The minimum value for decrease quantity is " + parseInt(minimumvalue));
+                    $('#Quantity').focus();
+                    return false;
+                }
+                else {
+                    $('#Update_StockDetail').submit();
+                }
+            }
+        }
+    })
+
+</script>

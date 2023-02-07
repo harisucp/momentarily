@@ -1,0 +1,304 @@
+﻿@model IEnumerable<Momentarily.ViewModels.Models.ReportAbuseVM>
+@{
+    /**/
+
+    Layout = "~/Areas/Frontend/Views/Shared/_AdminDashboardLayoutNew.cshtml";
+}
+<style>
+    #tb_abusivereports > tbody > tr > td:nth-child(2) {
+        text-overflow: ellipsis !important;
+        width: 50px;
+        white-space: nowrap;
+        overflow: hidden;
+        position: relative;
+        max-width: 100px;
+    }
+</style>
+
+<div class="page-header">
+    <div class="row align-items-end">
+        <div class="col-lg-8">
+            <div class="page-header-title">
+                <div class="d-inline">
+                    <h4>Reported Items</h4>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="page-header-breadcrumb">
+                <ul class="breadcrumb-title parentModulesInner">
+                    <li class="breadcrumb-item">
+                        <a href="/AdminDashboard/"> <i class="feather icon-home"></i> </a>
+                    </li>
+                    <li class="breadcrumb-item"><a href="#!">Abusive Item Report</a> </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="page-body">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+
+                <div class="card-block">
+                    <div class="dashBoardTable">
+                        <div class="table-responsive">
+                            <table id="tb_abusivereports" class="table table-hover table-borderless">
+                                <thead>
+                                    <tr>
+                                        <th>Product Name</th>
+                                        @*<th>UserName</th>*@
+                                        <th>Last Reported</th>
+                                        <th>Count</th>
+                                        <th>Status</th>
+                                        <th>No Issue</th>
+                                        <th>Notification</th>
+                                        <th>Abusive</th>
+                                        <th>Detail</th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+
+                                    <tr id="@("row"+item.Id)">
+                                        <td>
+                                            @Html.ActionLink(item.ItemName, "Item", "Search", new { id = item.GoodId }, new { title = item.ItemName, target = "_blank" })
+                                            @Html.HiddenFor(x => item.GoodId)
+                                        </td>
+                                        @*<td>
+            @Html.ActionLink(item.UserName, "UserPublicProfile", "User", new { id = item.UserId }, new { title = item.UserName, target = "_blank" })
+            @Html.HiddenFor(x => item.UserId)
+        </td>*@
+                                        <td>
+                                            @Html.DisplayFor(x => item.ModDate)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(x => item.count)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(x => item.GlobalCodeName)
+                                            @*@Html.HiddenFor(x => item.UserId)*@
+                                        </td>
+
+                                        <td style="text-align:center">
+
+                                            <a title="No Issue" onclick="markas_noissue(event)" id="@item.GoodId" name="@item.Id"> <i class="fa fa-check" style="color:#3b7b00"></i></a> &nbsp;
+                                        </td>
+                                        <td style="text-align:center">
+                                            <a title="Send Notification" onclick="markas_sendreminder(event)" id="@item.GoodId" name="@item.Id"> <i class="fa fa-bell" style="color:#dcc416"></i></a>  &nbsp;
+                                        </td>
+                                        <td style="text-align:center">
+                                            <a title="Abusive" onclick="markas_abusive(event)" id="@item.GoodId" name="@item.Id"> <i class="fa fa-ban" style="color:#cf2d1e"></i></a> &nbsp;
+                                        </td>
+                                        <td style="text-align:center">
+                                            <a title="Detail" onclick="markas_detail(event)" id="@item.GoodId"> <i class="fa fa-align-justify" style="color:#369ead "></i></a>
+
+                                        </td>
+                                    </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="myDiv">
+                <img id="loading-image" src="~/Content/Images/Category/loading.gif" alt="image" style="display:none;" />
+            </div>
+            <div class="loading" align="center">
+                Loading. Please wait.<br />
+                <br />
+                <img src="~/Content/Images/Category/loading.gif" alt="" />
+            </div>
+        </div>
+    </div>
+</div>
+<link href="~/plugins/datatables-bs4/css/dataTables.bootstrap4.css" rel="stylesheet" />
+<script src="~/plugins/jquery/jquery.js"></script>
+<script src="~/plugins/datatables/jquery.dataTables.js"></script>
+<script src="~/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+
+<link href="~/Content/ToastMessage/toastr.css" rel="stylesheet" />
+<script src="~/Content/ToastMessage/toastr.min.js"></script>
+<style type="text/css">
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: black;
+        z-index: 99;
+        opacity: 0.8;
+        filter: alpha(opacity=80);
+        -moz-opacity: 0.8;
+        min-height: 100%;
+        width: 100%;
+    }
+
+    .loading {
+        font-family: Arial;
+        font-size: 10pt;
+        border: 5px solid #67CFF5;
+        width: 200px;
+        height: 100px;
+        display: none;
+        position: fixed;
+        background-color: White;
+        z-index: 999;
+    }
+    a,
+    a i {
+        cursor: pointer;
+    }
+</style>
+
+<script>
+
+    var table;
+    $(document).ready(function () {
+      table=  $('#tb_abusivereports').DataTable({
+            "order": [[1, "desc"]]
+        });
+    });
+
+    var modal, loading;
+    function ShowProgress() {
+        modal = document.createElement("DIV");
+        modal.className = "modal";
+        document.body.appendChild(modal);
+        loading = document.getElementsByClassName("loading")[0];
+        loading.style.display = "block";
+        var top = Math.max(window.innerHeight / 2 - loading.offsetHeight / 2, 0);
+        var left = Math.max(window.innerWidth / 2 - loading.offsetWidth / 2, 0);
+        loading.style.top = top + "px";
+        loading.style.left = left + "px";
+    };
+
+    function markas_noissue(event) {
+        
+        ShowProgress();
+        var itemid = event.currentTarget.id;
+        var currentrowId = event.currentTarget.name;
+        //var userid = document.getElementById('item_UserId').value;
+        var userid ="";
+        $.ajax({
+            url: "/AdminDashboard/NoIssue",
+            type: "Post",
+            data: { itemId: itemid, userId: userid },
+            success: function (data) {
+                
+                document.body.removeChild(modal);
+                loading.style.display = "none";
+                if (data == "Issue Removed") {
+                    
+                    //var rowid = event.currentTarget.parentNode.parentNode.id;
+                    //var rowid = currentrowId;
+                    //$('#row' + rowid).remove();
+                    
+                    var td = $(event.target.parentNode.parentNode.parentNode)[0].children[3];
+                    td.innerText = "NoIssue";
+                    td = $(event.target.parentNode.parentNode.parentNode)[0].children[1];
+                    td.innerText = new Date().toLocaleDateString();
+                    toastr.success(data);
+                }
+                else {
+                    toastr.error(data);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                document.body.removeChild(modal);
+                loading.style.display = "none";
+                toastr.error('Error');
+            },
+        });
+    };
+
+    function markas_sendreminder(event) {
+        
+        ShowProgress();
+        var itemid = event.currentTarget.id;
+        var currentrowId = event.currentTarget.name;
+        //var userid = document.getElementById('item_UserId').value;
+        var userid = "0";
+        $.ajax({
+            url: "/AdminDashboard/SendReminder",
+            type: "Post",
+            data: { itemId: itemid, userId: userid },
+            success: function (data) {
+                
+                document.body.removeChild(modal);
+                loading.style.display = "none";
+                if (data == "Notified") {
+                    var td = $(event.target.parentNode.parentNode.parentNode)[0].children[3];
+                    td.innerText = "Notified";
+                    td = $(event.target.parentNode.parentNode.parentNode)[0].children[1];
+                    td.innerText = new Date().toLocaleDateString();
+                    //var rowid = currentrowId;
+                    //$('#row' + rowid).remove();
+                        toastr.success(data);
+                }
+                else {
+                    toastr.error(data);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+
+                document.body.removeChild(modal);
+                loading.style.display = "none";
+                toastr.error('Error');
+            },
+        });
+    };
+
+    function markas_abusive(event) {
+        ShowProgress();
+        var itemid = event.currentTarget.id;
+        var currentrowId = event.currentTarget.name;
+        //var userid = document.getElementById('item_UserId').value;
+        var userid = "0";
+        $.ajax({
+            url: "/AdminDashboard/SetAbusive",
+            type: "Post",
+            data: { itemId: itemid, userId: userid },
+            success: function (data) {
+                document.body.removeChild(modal);
+                loading.style.display = "none";
+                if (data == "Marked As Abusive") {
+                    var td = $(event.target.parentNode.parentNode.parentNode)[0].children[3];
+                    td.innerText = "Abusive";
+                    td = $(event.target.parentNode.parentNode.parentNode)[0].children[1];
+                    td.innerText = new Date().toLocaleDateString();
+                    //var rowid = currentrowId;
+                    //$('#row' + rowid).remove();
+                    toastr.success(data);
+                }
+                else {
+                    toastr.error(data);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                document.body.removeChild(modal);
+                loading.style.display = "none";
+                toastr.error('Error');
+            },
+        });
+    };
+
+
+    function markas_detail(event) {
+        
+        //ShowProgress();
+        var itemid = event.currentTarget.id;
+        //var userid = document.getElementById('item_UserId').value;
+        @*$.post('@Url.Action("AbusivereportDetail", "AdminDashboard")', { itemId: itemid  })*@
+          var url = '@Url.Action("AbusivereportDetail", "AdminDashboard", new { itemId ="id" })';
+        window.location.href = url.replace('id', itemid);
+    };
+
+</script>

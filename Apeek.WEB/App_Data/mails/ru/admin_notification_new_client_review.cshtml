@@ -1,0 +1,27 @@
+﻿@using Apeek.Entities.Entities
+
+@{
+    var Shape = @Model as ClientReview;
+    string url = null;
+}
+
+@if (Shape.ServiceId.HasValue)
+{
+    url = QuickUrl.UserServiceAbsoluteUrl(Shape.SubDomain, string.Format("{0}-{1}", Shape.UserId, Shape.ServiceId));
+}
+else
+{
+    url = QuickUrl.UserAbsoluteUrl(Shape.UserId.ToString(), Shape.SubDomain, null, null);
+}
+
+<a href="@url">Commented Page</a>;
+
+<br>
+Text:
+<br>
+@Shape.Text
+<br>
+From:
+<br>
+@Shape.ClientId
+<br>

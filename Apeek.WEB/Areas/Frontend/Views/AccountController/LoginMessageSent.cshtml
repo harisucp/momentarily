@@ -1,0 +1,27 @@
+﻿@model Apeek.Common.IShape<Apeek.ViewModels.Models.MessageSentModel>
+
+
+@if (Shape.ViewModel.IsEmailMessageSent)
+{
+    <div class="notification ok">
+        <div class="icon"></div>
+        <div class="text">@t("Вам отправлен email")</div>
+    </div>
+    <p>
+        @t("На ваш почтовый ящик ") <b>@Model.ViewModel.EmailOrPhoneNumber</b> @t(" отправлено письмо.")<br/>
+    </p>
+
+    <br/>
+    <br/>
+    <a href="http://gmail.com" class="btn red" style="float: left">@t("Перейти до gmail.com")</a>
+} else if (Shape.ViewModel.IsSmsMessageSent)
+{
+    <div class="notification ok">
+        <div class="icon"></div>
+        <div class="text">@t("SMS - отправлено")</div>
+    </div>
+    <p>
+        @t("На ваш номер телефона") <b>@Model.ViewModel.EmailOrPhoneNumber</b> @t(" отправлено временный пароль, который действителен 24 часа")<br/>
+    </p>
+    @Html.RouteLink(t("Войдите тут"), @QuickUrl.RouteLogin(null) ) @:, используя временный пароль
+}

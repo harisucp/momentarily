@@ -1,0 +1,19 @@
+﻿@model Apeek.Common.IShape<Momentarily.ViewModels.Models.MomentarilyItemMapViewModel>
+
+<table cellpadding="0" cellspacing="0" border="0">
+
+    @for (int i = 0; i < Model.ViewModel.GoodShareDates.Count; i++)
+    {
+        if (!Model.ViewModel.GoodBookedDates.Contains(Model.ViewModel.GoodShareDates[i]))
+        {
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label>Available Date : @Model.ViewModel.GoodShareDates[i]</label>
+                    </div>
+                </td>
+            </tr>
+        }
+    }
+
+</table>

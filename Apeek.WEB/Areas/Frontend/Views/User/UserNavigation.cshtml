@@ -1,0 +1,15 @@
+﻿@using Apeek.Common
+
+<div class="menu">
+    
+    <ul>
+        <li class="@(Shape.PageName == PageName.UserInfoPreview.ToString() ? "act" : null)">@Html.RouteLink(t("Объявление"), QuickUrl.RouteUserInfoPreview() )</li>
+        <li class="@(Shape.PageName == PageName.UserServices.ToString() ? "act" : null)">@Html.RouteLink(t("Прайс-лист"), QuickUrl.RouteUserServices() )</li>
+        <li class="@(Shape.PageName == PageName.UserInfo.ToString() ? "act" : null)">@Html.RouteLink(t("О компании"), QuickUrl.RouteUserInfo())</li>
+    </ul>
+  
+    <div class="settings_btn">
+        <div class="icon gear"></div>
+        @Html.RouteLink(t("Настройки"), QuickUrl.RouteUserEmail())
+    </div>
+</div>

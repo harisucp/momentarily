@@ -1,0 +1,93 @@
+﻿@model Apeek.ViewModels.Models.Impl.MostRentedItems
+@{
+    Layout = "~/Areas/Frontend/Views/Shared/_AdminDashboardLayout.cshtml";
+    var dt = Model;
+}
+@using (Html.BeginForm("TotalLoanedItems", "AdminDashboard", FormMethod.Post, new { id = "TotalLoanedItems_Id" }))
+{
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">Loaned Items</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right parentModulesInner">
+                        <li class="breadcrumb-item"><a href="/AdminDashboard/">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Total Loaned Items</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Total Loaned Items</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body table-responsive">
+                            <table id="itemslist" class="table table-bordered table-striped itemstable">
+                                <thead>
+                                    <tr>
+                                        <th>Sr.No</th>
+                                        <th>Good Id</th>
+                                        <th>Name</th>
+                                        <th>Count</th>
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{ int count = 1; }
+                                    @for (int i = 0; i < Model.mostRentedItems.Count(); i++)
+                                    {
+                                    <tr>
+                                        <td>
+                                            @count
+                                        </td>
+                                        <td>
+                                            <a href="/Search/Item/@Model.mostRentedItems[i].Id" target="_blank" title="@Model.mostRentedItems[i].ItemName">@Model.mostRentedItems[i].Id</a>
+                                        </td>
+                                        <td>
+                                            <a href="/Search/Item/@Model.mostRentedItems[i].Id" target="_blank" title="@Model.mostRentedItems[i].ItemName">@Model.mostRentedItems[i].ItemName</a>
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(m => m.mostRentedItems[i].Count)
+                                        </td>
+                                    </tr>
+                                        count++;
+                                    }
+
+                                </tbody>
+
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+        </div>
+    </section>
+}
+<link href="~/plugins/datatables-bs4/css/dataTables.bootstrap4.css" rel="stylesheet" />
+<script src="~/plugins/jquery/jquery.js"></script>
+<script src="~/plugins/datatables/jquery.dataTables.js"></script>
+<script src="~/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#itemslist').DataTable({
+            //"paging": true,
+            //"lengthChange": false,
+            //"searching": false,
+            //"ordering": true,
+            //"info": true,
+            //"autoWidth": false,
+        });
+    });
+</script>

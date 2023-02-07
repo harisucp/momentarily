@@ -1,0 +1,16 @@
+﻿@model Apeek.Common.IShape<Apeek.ViewModels.Models.UserRestorePwd>
+
+<h1>Восстановление доступа</h1>
+<br/>
+@using (Html.BeginForm())
+{
+    
+    <label>@t("Телефон или email")</label>
+    @Html.TextBoxFor(m => m.ViewModel.EmailAddressOrPhoneNum,new { placeholder = "shevchenko@gmail.com",style="width:200px;"})
+    @Html.ValidationMessageFor(m => m.ViewModel.EmailAddressOrPhoneNum)
+    <br/>
+    <input type="submit" value="@t("Восстановить")" id="submit" class="btn green" />
+    <br/>
+    <br/>
+    <div class="input_tip">* - телефон нужно вводить начиная с нуля (все цифры вместе).<br/> Напр. "0676754321"</div>
+}

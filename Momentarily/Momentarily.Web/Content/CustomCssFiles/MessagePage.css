@@ -1,0 +1,117 @@
+﻿/* Conversation */
+
+.mymessgaeimages {
+    float: right !important;
+}
+
+.mymessgaeimages img {
+    float: right !important;
+}
+
+    .mymessgaeimages img.img-fluid {
+        max-width: 100%;
+        height: auto !important;
+    }
+
+.messageText .mymessgaeThumbnail {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-flow: wrap;
+    width: 100%;
+}
+
+.messageText .mymessgaeimages {
+    float: right !important;
+    width: 20%;
+    display: flex;
+    padding: 5px;
+    height: 100px;
+    overflow: hidden;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+    .messageText .mymessgaeimages span {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+        outline: 1px solid #ccc;
+        border: 3px solid #fff;
+    }
+
+.messageText .text {
+    margin-top: 15px;
+    font-size: 13px;
+}
+
+.chooseFileBtn {
+    display: inline-block;
+    position: relative;
+    background-color: #cf2d1e;
+    color: #fff;
+    width: 140px;
+    overflow: hidden;
+    height: 40px;
+    border-radius: 3px;
+}
+
+    .chooseFileBtn:before {
+        position: absolute;
+        content: "Choose File";
+        display: flex;
+        align-items: center;
+        height: 40px;
+        justify-content: center;
+        width: 100%;
+        border-radius: 3px;
+    }
+
+    .chooseFileBtn input#files {
+        opacity: 0;
+        height: 40px;
+    }
+
+.chooseFileBtnSection {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.messageText .mymessgaeimages img {
+    max-width: 100%;
+}
+
+.mymessgaeimages img {
+    float: right !important;
+    height: 143px !important;
+    width: 125px !important;
+}
+
+.chooseFileBtnSection button#sendmsg {
+    margin: 0 !important;
+}
+
+.account.messages .type-message form.form-conversation.coversationSection {
+    padding: 20px 0 0;
+}
+
+.chooseFileBtnSection input {
+    border: none;
+    background-color: transparent;
+    padding: 0;
+}
+
+@media(max-width:575px) {
+    .messageText .mymessgaeimages {
+        width: 25%;
+        height: 60px;
+    }
+}
+
+.newmsgcolor {
+    background-color: #f0f8ff;
+}

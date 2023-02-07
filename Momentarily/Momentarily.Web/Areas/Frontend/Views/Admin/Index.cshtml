@@ -1,0 +1,156 @@
+﻿@model Apeek.Common.IShape<Apeek.ViewModels.Models.LoginModel>
+
+@{
+    //Layout = "~/Areas/Frontend/Views/Shared/_Layout.cshtml";
+   
+
+    string redirectTo = ViewBag.RedirectTo;
+}
+
+@*<link href="~/Content/css/Login.css" rel="stylesheet" />*@
+
+@Styles.Render("~/Content/css/Login")
+
+
+
+@using (Html.BeginForm("Index", "Admin", FormMethod.Post, new { @class = "Admin_form" }))
+{
+    <div class="content mainClass">
+        <div class="container-full">
+            <div class="row">
+                <div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 col-sm-12">
+                    <div class="sign-in-page">
+                        <div class="title-block @*separated-block*@">
+                            <h1>Admin Login</h1>
+                        </div>
+                        <div class="form-block">
+                            @*<form>*@
+                                @if (!string.IsNullOrWhiteSpace(Model.Message))
+                                {
+                                    <div class="formFields">
+                                        <div class="form-group error-labels">
+                                            <div>@Model.Message</div>
+                                        </div>
+                                    </div>
+                                }
+
+                                @if (Request.Cookies["AdminLogin"] != null)
+                                {
+                                    <div class="formFields">
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">E-mail Address</label>
+                                            <input class="form-control" data-val="true" data-val-required="The User email or phone number field is required." id="ViewModel_EmailAddressOrPhoneNum" name="ViewModel.EmailAddressOrPhoneNum" type="text" value="@Request.Cookies["AdminLogin"].Values["AdminEmailID"]">
+                                            <span class="field-validation-valid error-labels" data-valmsg-for="ViewModel.EmailAddressOrPhoneNum" data-valmsg-replace="true"></span>
+                                        </div>
+                                    </div>
+                                    <div class="formFields">
+                                        <div class="form-group">
+                                            <label for="exampleInputPassword1">Password</label>
+
+                                            @*<a href="/account/RestorePwd" class="right-align">Forgot Password?</a>*@
+                                            <div class="inputContainer">
+                                                <input class="form-control" data-val="true" data-val-required="The Password field is required." id="ViewModel_Password" name="ViewModel.Password" type="password" value="@Request.Cookies["AdminLogin"].Values["AdminPassword"]">
+                                                <a class="btnShowHide" id="btnShowHide" onclick="showHideFunctionalityInLogin()">SHOW</a>
+                                            </div>
+                                            <span class="field-validation-valid error-labels" data-valmsg-for="ViewModel.Password" data-valmsg-replace="true"></span>
+                                        </div>
+                                    </div>
+
+                                }
+                                else
+                                {
+                                    <div class="formFields">
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">E-mail Address</label>
+                                            @Html.TextBoxFor(m => m.ViewModel.EmailAddressOrPhoneNum, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(m => m.ViewModel.EmailAddressOrPhoneNum, null, new { @class = "error-labels" })
+                                        </div>
+                                    </div>
+                                    <div class="formFields">
+                                        <div class="form-group">
+                                            <label for="exampleInputPassword1">Password</label>
+                                            @*<a href="@QuickUrl.RestorePwdUrl()" class="right-align">Forgot Password?</a>*@
+                                            <div class="inputContainer">
+                                                @Html.PasswordFor(m => m.ViewModel.Password, new { @class = "form-control" })
+                                                <a class="btnShowHide" id="btnShowHide" onclick="showHideFunctionalityInLogin()">SHOW</a>
+                                            </div>
+                                            @Html.ValidationMessageFor(m => m.ViewModel.Password, null, new { @class = "error-labels" })
+
+                                        </div>
+                                    </div>
+
+                                }
+                                <div class="formFields">
+
+                                    <div class="form-group">
+
+                                        @Html.HiddenFor(m => m.ViewModel.RememberMe, Model.ViewModel.RememberMe)
+
+
+                                        <div class="regForm">
+                                            <label class="checkbox">
+                                                <input type="checkbox" id="setmarketingmail" checked="@Model.ViewModel.RememberMe">
+                                                <span class="primary"></span>
+                                            </label>
+                                            <span class="checkActive">
+                                                Remember Me
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+
+
+                                    @*<div class="form-group remember">
+                                            @Html.CheckBoxFor(m => m.ViewModel.RememberMe, Model.ViewModel.RememberMe)
+                                            <span style="vertical-align: super;">
+                                                Remember Me
+                                            </span>
+                                        </div>*@
+                                </div>
+                                <div class="formFields">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-green  form-control">Login</button>
+                                    </div>
+                                </div>
+
+
+
+                                @*<div class="hr"></div>*@
+
+                                @*<div class="form-group">
+                                    <div class="input-information">
+                                        Don't have an account with momentarily? <a href="@QuickUrl.RegisterUrl()" class="link-red">Sign Up</a>
+                                    </div>
+                                </div>*@
+
+                            @*</form>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@Scripts.Render("~/Scripts/Account")
+@Scripts.Render("~/Scripts/Libs/jquery")
+
+
+<script>
+    $(document).ready(function () {
+
+        localStorage.setItem("CurrentPage", '');
+        var hidden = document.getElementById("ViewModel_RememberMe");
+        $('#setmarketingmail').change(function () {
+            if (hidden.value == "False" || hidden.value == "false") {
+                hidden.value = true;
+            }
+            else {
+                hidden.value = false;
+            }
+        });
+    })
+</script>

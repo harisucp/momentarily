@@ -1,0 +1,15 @@
+﻿@model Momentarily.ViewModels.Models.OrderPayResult
+    @if (!string.IsNullOrWhiteSpace(Model.Message))
+    {
+        <div class="alerts">
+            @if (!Model.IsError)
+            {
+                <div class="alert-success successMessage text-center">@Model.Message</div>
+            }
+            else
+            {
+                <div class="alert-error successMessage text-center">@Model.Message</div>
+            }
+        </div>
+    }
+

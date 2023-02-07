@@ -1,0 +1,349 @@
+﻿@model Apeek.Common.Shape<Apeek.ViewModels.Models.ContactUsEntry>
+@using CaptchaMvc.HtmlHelpers
+@{
+
+    Layout = "~/Areas/Frontend/Views/Shared/_LayoutNew.cshtml";
+}
+@section meta
+    {
+    <meta property="title" content="@ViewBag.Title" />
+    <meta property="description" content="@ViewBag.Description" />
+}
+<link href="~/Content/CustomCssFiles/CommonForAllPages.css" rel="stylesheet" />
+
+<div class="content helpForm mainClass">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="contact-us-page">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="title-block">
+                                <h1>Need help?</h1>
+                                <p>
+                                    Visit our <a href="/Home/HowItWorks">How it Works</a> page to learn more about <b>momentarily</b>,
+                                    how we build trust and our mission to connect those looking to loan and borrow.
+                                </p>
+                                <p>If you couldn’t find what you were looking for let us know how we can help and we’ll get back to you as soon as possible.</p>
+                            </div>
+                            @Html.Partial("_Errors", Model)
+                        </div>
+                        <div class="col-sm-12">
+                            @using (Html.BeginForm("ContactUs", "Home", FormMethod.Post, new { @class = "ng-pristine ng-valid" }))
+                            {
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Your Name</label>
+                                            @Html.TextBoxFor(m => m.ViewModel.Name, new { @class = "form-control account-input" })
+                                            @Html.ValidationMessageFor(m => m.ViewModel.Name, null, new { @class = "error-labels" })
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Your Email Address</label>
+                                            @Html.TextBoxFor(m => m.ViewModel.EmailAddress, new { @class = "form-control account-input" })
+                                            @Html.ValidationMessageFor(m => m.ViewModel.EmailAddress, null, new { @class = "error-labels" })
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Subject</label>
+                                            @Html.TextBoxFor(m => m.ViewModel.Subject, new { @class = "form-control account-input" })
+                                            @Html.ValidationMessageFor(m => m.ViewModel.Subject, null, new { @class = "error-labels" })
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Issues you are facing</label>
+                                            @Html.DropDownList("ViewModel.Issuesfacing", new List<SelectListItem>()
+                                                 {
+                                                     new SelectListItem(){ Text= "Sign Up", Value = "Sign Up"},
+                                                     new SelectListItem(){ Text= "Login", Value = "Login"},
+                                                     new SelectListItem(){ Text= "Profile", Value = "Profile"},
+                                                     new SelectListItem(){ Text= "Sharing", Value = "Sharing"},
+                                                     new SelectListItem(){ Text= "Borrowing", Value = "Borrowing"},
+                                                     new SelectListItem(){ Text= "Payments", Value = "Payments"},
+                                                      new SelectListItem(){ Text= "Other", Value = "Other"}
+                                                 }, "Select issues you are facing", new { @class = "form-control account-input" })
+                                            @Html.ValidationMessageFor(m => m.ViewModel.Issuesfacing, null, new { @class = "error-labels" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>How can we help? Talk to us.</label>
+                                            @Html.TextAreaFor(m => m.ViewModel.Message, new { @class = "form-control account-input", rows = 5 })
+                                            @Html.ValidationMessageFor(m => m.ViewModel.Message, null, new { @class = "error-labels" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 btnAlingnment">
+                                        @Html.Captcha(5)
+                                        <br/> <p style="color: #A63232"> @ViewBag.ErrorMessage </p> <p>
+    <button class="btn btn-green helpBtn" type="submit">Send</button>
+    </p>
+
+    <div class="form-group">
+    </div>
+</div>
+                                </div>
+
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<section class="subscribe">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="subscribeInner">
+                    <h4>Subscribe to Our Newsletter</h4>
+                    <p>For latest updates and news</p>
+                    <!---->
+                    <div class="input-group">
+                        <input type="email" id="subscribeEmail" class="form-control" placeholder="Enter your email">
+                        <span class="input-group-btn">
+                            <button type="button" id="btn_subscribe" class="btn">Subscribe</button>
+                        </span>
+                    </div>
+                    <span class="subscribe_msg red" id="subscribe_msg_error" style="display:none; text-align:left;"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Invalid email address.</span>
+                    <span class="subscribe_msg green" id="subscribe_msg_error2" style="display:none; text-align:left;"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Please enter email address.</span>
+                    <!---->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="divLoading">
+        <p>
+            Loading. Please wait...<br />
+            <span>
+                <img src="~/Content/Images/circleloadinganimationOrignal.gif" alt="image" />
+            </span>
+        </p>
+
+    </div>
+</section>
+
+<!--footer section-->
+<footer class="footer">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3 col-sm-12 col-xs-12 full">
+                <div class="footerDesc">
+                    <h5>momentarily</h5>
+                    <p>A peer-to-peer marketplace for people and businesses to share their belongings for an affordable price, or borrow something for the moment.</p>
+                </div>
+            </div>
+            <div class="col-md-8 col-md-offset-1 col-sm-12 col-xs-12 ">
+                <div class="row">
+                    <div class="col-md-4 col-sm-4 col-xs-4 full">
+                        <div class="footerDesc">
+                            <h5>Company</h5>
+                            <ul>
+                                <li><a href="@Url.Action("Index", "Home")" id="btn_home" "><i class="fa fa-caret-right" aria-hidden="true"></i> Home</a></li>
+                                <li><a href="@Url.Action("AboutUs", "Home")"><i class="fa fa-caret-right" aria-hidden="true"></i> About Us</a></li>
+                                <li><a href="@Url.Action("FAQ", "Home")"><i class="fa fa-caret-right" aria-hidden="true"></i>  FAQ</a></li>
+                                <!--  <li><a href="#"><i class="fa fa-caret-right" aria-hidden="true"></i> Videos</a></li>
+                                   <li><a href="#"><i class="fa fa-caret-right" aria-hidden="true"></i> Blog</a></li>
+                                   <li><a href="/contactus"><i class="fa fa-caret-right" aria-hidden="true"></i> Help</a></li> -->
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-4 col-xs-4 full">
+                        <div class="footerDesc">
+                            <h5>Quick Links</h5>
+                            <ul>
+                                <li><a href="@Url.Action("HowItWorks", "Home")"><i class="fa fa-caret-right" aria-hidden="true"></i> How it Works </a></li>
+                                <li><a href="@Url.Action("Create", "Listing")"><i class="fa fa-caret-right" aria-hidden="true"></i> Share </a></li>
+                                <li><a href="" id="becomeBorrower"><i class="fa fa-caret-right" aria-hidden="true"></i> Borrow </a></li>
+                                <li><a href="@Url.Action("ContactUs", "Home")"><i class="fa fa-caret-right" aria-hidden="true"></i>  Help</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-4 col-xs-4 full">
+                        <div class="footerDesc">
+                            <h5>Contact Us</h5>
+                            <ul>
+                                <li><a href="mailto:hello@momentarily.com"><i class="fa fa-envelope" aria-hidden="true"></i> hello@momentarily.com</a></li>
+                            </ul>
+                            <ul class="socialLinks">
+                                <li><a href="https://www.instagram.com/momentarily/" target="_blank" title="Instagram"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+                                <li><a href="https://www.facebook.com/momentarily" target="_blank" title="facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+                                <li>
+                                    <a href="https://twitter.com/momentarilycom" target="_blank" title="
+                                 Twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                                </li>
+                                <li><a href="https://www.youtube.com/momentarily" target="_blank" title="Youtube"><i class="fa fa-youtube-play" aria-hidden="true"></i></a></li>
+
+
+                                <li id="pintrest"><a href="https://www.pinterest.com/momentarilycom/" target="_blank" title="pinterest"><i class="fa fa-pinterest-p" aria-hidden="true"></i></a></li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!---->
+<div class="copyright">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="copyrightDesc">
+                    <ul>
+                        <li><a href="/termsofuse">Terms &amp; Conditions</a></li>
+                        <li><a href="/privacypolicy" class="ppBtn"><img src="~/Content/TemplateImg/images/privacy-policy_icon.png" alt="image" /> Privacy Policy</a></li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="copyrightDesc">
+                    <p>@DateTime.Now.Year <b>momentarily</b><sup id="trademark">TM</sup></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<a href="#" id="scroll" style="display:none;" title="Bottom to Top Scroll">
+    <span class="goto">Go To</span> <span class="top-text">Top</span>
+</a>
+
+
+<script src="~/Content/TemplateImg/js/jquery.min.js"></script>
+<script src="~/Content/TemplateImg/js/bootstrap.min.js"></script>
+<script src="~/Content/TemplateImg/js/jquery.nicescroll.min.js"></script>
+<script src="~/Content/TemplateImg/js/owl.carousel.js"></script>
+<link href="~/Content/ToastMessage/toastr.css" rel="stylesheet" />
+<script src="~/Content/ToastMessage/toastr.min.js"></script>
+<style>
+    #divLoading {
+        margin: 0px;
+        padding: 0px;
+        position: fixed;
+        right: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        background-color: #666666;
+        z-index: 30001;
+        opacity: .8;
+        filter: alpha(opacity=70);
+        display: none
+    }
+
+        #divLoading p {
+            position: fixed;
+            top: 30%;
+            left: 45%;
+            color: White;
+        }
+
+        #divLoading span > img {
+            padding-left: 44px;
+        }
+</style>
+
+<script>
+        $(document).on('click', '#becomeBorrower', function () {
+
+        $.ajax({
+            url: "/Search/CheckVersion",
+            type: "Get",
+            success: function (data) {
+                if (data == "True" || data == "true") {
+
+                    $('#exampleModalBeta').modal('show');
+                }
+                else {
+                    window.location.href = '/Search/Map';
+                }
+            },
+            error: function () {
+                toastr.info("Error Occurred");
+            }
+        })
+
+    });
+    $("#btn_subscribe").click(function () {
+
+        var email = $("#subscribeEmail").val();
+        if (email == undefined || email == '') {
+            $("#subscribeEmail").focus();
+            $("#subscribe_msg_error2").css("display", "block");
+            $("#subscribe_msg_error").css("display", "none");
+            return;
+        }
+        else if (!ValidateEmail(email)) {
+            $("#subscribeEmail").focus();
+            $("#subscribe_msg_error2").css("display", "none");
+            $("#subscribe_msg_error").css("display", "block");
+            return;
+        }
+        else {
+            $('#divLoading').show();
+            $.ajax({
+                url: "/Account/Subscribe",
+                type: "Post",
+                dataType: "json",
+                data: { Email: email },
+                success: function (data) {
+                    if (data == "Subscribed") {
+                        toastr.success(data);
+                        $("#subscribeEmail").val('');
+                        $("#subscribe_msg_error2").css("display", "none");
+                        $("#subscribe_msg_error").css("display", "none");
+                        $('#divLoading').hide();
+                    }
+                    else {
+                        toastr.info(data);
+                        $("#subscribeEmail").val('');
+                        $("#subscribe_msg_error2").css("display", "none");
+                        $("#subscribe_msg_error").css("display", "none");
+                        $('#divLoading').hide();
+                    }
+                },
+                error: function () {
+                    toastr.info("Error Occurred");
+                    $('#divLoading').hide();
+                }
+            })
+        }
+
+    });
+    function ValidateEmail(email) {
+        var expr = /^([\w-\.]+)@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+        return expr.test(email);
+    };
+
+    $(document).ready(function () {
+
+        //$('#pintrest').click(function () {
+        //    window.open('https://www.pinterest.com/momentarilycom/', '_blank');
+        //})
+
+
+        $(window).scroll(function () {
+            if ($(this).scrollTop() > 100) {
+                $('#scroll').fadeIn();
+            } else {
+                $('#scroll').fadeOut();
+            }
+        });
+        $('#scroll').click(function () {
+            $("html, body").animate({ scrollTop: 0 }, 600);
+            return false;
+        });
+    });
+</script>

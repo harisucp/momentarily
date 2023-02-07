@@ -1,0 +1,36 @@
+﻿@model Apeek.Common.IShape<Apeek.ViewModels.Models.RegisterModel>
+@{
+    ViewBag.Title = "Register";
+}
+<div class="login">
+    <h1>Register</h1>
+    <br />
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        <label>Email</label>
+        @Html.TextBoxFor(m => m.ViewModel.UserName, new { placeholder = "Username" })
+        @Html.ValidationMessageFor(m => m.ViewModel.UserName)
+
+        <label>Password</label>
+        @Html.PasswordFor(m => m.ViewModel.Password)
+        @Html.ValidationMessageFor(m => m.ViewModel.Password)
+
+        <label>Confirm Password</label>
+        @Html.PasswordFor(m => m.ViewModel.ConfirmPassword)
+        @Html.ValidationMessageFor(m => m.ViewModel.ConfirmPassword)
+        
+        <label>Date of Birthday</label>
+        @Html.TextBoxFor(m => m.ViewModel.DateOfBirthday)
+        @Html.ValidationMessageFor(m => m.ViewModel.DateOfBirthday)
+        <br />
+        <br />
+        <br />
+    <input type="submit" class="btn green" value="@t("Register")" style="width:100px;float:left;" />
+    }
+    <br />
+    <br />
+    <br />
+</div>

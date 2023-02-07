@@ -1,0 +1,223 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{7251F05D-2DB3-49EE-A95D-CBC3701B768B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Apeek.ViewModels</RootNamespace>
+    <AssemblyName>Apeek.ViewModels</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Production|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Production\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BaseViewModel\Pagination.cs" />
+    <Compile Include="Dtos\ClientReviewDto.cs" />
+    <Compile Include="Dtos\UserDto.cs" />
+    <Compile Include="Mappers\IGoodBookingRankMapper.cs" />
+    <Compile Include="Mappers\IGoodRequestMapper.cs" />
+    <Compile Include="Mappers\Imp\AuditEntityMapper.cs" />
+    <Compile Include="Mappers\Imp\GoodEntityMapper.cs" />
+    <Compile Include="Mappers\IAuditEntityMapper.cs" />
+    <Compile Include="Mappers\IMapper.cs" />
+    <Compile Include="Mappers\IGoodMapper.cs" />
+    <Compile Include="Mappers\Imp\GoodRequestMapper.cs" />
+    <Compile Include="Mappers\Imp\GoodBookingRankMapper.cs" />
+    <Compile Include="Mappers\IUserImageMapper.cs" />
+    <Compile Include="Mappers\IUserNotificationMapper.cs" />
+    <Compile Include="Mappers\IUserMapper.cs" />
+    <Compile Include="Mappers\Imp\Mapper.cs" />
+    <Compile Include="Mappers\Imp\UserMapper.cs" />
+    <Compile Include="Mappers\Imp\UserNotificationEntityMapper.cs" />
+    <Compile Include="Mappers\Imp\UserImageMapper.cs" />
+    <Compile Include="Models\IApeekPayment.cs" />
+    <Compile Include="Models\Impl\AccountCompletenessViewModel.cs" />
+    <Compile Include="Models\Impl\AdminPwdModel.cs" />
+    <Compile Include="Models\Impl\AdminReportingVM.cs" />
+    <Compile Include="Models\Impl\ApeekPaymentModel.cs" />
+    <Compile Include="Models\Impl\ApeekPayout.cs" />
+    <Compile Include="Models\Impl\BookingListViewModel.cs" />
+    <Compile Include="Models\Impl\BookingRequestModel.cs" />
+    <Compile Include="Models\Impl\CAMasterViewModel.cs" />
+    <Compile Include="Models\Impl\ChatBotQuestionsVM.cs" />
+    <Compile Include="Models\Impl\ChatBotQuestionsŌrAnswersVM.cs" />
+    <Compile Include="Models\Impl\ChatTopicsVM.cs" />
+    <Compile Include="Models\Impl\ExternalLogin.cs" />
+    <Compile Include="Models\Impl\GoodRequestRankInsertModel.cs" />
+    <Compile Include="Models\Impl\GoodRequestReviews.cs" />
+    <Compile Include="Models\Impl\MostRentedItems.cs" />
+    <Compile Include="Models\Impl\PaymentResult.cs" />
+    <Compile Include="Models\Impl\PriceViewModel.cs" />
+    <Compile Include="Models\Impl\RecentlyRentedProduct.cs" />
+    <Compile Include="Models\Impl\ReviewListViewModel.cs" />
+    <Compile Include="Models\Impl\ReviewViewModel.cs" />
+    <Compile Include="Models\Impl\StartEndPeriod.cs" />
+    <Compile Include="Models\Impl\SubscriberViewModel.cs" />
+    <Compile Include="Models\Impl\UserContactInfo.cs" />
+    <Compile Include="Models\Impl\UserCouponVM.cs" />
+    <Compile Include="Models\Impl\UserDashboardViewModel.cs" />
+    <Compile Include="Models\Impl\UserDataViewModel.cs" />
+    <Compile Include="Models\Impl\UserListing.cs" />
+    <Compile Include="Models\Impl\UserProfileGoodViewModel.cs" />
+    <Compile Include="Models\Impl\UserPublicProfile.cs" />
+    <Compile Include="Models\IRegisterModel.cs" />
+    <Compile Include="Models\Impl\LocalPasswordModel.cs" />
+    <Compile Include="Models\Impl\LoginModel.cs" />
+    <Compile Include="Models\Impl\RegisterExternalLoginModel.cs" />
+    <Compile Include="Models\Impl\RegisterModel.cs" />
+    <Compile Include="Models\Impl\RequestChangeStatusViewModel.cs" />
+    <Compile Include="Models\Impl\BreadcrumbViewModel.cs" />
+    <Compile Include="Models\Impl\ContactUsEntry.cs" />
+    <Compile Include="Models\Impl\GoodRequestViewModel.cs" />
+    <Compile Include="Models\Impl\GoodImageViewModel.cs" />
+    <Compile Include="Models\Impl\GoodPropertyValueViewModel.cs" />
+    <Compile Include="Models\IGoodViewModel.cs" />
+    <Compile Include="Models\Impl\ImgModel.cs" />
+    <Compile Include="Models\Impl\ImgProcessorModel.cs" />
+    <Compile Include="Models\Impl\GoodViewModel.cs" />
+    <Compile Include="Models\Impl\UserUpdateModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Impl\UserViewModel.cs" />
+    <Compile Include="Models\Impl\IpGeolocationModel.cs" />
+    <Compile Include="Models\Impl\GoodRequestModel.cs" />
+    <Compile Include="Models\IUserUpdateModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\IUserViewModel.cs" />
+    <Compile Include="Models\Impl\MessageSentModel.cs" />
+    <Compile Include="Models\Impl\CreateUserEmailModel.cs" />
+    <Compile Include="BaseViewModel\LangViewModel.cs" />
+    <Compile Include="Models\Impl\ProcessedImagesModel.cs" />
+    <Compile Include="Models\Impl\RefreshUserImageModel.cs" />
+    <Compile Include="Models\Impl\RequestViewModel.cs" />
+    <Compile Include="Models\Impl\UserAccountAssociacionModel.cs" />
+    <Compile Include="Models\Impl\UserConversationViewModel.cs" />
+    <Compile Include="Models\Impl\UserEmailModel.cs" />
+    <Compile Include="Models\Impl\UserMessageCreateModel.cs" />
+    <Compile Include="Models\Impl\UserMessageUpdateModel.cs" />
+    <Compile Include="Models\Impl\UserMessageViewModel.cs" />
+    <Compile Include="Models\Impl\UserNotificationCreateModel.cs" />
+    <Compile Include="Models\Impl\UserNotificationViewModel.cs" />
+    <Compile Include="Models\Impl\UserProfile.cs" />
+    <Compile Include="Models\Impl\UserPwdModel.cs" />
+    <Compile Include="Models\Impl\UserRestorePwd.cs" />
+    <Compile Include="Models\Impl\UserUploadImageModel.cs" />
+    <Compile Include="Models\Impl\WriteImageUrlModel.cs" />
+    <Compile Include="Models\Impl\ReviewEmailViewModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings\PayPalSetting.cs" />
+    <Compile Include="Settings\PinPaymentSetting.cs" />
+    <Compile Include="ViewModelBinders\BaseViewModelBinder.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Apeek.Common\Apeek.Common.csproj">
+      <Project>{38A1088F-059C-49BB-89FB-2F7E2FEFBA73}</Project>
+      <Name>Apeek.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Apeek.Entities\Apeek.Entities.csproj">
+      <Project>{4ae6f284-57f5-4a84-a280-9f1fab61dc7c}</Project>
+      <Name>Apeek.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,148 @@
+﻿@using Newtonsoft.Json
+@model Apeek.Common.IShape<Apeek.ViewModels.Models.Impl.UserUpdateModel>
+@{
+    Layout = "~/Areas/Frontend/Views/Shared/_AccountMenuLayout.cshtml";
+}
+@*<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>*@
+@*<script src="https://rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>*@
+<div class="content" ng-controller="UserProfileController as profile">
+    <div class="container account">
+        <div class="row">
+            <div class="col-md-9 col-md-offset-3">
+                <div class="profile-page">
+                    <div class="account-sub-menu separated-block">
+                        <div class="account-sub-menu-items active col-md-3"><a href="@QuickUrl.UserProfileUrl()">My profile</a></div>
+                        <div class="account-sub-menu-items  col-md-3"><a href="@QuickUrl.UserEmailUrl()">Change email</a></div>
+                        <div class="account-sub-menu-items  col-md-3"><a href="@QuickUrl.UserPwdUrl()">Change password</a></div>
+                        <div class="account-sub-menu-items  col-md-3"><a href="@Url.Action("BankInfo","User")">Payment Details</a></div>
+                    </div>
+                    <div class="title-block separated-block">
+                        <h1 class="left-align">
+                            Profile Settings
+                        </h1>
+                    </div>
+                    @using (Html.BeginForm())
+                    {
+        @Html.Partial("_Errors", Model)
+        ;
+<div class="form-block">
+    <div class="form-group col-md-12">
+        <label>Profile picture</label>
+        <upload-image url="/api/momentarilyuserimage" img-obj="profile.userImage" user-photo="true" thumb-file-path="{{profile.profileData.UserProfileImageUrl}}"></upload-image>
+    </div>
+    <div class="form-block col-md-12">
+        <div>
+            <input type="hidden" name="ViewModel.UserImage.Id" value="{{profile.userImage.Id}}" />
+            <input type="hidden" name="ViewModel.UserImage.FileName" value="{{profile.userImage.FileName}}" />
+            <input type="hidden" name="ViewModel.UserImage.UserId" value="{{profile.userImage.UserId}}" />
+            <input type="hidden" name="ViewModel.UserProfileImageUrl" value="{{profile.profileData.UserProfileImageUrl}}" />
+            <input type="hidden" name="ViewModel.BigUserProfileImageUrl" value="{{profile.profileData.BigUserProfileImageUrl}}" />
+        </div>
+        <div class="row">
+            <div class="form-group col-md-5">
+                <div class="form-group">
+                    <label>First Name</label>
+                    @Html.TextBoxFor(m => m.ViewModel.FirstName, new { @class = "form-control account-input" })
+                    @Html.ValidationMessageFor(m => m.ViewModel.FirstName, null, new { @class = "error-labels" })
+                </div>
+                <div class="form-group">
+                    <label>Last Name</label>
+                    @Html.TextBoxFor(m => m.ViewModel.LastName, new { @class = "form-control account-input" })
+                    @Html.ValidationMessageFor(m => m.ViewModel.LastName, null, new { @class = "error-labels" })
+                </div>
+                <div class="form-group">
+                    <label for="InputEmail">Select Country</label>
+                    @Html.DropDownListFor(n => n.ViewModel.CountryCode, new SelectList(ViewBag.Countries, "Value", "Text", Model.ViewModel.CountryCode), "", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.ViewModel.CountryCode, null, new { @class = "error-labels" })
+                    @Html.HiddenFor(m => m.ViewModel.CountryCode)
+                </div>
+
+                <div class="form-group">
+                    <label>Mobile phone</label>
+                    <div class="row">
+                        <div class="col-md-12" style="display: inline-flex;width: 100% !important;">
+                            <span class="col-md-1" id="countrycodespan" style="background: #cecece;padding-top: 5px;width: auto;font-size: 14px;">+@Model.ViewModel.CountryCode</span>
+                            @Html.TextBoxFor(m => m.ViewModel.PhoneNumber, new { @class = "form-control account-input" })
+                        </div>
+                    </div>
+                    @Html.ValidationMessageFor(m => m.ViewModel.PhoneNumber, null, new { @class = "error-labels" })
+                    <div class="row">
+                        <div class="input-information col-md-12">
+                            Shared once you have confirmed your booking
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-12">
+                <label>About me (optional)</label>
+                @Html.TextAreaFor(m => m.ViewModel.Description, new { @class = "form-control account-input", rows = 6 })
+                @Html.ValidationMessageFor(m => m.ViewModel.Description, null, new { @class = "error-labels" })
+            </div>
+        </div>
+        <div class="row ">
+            <div class="form-group col-md-12">
+                @Html.CheckBoxFor(m => m.ViewModel.IgnoreMarketingEmails, Model.ViewModel.IgnoreMarketingEmails)
+                <span class="checkmarketingmailuser">
+                    I don’t want to receive marketing messages from momentarily.
+                    I can also opt out of receiving these at any time in my account settings or via the link in the message.
+                </span>
+            </div>
+        </div>
+
+        <div class="separated-block">
+            <button type="submit" class="btn btn-green">Save</button>
+            <button type="button" id="deleteAccount" class="btn btn-green">Delete Account</button>
+        </div>
+    </div>
+</div>
+}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@Scripts.Render("~/Scripts/User")
+@*@Scripts.Render("~/Scripts/Libs/GoogleJquery211")*@
+@*@Scripts.Render("~/Scripts/Libs/jqueryInputMask")*@
+<link href="~/Content/ToastMessage/toastr.css" rel="stylesheet" />
+<script src="~/Content/ToastMessage/toastr.min.js"></script>
+<script>
+    var angularConstants = {};
+    angularConstants = {
+        profileData: JSON.parse('@Html.Raw(JsonConvert.SerializeObject(Model.ViewModel))')
+    };
+    $('#ViewModel_CountryCode').change(function () {
+        var value = $('#ViewModel_CountryCode').val();
+        $('#countrycodespan').html('+' + value)
+    })
+    $('#deleteAccount').click(function () {
+        debugger
+        var confirmation = confirm("Are You Sure!");
+        if (confirmation) {
+            $.ajax({
+                //url: "/User/DeleteAccount",
+                url:'@Url.Action("DeleteAccount", "User")',
+                type: "GET",
+                success: function (data) {
+
+                    if (data == "true" || data == "True") {
+                       
+                         location.href = '@Url.Action("logoff", "account")';
+                    }
+                    else {
+                        toastr.error('Something went wrong !')
+                    }
+                },
+                error: function () {
+                    toastr.error('Error!')
+                }
+
+            })
+        }
+
+    })
+
+    //$('#ViewModel_PhoneNumber').inputmask("(999) 999-9999");
+</script>

@@ -1,0 +1,22 @@
+﻿@model Apeek.Common.IShape<List<Apeek.ViewModels.Models.UserAccountAssociacionModel>>
+
+@{
+    Layout = "UserSettings.cshtml";
+}
+
+    @using (Html.BeginFormAntiForgeryPost())
+    {
+        foreach (var m in Shape.ViewModel)
+        {
+            <input type="submit" name="provider" value="@m.ProviderName"  style="width:100px;"/>
+            if (m.IsAssociated)
+            {
+                @m.UserAssociationName
+            }
+            else
+            {
+                @t("No association")
+            }
+            <br>
+        }
+    }

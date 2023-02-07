@@ -1,0 +1,144 @@
+﻿
+.footer {
+    background-color: #495251;
+    padding: 73px 0 50px 0;
+}
+
+.footerDesc h5 {
+    font-size: 20px;
+    color: #fff;
+    line-height: 26px;
+    font-weight: 400;
+    margin: 0 0 12px 0;
+}
+
+.footerDesc p {
+    font-size: 14px;
+    color: #fff;
+    line-height: 23px;
+    font-weight: 400;
+    opacity: 0.6;
+}
+
+.footerDesc ul {
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+}
+
+    .footerDesc ul li {
+        font-size: 14px;
+        line-height: 28px;
+        font-weight: 400;
+    }
+
+        .footerDesc ul li a:hover,
+        .footerDesc ul li a:focus {
+            text-decoration: none;
+            opacity: 1;
+        }
+
+        .footerDesc ul li a {
+            color: #fff;
+            opacity: 0.6;
+        }
+
+            .footerDesc ul li a i {
+                padding: 0 8px 0 0;
+            }
+
+    .footerDesc ul.socialLinks {
+        margin: 14px 0 0 0;
+    }
+
+        .footerDesc ul.socialLinks li {
+            width: auto;
+            display: inline-block;
+            font-size: 18px;
+            margin: 0 7px 0 0;
+        }
+
+            .footerDesc ul.socialLinks li a {
+                color: #fff;
+                opacity: 1;
+            }
+
+                .footerDesc ul.socialLinks li a i {
+                    color: #fff;
+                    opacity: 1;
+                }
+
+.copyright {
+    background-color: #565a59;
+    padding: 10px 0;
+    border-top: 0px #b1b1b1 solid;
+}
+
+.copyrightDesc {
+    width: 100%;
+}
+
+    .copyrightDesc ul {
+        margin: 0px;
+        padding: 0px;
+        list-style: none;
+    }
+
+        .copyrightDesc ul li {
+            width: auto;
+            display: inline-block;
+            margin: 0 20px 0 0;
+            font-size: 13px;
+        }
+
+            .copyrightDesc ul li a:before {
+                content: "";
+                background: rgba(255, 255, 255, 0.6);
+                top: 0;
+                width: 1px;
+                height: 100%;
+                position: absolute;
+                right: -13px;
+            }
+
+            .copyrightDesc ul li:last-child a:before {
+                width: 0px;
+            }
+
+            .copyrightDesc ul li a {
+                color: #fff;
+                opacity: 0.6;
+                position: relative;
+            }
+
+                .copyrightDesc ul li a:hover {
+                    text-decoration: none;
+                    opacity: 1;
+                }
+
+    .copyrightDesc p {
+        margin: 0;
+        text-align: right;
+        color: #fff;
+        opacity: 0.6;
+        font-size: 13px;
+    }
+
+#SearchControllerData {
+    display: inline-block;
+    width: 100%;
+}
+
+@media (max-width: 640px) {
+    .footer .full {
+        width: 100%;
+        text-align: center;
+    }
+    .copyrightDesc {
+        text-align: center; 
+    }
+        .copyrightDesc p {
+            text-align: center;
+            margin: 10px 0;
+        }
+}

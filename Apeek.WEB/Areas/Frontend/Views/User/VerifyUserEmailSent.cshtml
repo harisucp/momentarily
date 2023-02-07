@@ -1,0 +1,22 @@
+﻿@*/uk/user/VerifyUserEmailSent?email=grubij@gmail.com*@
+@model Apeek.Common.IShape<Apeek.ViewModels.Models.MessageSentModel>
+
+
+@if (Shape.ViewModel.IsEmailMessageSent)
+{
+    <div class="notification ok">
+        <div class="icon"></div>
+        <div class="text">@t("Вам отправлено письмо")</div>
+    </div>
+
+
+    <p>
+        @t("На Ваш почтовый ящик ") <b>@Model.ViewModel.EmailOrPhoneNumber</b> @t("отправлено письмо.")<br/>
+        @t("Пожалуйста, перейдите на свою почту чтобы подтвердить подачу заявки.")
+    </p>
+
+    <br/>
+    <br/>
+    string domainName = Model.ViewModel.EmailOrPhoneNumber.Split(new[] { '@' }, 2, StringSplitOptions.RemoveEmptyEntries)[1];
+    <a  href="@string.Format("http://{0}", domainName)" class="btn red" style="float: left">@t(string.Format("Перейти на {0}",domainName))</a>
+}

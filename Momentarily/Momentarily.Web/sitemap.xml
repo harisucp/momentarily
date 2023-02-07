@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+
+<url>
+  <loc>https://www.momentarily.com/</loc>
+  <lastmod>2020-03-30T12:38:22+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>https://www.momentarily.com/Home/HowItWorks</loc>
+  <lastmod>2020-03-30T12:38:22+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.momentarily.com/Home/FAQ</loc>
+  <lastmod>2020-03-30T12:38:22+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.momentarily.com/contactus</loc>
+  <lastmod>2020-03-30T12:38:22+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.momentarily.com/account/Register</loc>
+  <lastmod>2020-03-30T12:38:22+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.momentarily.com/account</loc>
+  <lastmod>2020-03-30T12:38:22+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.momentarily.com/Account/Login?ReturnUrl=%2fListing%2fCreate</loc>
+  <lastmod>2020-03-30T12:38:22+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.momentarily.com/Search/Item/4308</loc>
+  <lastmod>2020-03-30T12:38:22+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.momentarily.com/Search/Item/4345</loc>
+  <lastmod>2020-03-30T12:38:22+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.momentarily.com/Search/Item/4344</loc>
+  <lastmod>2020-03-30T12:38:22+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.momentarily.com/Search/Item/4343</loc>
+  <lastmod>2020-03-30T12:38:22+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.momentarily.com/Search/Item/4313</loc>
+  <lastmod>2020-03-30T12:38:22+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.momentarily.com/Search/Item/4307</loc>
+  <lastmod>2020-03-30T12:38:22+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.momentarily.com/Search/Item/4318</loc>
+  <lastmod>2020-03-30T12:38:22+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.momentarily.com/Search/Item/4335</loc>
+  <lastmod>2020-03-30T12:38:22+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.momentarily.com/Search/Item/4317</loc>
+  <lastmod>2020-03-30T12:38:22+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.momentarily.com/Home/AboutUs</loc>
+  <lastmod>2020-03-30T12:38:22+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.momentarily.com/termsofuse</loc>
+  <lastmod>2020-03-30T12:38:22+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.momentarily.com/privacypolicy</loc>
+  <lastmod>2020-03-30T12:38:22+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.momentarily.com/account/RestorePwd</loc>
+  <lastmod>2020-03-30T12:38:22+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.momentarily.com/Account/Login?ReturnUrl=%2fMessage%2fConversation%3fuserId%3d5215&amp;userId=5215</loc>
+  <lastmod>2020-03-30T12:38:22+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.momentarily.com/Account/Login?ReturnUrl=%2fUser%2fUserPublicProfile%2f5215</loc>
+  <lastmod>2020-03-30T12:38:22+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.momentarily.com/Account/Login?ReturnUrl=%2fMessage%2fConversation%3fuserId%3d5230&amp;userId=5230</loc>
+  <lastmod>2020-03-30T12:38:22+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.momentarily.com/Account/Login?ReturnUrl=%2fUser%2fUserPublicProfile%2f5230</loc>
+  <lastmod>2020-03-30T12:38:22+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.momentarily.com/Account/Login?ReturnUrl=%2fMessage%2fConversation%3fuserId%3d5164&amp;userId=5164</loc>
+  <lastmod>2020-03-30T12:38:22+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.momentarily.com/Account/Login?ReturnUrl=%2fUser%2fUserPublicProfile%2f5164</loc>
+  <lastmod>2020-03-30T12:38:22+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+
+
+</urlset>

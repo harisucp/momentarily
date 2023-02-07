@@ -1,0 +1,491 @@
+﻿@model Apeek.ViewModels.Models.FinalFeedbackVM
+
+
+<div class="popupTabbing">
+    @*<ul class="nav nav-tabs">
+            <li class="active" onclick="showhidedivs('1')"><a href="#"><i class="fa fa-check" aria-hidden="true"></i>No Issue</a></li>
+            <li   onclick="showhidedivs('2')"><a href="#"><i class="fa fa-check" aria-hidden="true"></i> Returned Late</a></li>
+            <li  onclick="showhidedivs('3')"><a href="#"><i class="fa fa-check" aria-hidden="true"></i>Damaged</a></li>
+        </ul>*@
+    <div class="tabBbuttonList">
+        <label class="check-box">
+            <input type="checkbox" id="NoIssue" class="feedbackChoose" checked name="feedbackbox" value="1">No Issue
+            <span class="checkmark"></span>
+        </label>&nbsp;
+        <label class="check-box">
+            <input type="checkbox" id="Late" class="feedbackChoose" name="feedbackbox" value="2">Returned Late
+            <span class="checkmark"></span>
+        </label>&nbsp;
+        <label class="check-box">
+            <input type="checkbox" id="Damaged" class="feedbackChoose" name="feedbackbox" value="3">Damaged
+            <span class="checkmark"></span>
+        </label>
+    </div>
+
+    <div class="tab-content">
+        @Html.HiddenFor(x => x.NoIssue)
+        @Html.HiddenFor(x => x.Late)
+        @Html.HiddenFor(x => x.Damaged)
+        @Html.HiddenFor(x => x.RequestId)
+        <div class="row">
+            <div class="NoIssueCaseClosed col-md-4 col-sm-12" id="retdate">
+                <div class="iconText">
+                    <h3><i class="fa fa-calendar" aria-hidden="true"></i> Return Date</h3>
+                    <div class="innerValues">
+                        @Html.TextBoxFor(x => x.ReturnDate, "{0:MM/dd/yyyy}", new { @class = "form-control" })
+
+                        @Html.HiddenFor(x => x.ReturnDate)
+                    </div>
+                </div>
+            </div>
+            <div class="NoIssueCaseClosed col-md-4 col-sm-12" id="rettime">
+                <div class="iconText">
+                    <h3><i class="fa fa-clock-o" aria-hidden="true"></i> Return Time</h3>
+                    <div class=" innerValues"> @Html.TextBoxFor(x => x.ReturnTime, new { @class = "form-control" })</div>
+                </div>
+            </div>
+            <div class="NoIssueCaseClosed col-md-4 col-sm-12" id="retclaim">
+                <div class="iconText">
+                    <h3><i class="fa fa-money" aria-hidden="true"></i> Claim Amount</h3>
+                    <div class="innerValues"> @Html.TextBoxFor(x => x.Claim, new { @class = "form-control" })</div>
+                </div>
+            </div>
+
+            <div class="col-md-12 col-sm-12">
+                <div class="discriptionExt">
+                    <h3> Description </h3>
+                    <p>@Html.TextAreaFor(x => x.Description, new { @class = "form-control" })</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-sm-12">
+        <div class="form-group text-center">
+            <button type="button" id="btnSubmit" style="background-color:#cf2d1e; border-color: #fff;" class="btn btn-primary">SUBMIT</button>
+        </div>
+    </div>
+</div>
+
+<div id="divLoading">
+    <p>
+        Loading. Please wait...<br />
+        <span>
+            <img src="~/Content/Images/circleloadinganimationOrignal.gif" alt="image" />
+        </span>
+    </p>
+
+</div>
+
+<script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
+<link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="~/plugins/jquery-ui/jquery-ui.js"></script>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+        $('#ReturnTime').timepicker({
+        });
+
+        if ($('input[type="checkbox"]').prop("checked") == true) {
+
+            $("#retdate").css("display", "none");
+            $("#rettime").css("display", "none");
+            $("#retclaim").css("display", "none");
+
+        }
+
+    });
+
+    $("#btnSubmit").on('click', function () {
+        debugger
+        var ischeckedNoIssue = $("#NoIssue").is(':checked');
+        var ischeckedLate = $("#Late").is(':checked');
+        var ischeckedDamages = $("#Damaged").is(':checked');
+        var returnDate = $("#ReturnDate").val();
+        var returnTime = $("#ReturnTime").val();
+        var claim = $("#Claim").val();
+        var description = $("#Description").val();
+
+
+        if (!ischeckedNoIssue && !ischeckedLate && !ischeckedDamages) {
+            alert("Please atleast one selection.");
+            return false;
+        }
+        else {
+            var model = {};
+            model.NoIssue = ischeckedNoIssue;
+            model.Late = ischeckedLate;
+            model.Damaged = ischeckedDamages;
+            model.ReturnDate = returnDate;
+            model.ReturnTime = returnTime;
+            model.Claim = claim;
+            model.Description = description;
+            model.RequestId = $("#RequestId").val();
+            $('#divLoading').show();
+            $.ajax({
+                type: "POST",
+                url: "/Listing/FinalFeedback",
+                data: '{model: ' + JSON.stringify(model) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    if (response == 'Success') {
+                        $('#id_feedback')[0].reset();
+                           //  toastr.success("Successfully Submitted");
+                        window.location.href = window.location.href;
+                        $('#divLoading').hide();
+                    }
+                    else {
+                        toastr.error("Something Went Wrong!");
+                        $('#divLoading').hide();
+                    }
+                },
+                failure: function (response) {
+                    toastr.error("Failure!");
+                    $('#divLoading').hide();
+                },
+                error: function (response) {
+                    toastr.error("Error!");
+                    $('#divLoading').hide();
+                }
+            });
+        }
+
+    });
+
+
+
+
+
+        $(".feedbackChoose").click(function () {
+
+            //feedbackbox
+            var checkedValue = $(this).val();
+            if (checkedValue == 2) {
+                $("#retdate").css("display", "block");
+                $("#rettime").css("display", "block");
+                $("#retclaim").css("display", "none");
+                $("#NoIssue").prop("checked", false);
+                //$("#Damaged").prop("checked", false);
+            }
+            else if (checkedValue == 3) {
+                $("#retdate").css("display", "block");
+                $("#rettime").css("display", "block");
+                $("#retclaim").css("display", "block");
+                $("#NoIssue").prop("checked", false);
+                //$("#Late").prop("checked", false);
+            }
+            else {
+                $("#retdate").css("display", "none");
+                $("#rettime").css("display", "none");
+                $("#retclaim").css("display", "none");
+                $("#Late").prop("checked", false);
+                $("#Damaged").prop("checked", false);
+            }
+
+
+            $("#Late").change(function () {
+
+                var ischecked = $(this).is(':checked');
+                var ischeckedDameaged = $("#Damaged").is(':checked');
+
+                if (ischecked && ischeckedDameaged) {
+                    $("#retclaim").css("display", "block");
+                }
+                else if (ischecked && !ischeckedDameaged) {
+                    $("#retclaim").css("display", "none");
+                }
+                else if (!ischecked && !ischeckedDameaged) {
+                    $("#retdate").css("display", "none");
+                    $("#rettime").css("display", "none");
+                    $("#retclaim").css("display", "none");
+                    $("#NoIssue").prop("checked", true);
+                }
+                else {
+                    $("#retclaim").css("display", "block");
+                }
+            });
+
+            $("#Damaged").change(function () {
+
+                var ischecked = $(this).is(':checked');
+                var ischeckedLate = $("#Late").is(':checked');
+                if (ischecked) {
+                    $("#retclaim").css("display", "block");
+                }
+                else if (!ischecked && !ischeckedLate) {
+                    $("#retdate").css("display", "none");
+                    $("#rettime").css("display", "none");
+                    $("#retclaim").css("display", "none");
+                    $("#NoIssue").prop("checked", true);
+                }
+                else {
+                    $("#retclaim").css("display", "none");
+                }
+            });
+
+        });
+
+
+
+
+
+    $('#ReturnDate').datepicker({
+        uiLibrary: 'bootstrap4',
+        maxDate: 0
+    });
+
+    $('#ReturnDate').on('click', function (e) {
+        e.preventDefault();
+        $(this).attr("autocomplete", "off");
+    });
+
+
+    //function showhidedivs(number) {
+
+    //    if (number == "1") {
+    //        $('retdate').css('display', 'none');
+    //        $('rettime').css('display', 'none');
+    //        $('retclaim').css('display', 'none');
+    //    }
+    //    if (number == "2") {
+    //        $('retdate').css('display', 'block');
+    //        $('rettime').css('display', 'block');
+    //        $('retclaim').css('display', 'none');
+    //    }
+    //    if (number == "3") {
+    //        $('retdate').css('display', 'block');
+    //        $('rettime').css('display', 'block');
+    //        $('retclaim').css('display', 'block');
+    //    }
+    //}
+
+
+</script>
+
+
+
+<style>
+    #divLoading {
+        margin: 0px;
+        padding: 0px;
+        position: fixed;
+        right: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        background-color: #666666;
+        z-index: 30001;
+        opacity: .8;
+        filter: alpha(opacity=70);
+        display: none
+    }
+
+        #divLoading p {
+            position: fixed;
+            top: 30%;
+            left: 45%;
+            color: White;
+        }
+
+        #divLoading span > img {
+            padding-left: 44px;
+        }
+
+    .gj-datepicker-bootstrap [role=right-icon] button {
+        height: 35px !important;
+    }
+
+
+    .ui-timepicker-standard {
+        z-index: 10000 !important;
+    }
+
+    #ReturnDate {
+        width: 100%;
+    }
+
+    #ReturnTime {
+        width: 100%;
+    }
+
+    #Claim {
+        width: 100%;
+    }
+
+    #Description {
+        width: 100%;
+    }
+
+    .popupTabbing .nav-tabs {
+        border-bottom: none;
+        text-align: center;
+    }
+
+        .popupTabbing .nav-tabs > li {
+            float: none;
+            display: inline-block;
+            max-width: 140px;
+            width: 100%;
+        }
+
+            .popupTabbing .nav-tabs > li.active > a, .popupTabbing .nav-tabs > li.active > a:hover, .popupTabbing .nav-tabs > li.active > a:focus {
+                border: none;
+            }
+
+            .popupTabbing .nav-tabs > li.active > a, .popupTabbing .nav-tabs > li > a:hover {
+                background-color: #cf2d1e;
+                color: #fff;
+                border: none;
+            }
+
+            .popupTabbing .nav-tabs > li > a {
+                border: none;
+                border-radius: 3px;
+                padding: 5px 15px;
+                color: #333;
+                font-size: 13px;
+                background-color: rgba(0,0,0,0.04);
+            }
+
+                .popupTabbing .nav-tabs > li > a i {
+                    display: none;
+                    margin-right: 5px;
+                }
+
+                .popupTabbing .nav-tabs > li > a:hover i, .popupTabbing .nav-tabs > li.active > a i {
+                    display: inline-block;
+                }
+
+    .tab-content {
+        border: 1px solid rgba(0,0,0,0.08);
+        padding: 20px;
+        border-radius: 5px;
+        font-size: 16px;
+        margin-top: 20px;
+    }
+
+    .popupTabbing .discriptionExt {
+        margin-top: 20px;
+        text-align: left;
+    }
+
+        .popupTabbing .discriptionExt h3 {
+            margin: 40px 0 15px;
+        }
+
+    .popupTabbing .tab-content i {
+        margin-right: 5px;
+        color: #cf2d1e;
+    }
+
+    .popupTabbing .tab-content h3 {
+        font-size: 12px;
+        text-transform: uppercase;
+        font-weight: 600;
+        letter-spacing: 0.2px;
+        width: 100%;
+        margin: 0 0 10px;
+    }
+
+    .popupTabbing .iconText {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .innerValues {
+        font-size: 13px;
+    }
+
+
+    .popupTabbing {
+        display: inline-block;
+        width: 100%;
+    }
+
+        .popupTabbing button#btnSubmit {
+            margin: 20px 0 0;
+        }
+
+        .popupTabbing .check-box {
+            display: block;
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            color: #000;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0 15px;
+        }
+
+        .popupTabbing .tabBbuttonList {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Hide the browser's default checkbox */
+        .popupTabbing .check-box input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        /* Create a custom checkbox */
+        .popupTabbing .checkmark {
+            position: absolute;
+            top: -3px;
+            left: 0;
+            height: 25px;
+            width: 25px;
+            background-color: #eee;
+        }
+
+        /* On mouse-over, add a grey background color */
+        .popupTabbing .check-box:hover input ~ .checkmark {
+            background-color: #ccc;
+        }
+
+        /* When the checkbox is checked, add a blue background */
+        .popupTabbing .check-box input:checked ~ .checkmark {
+            background-color: #cf2d1e;
+        }
+
+        /* Create the checkmark/indicator (hidden when not checked) */
+        .popupTabbing .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        /* Show the checkmark when checked */
+        .popupTabbing .check-box input:checked ~ .checkmark:after {
+            display: block;
+        }
+
+        /* Style the checkmark/indicator */
+        .popupTabbing .check-box .checkmark:after {
+            left: 9px;
+            top: 7px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 3px 3px 0;
+            -webkit-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            transform: rotate(45deg);
+        }
+</style>
+

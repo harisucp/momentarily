@@ -1,0 +1,80 @@
+﻿@model Apeek.Common.IShape<Apeek.ViewModels.Models.GoodRequestViewModel>
+
+@{
+    ViewBag.Title = "Review";
+    Layout = "~/Areas/Frontend/Views/Shared/_AccountMenuLayout.cshtml";
+}
+
+<div class="content" ng-controller="BookingReviewRequestController as review" ng-cloak>
+    <div class="container account booking conversation">
+        <div class="row">
+            <div class="col-md-9 col-md-offset-3 background-container">
+
+
+                <div class="title-block separated-block">
+
+                    <h1 class="left-align back">
+                        <span class="back-button">
+                            <a href="@Url.Action("Booking", "Listing", new {id = Model.ViewModel.Id})"><i class="fa fa-chevron-left" aria-hidden="true"></i></a>
+                        </span>
+                        Back to request
+                    </h1>
+                </div>
+
+
+
+
+                @using (Html.BeginForm("BookingReview", "Listing", FormMethod.Post, new { name = "reviewForm", @class = "form-conversation", ng_submit = "review.submitForm($event, reviewForm)" }))
+                {
+                    //@Html.Hidden("Rank", 5)
+                    @Html.Hidden("GoodRequestId", Model.ViewModel.Id)
+                    <input type="hidden" name="Rank" value="{{review.Review.Rank}}" ng-model="review.Review.Rank" required />
+                                      
+                    <div class="form-group">
+                        <label id="message">Leave message (required) </label>
+                        <textarea name="Message"
+                                  class="form-control"
+                                  ng-model="review.Review.Message"
+                                  ng-maxlength="4000"
+                                  ng-class="{'error-input': (reviewForm.message.$dirty || reviewForm.$submitted) && (reviewForm.message.$error.required || reviewForm.message.$error.maxlength)}"
+                                  rows="3" required></textarea>
+                        <span class="error-msg"
+                              ng-show="(reviewForm.message.$dirty || reviewForm.$submitted) && reviewForm.message.$error.required">
+                            Required
+                        </span>
+                        <span class="error-msg"
+                              ng-show="(reviewForm.message.$dirty || reviewForm.$submitted) && reviewForm.message.$error.maxlength">
+                            Max length 1000
+                        </span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Provide Rating </label>
+                        <div class="clearfix">
+                            <div class="detail  left-align"></div>
+                        </div>
+
+                        <div class="rate-block">
+                            <ng-rate-it ng-model="review.Review.Rank" resetable="false" step="1"></ng-rate-it>
+                            <span class="error-msg"
+                                  ng-show="(reviewForm.Rank.$dirty || reviewForm.$submitted) && reviewForm.Rank.$error.required">
+                                Rating Required
+                            </span>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-red">Leave review</button>
+                    <a class="btn secondary-btn" href="@Url.Action("Booking", "Listing", new {id = Model.ViewModel.Id})">Cancel</a>
+                }
+            </div>
+                </div>
+    </div>
+</div>
+
+@Scripts.Render("~/Scripts/Listing")
+
+<script>
+    var angularConstants = {};
+    angularConstants = {
+        Request: JSON.parse('@Html.Raw(HttpUtility.JavaScriptStringEncode(Json.Encode(Model)))')
+    };
+</script>

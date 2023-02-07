@@ -1,0 +1,455 @@
+﻿@model Momentarily.ViewModels.Models.DetailedReports
+@using Apeek.Common.Definitions;
+@{
+    Layout = "~/Areas/Frontend/Views/Shared/_AdminDashboardLayoutNew.cshtml";
+}
+
+
+@using (Html.BeginForm("AllTransactionReports", "AdminDashboard", FormMethod.Post, new { @id = "Admin_AllTransactionReports" }))
+{
+    <div class="page-header non-printable">
+        <div class="row align-items-end">
+            <div class="col-lg-8">
+                <div class="page-header-title">
+                    <div class="d-inline">
+                        <h4>Transaction Report</h4>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="page-header-breadcrumb">
+                    <ul class="breadcrumb-title parentReportInner">
+                        <li class="breadcrumb-item">
+                            <a href="/AdminDashboard/"> <i class="feather icon-home"></i> </a>
+                        </li>
+                        <li class="breadcrumb-item"><a href="#!">Transaction Report</a> </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-body">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-block">
+                        <div class="row non-printable">
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="exampleInputOldPassword1">Start Date</label>
+                                    <div class="inputContainer">
+                                        @Html.TextBoxFor(x => x.StartRentalDate, "{0:MM/dd/yyyy}", new { @class = "form-control", autocomplete = "off" })
+                                        @*<input type="text" id="StartRentalDate" placeholder="Select Start Date" class="form-control" value="@Model.StartRentalDate.ToShortDateString()">
+                                            @Html.HiddenFor(x => x.StartRentalDate)*@
+
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="exampleInputOldPassword1">End Date</label>
+                                    <div class="inputContainer">
+                                        @Html.TextBoxFor(x => x.EndRentalDate, "{0:MM/dd/yyyy}", new { @class = "form-control", autocomplete = "off" })
+                                        @*<input type="text" id="StartRentalDate" placeholder="Select Start Date" class="form-control" value="@Model.EndRentalDate.ToShortDateString()">
+                                            @Html.HiddenFor(x => x.EndRentalDate)*@
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="exampleInput">Sharer Name</label>
+                                    <div class="inputContainer">
+
+                                        @Html.TextBoxFor(x => x.SharerId, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="exampleInput">Borrower Name</label>
+                                    <div class="inputContainer">
+                                        @Html.TextBoxFor(x => x.BorrowerId, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row non-printable">
+
+                            <div class="col-md-3" style="display:block">
+                                <div class="form-group">
+                                    <label for="exampleInputOldPassword1">Select Category</label>
+                                    <div class="inputContainer">
+                                        @Html.DropDownList("CategoryId", (IEnumerable<SelectListItem>)ViewData["DDLCategories"], "Select Category", new { @class = "form-control" })
+                                        @*@Html.HiddenFor(x => x.CategoryId)*@
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="exampleInputOldPassword1">Item Name</label>
+                                    <div class="inputContainer">
+                                        @Html.TextBoxFor(x => x.GoodNameId, new { @class = "form-control" })
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="exampleInputOldPassword1">Amount Range</label>
+                                    <div class="inputContainer">
+                                        @Html.DropDownList("AmountRangeId", new List<SelectListItem>
+
+                                           {
+                                              new SelectListItem{ Text="$0-$50", Value = "1" },
+                                              new SelectListItem{ Text="$50-$100", Value = "2" },
+                                               new SelectListItem{ Text="$100-$200", Value = "3" },
+                                                new SelectListItem{ Text="$200-$300", Value = "4" },
+                                                 new SelectListItem{ Text="$300-$400", Value = "5" },
+                                                  new SelectListItem{ Text="$400-$500", Value = "6" },
+                                                   new SelectListItem{ Text="$500-$1000", Value = "7" },
+                                                    new SelectListItem{ Text="Above", Value = "8" }
+                                           }, "Select Amount", new { @class = "form-control" })
+                                        @*@Html.HiddenFor(x => x.AmountRangeId)*@
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="exampleInputOldPassword1" style="visibility:hidden">Blank</label>
+                                    <div class="inputContainer text-right">
+                                        <button type="submit" id="btnSubmit" style="background-color:#cf2d1e; border-color: #fff;" class="btn btn-primary">APPLY FILTERS</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <hr class="row">
+
+                        <div id="idAdminTransaction">
+
+                            <div class="card-block">
+                                <div class="row">
+                                    <div class="table-responsive">
+                                        <table id="requestlist" class="table table-bordered table-striped itemstable">
+                                            <thead>
+                                                <tr>
+                                                    <th>Transaction Id</th>
+                                                    <th>Product Name</th>
+                                                    <th>City</th>
+                                                    <th>State</th>
+                                                    <th>Rental Start</th>
+                                                    <th>Rental End</th>
+                                                    <th>Rental Requested On</th>
+                                                    <th>Last Modified Date</th>
+                                                    <th>Status</th>
+                                                    <th>Payment Processed</th>
+                                                    <th>Late Fee</th>
+                                                    <th>Claim Amount</th>
+                                                    <th>Total Paid Amount</th>
+                                                    <th>Sharer Amount</th>
+                                                    <th>Refunded Amount</th>
+                                                    <th>Pending Amount</th>
+                                                    <th>Rental Days</th>
+                                                    <th>Rental Cost/Day</th>
+                                                    <th>Total Item Cost</th>
+                                                    <th>Charity Amount</th>
+                                                    <th>Service Fee</th>
+                                                    <th>Security Deposit</th>
+                                                    <th>Discount</th>
+                                                    <th>Rental Total</th>
+                                                    <th>momentarily Earnings</th>
+                                                    <th>Owner</th>
+                                                    @* <th>Owner Received Rating For Transaction</th>*@
+                                                    <th>Borrower</th>
+                                                    @* <th>Borrower Received Rating For Transaction</th>*@
+                                                    @*<th>category</th>*@
+                                                    <th>Description</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                @foreach (var item in Model.AllTransactionReports)
+                                                {
+                                                    var earnigs = item.CustomerServiceFeeCost + item.SharerServiceFeeCost;
+                                                    <tr>
+                                                        <td>
+                                                            @Html.DisplayFor(x => item.TransactionId)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(x => item.GoodName)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(x => item.City)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(x => item.State)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(x => item.RentalStartDate)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(x => item.RentalEndDate)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(x => item.RentalStartDate)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(x => item.ModDate)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(x => item.StatusName)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(x => item.PaymentProcess)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(x => item.LateFee)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(x => item.ClaimAmount)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(x => item.CustomerCost)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(x => item.OnDisputeAmountForSharer)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(x => item.OnDisputeAmountForBorrower)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(x => item.PendingAmount)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(x => item.Days)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(x => item.Price)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(x => item.DaysCost)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(x => item.CustomerCharityCost)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(x => item.CustomerServiceFeeCost)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(x => item.SecurityDeposit)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(x => item.DiscountAmount)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(x => item.CustomerCost)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(x => item.Earnings)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(x => item.GoodOwnerName)
+                                                        </td>
+                                                        @*<td>
+                                                                @Html.DisplayFor(x => item.RatingToOwner)
+                                                            </td>*@
+                                                        <td>
+                                                            @Html.DisplayFor(x => item.UserName)
+                                                        </td>
+                                                        @*<td>
+                                                                @Html.DisplayFor(x => item.RatingToBorrower)
+                                                            </td>*@
+                                                        @*<td>
+                                                                @Html.DisplayFor(x => item.CategoryNames)
+                                                            </td>*@
+                                                        <td>
+                                                            @Html.DisplayFor(x => item.Description)
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="inputContainer text-right">
+                                    <button type="button" id="btnExportToCsv" style="background-color:#cf2d1e; border-color: #fff;" class="btn btn-primary">EXPORT TO CSV</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="divLoading">
+        <p>
+            Loading. Please wait...<br />
+            <span>
+                <img src="~/Content/Images/circleloadinganimationOrignal.gif" alt="image" />
+            </span>
+        </p>
+
+    </div>
+
+}
+
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
+<link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+
+<script src="~/AdminContent/Admity/js/canvasjs.min.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+@*<script src="//code.jquery.com/jquery-1.10.2.js"></script>*@
+<script src="~/plugins/jquery/jquery.js"></script>
+<script src="~/plugins/jquery-ui/jquery-ui.js"></script>
+<script src="~/AdminContent/html2canvas.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@1.5.3/dist/jspdf.min.js"></script>
+<link href="~/Content/ToastMessage/toastr.css" rel="stylesheet" />
+<script src="~/Content/ToastMessage/toastr.min.js"></script>
+
+<link href="~/plugins/datatables-bs4/css/dataTables.bootstrap4.css" rel="stylesheet" />
+<script src="~/plugins/datatables/jquery.dataTables.js"></script>
+<script src="~/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+
+<style>
+    .gj-datepicker-bootstrap [role=right-icon] button {
+        height: 35px !important;
+    }
+    #divLoading {
+        margin: 0px;
+        padding: 0px;
+        position: fixed;
+        right: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        background-color: #666666;
+        z-index: 30001;
+        opacity: .8;
+        filter: alpha(opacity=70);
+        display: none
+    }
+
+        #divLoading p {
+            position: fixed;
+            top: 30%;
+            left: 45%;
+            color: White;
+        }
+
+        #divLoading span > img {
+            padding-left: 44px;
+        }
+
+</style>
+
+<script>
+
+    $(document).ready(function () {
+
+        $("#btnSubmit").click(function () {
+            $('#divLoading').show();
+        });
+        var tempLoading = '@TempData["DivLoading"]';
+        if (tempLoading == 'Loading') {
+            $('#divLoading').hide();
+        }
+
+        $('#requestlist').DataTable({
+
+        });
+
+        $('#StartRentalDate').datepicker({
+            uiLibrary: 'bootstrap4'
+        });
+
+        $('#EndRentalDate').datepicker({
+            uiLibrary: 'bootstrap4',
+            maxDate: 0
+        });
+
+
+        $('#StartRentalDate').on('click', function (e) {
+            e.preventDefault();
+            $(this).attr("autocomplete", "off");
+        });
+        $('#EndRentalDate').on('click', function (e) {
+            e.preventDefault();
+            $(this).attr("autocomplete", "off");
+        });
+
+        var d = new Date();
+        var strdateNew = (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear();
+
+        $("#btnExportToCsv").click(function () {
+
+            var startRentalDate = $("#StartRentalDate").val();
+            if (startRentalDate == "") {
+                startRentalDate = strdateNew;
+            }
+            var endRentalDate = $("#EndRentalDate").val();
+            if (endRentalDate == "") {
+                endRentalDate = strdateNew;
+            }
+            var searchShareName = $("#SharerId").val();
+            var searchBorrowerName = $("#BorrowerId").val();
+            var categoryId = $("#CategoryId").val();
+            if (categoryId == "" || categoryId == "Select Category") {
+                categoryId = 0;
+            }
+            var ItemName = $("#GoodNameId").val();
+            var amountRangeId = $("#AmountRangeId").val();
+            if (amountRangeId == "" || amountRangeId == "Select Amount") {
+                amountRangeId = 0;
+            }
+            $('#divLoading').show();
+
+            $.ajax({
+                cache: false,
+                type: 'POST',
+                url: '@Url.Action("ExportToCsvTransaction", "AdminDashboard")',
+
+                data: { startRentalDate: startRentalDate, endRentalDate: endRentalDate, searchShareName: searchShareName, searchBorrowerName: searchBorrowerName, categoryId: categoryId, ItemName: ItemName, amountRangeId: amountRangeId },
+                success: function (data) {
+                    window.location = '/AdminDashboard/Download?fileGuid=' + data.FileGuid
+                        + '&filename=' + data.FileName;
+                    $('#divLoading').hide();
+                    toastr.success('Successfully downloaded .xlsx file.')
+                },
+                error: function (data) {
+                    $('#divLoading').hide();
+                    toastr.error('Something went wrong !')
+                }
+            });
+
+
+
+
+
+        });
+
+    });
+
+</script>

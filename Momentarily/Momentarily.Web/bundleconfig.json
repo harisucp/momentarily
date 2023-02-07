@@ -1,0 +1,30 @@
+[
+  {
+    "outputFileName": "Content/css/bootstrap.min.css",
+    "inputFiles": [
+      "Content/css/bootstrap.css"
+    ]
+  },
+  {
+    "outputFileName": "Content/css/bundle.css",
+    "inputFiles": [
+      "Content/css/account.css",
+      "Content/css/angular-carousel.css",
+      "Content/css/bootstrap.css",
+      "Content/css/datepicker.css",
+      "Content/css/font-awesome.css",
+      "Content/css/header.css",
+      "Content/css/home.css",
+      "Content/css/how-it-works.css",
+      "Content/css/index.css",
+      "Content/css/jqueryUI.css",
+      "Content/css/Login.css",
+      "Content/css/messages.css",
+      "Content/css/ng-rateit.css",
+      "Content/css/registermessagesent.css",
+      "Content/css/registermessagesent.min.css",
+      "Content/css/select2.css",
+      "Content/css/welcomeuser.css"
+    ]
+  }
+]
