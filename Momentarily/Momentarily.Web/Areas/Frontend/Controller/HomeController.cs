@@ -258,11 +258,5 @@ namespace Momentarily.Web.Areas.Frontend.Controller
             var dataQuestionOrAnswer = _itemDataService.GetChatQuestionsOrAnswers(questionid);
             return Json(dataQuestionOrAnswer, JsonRequestBehavior.AllowGet);
         }
-
-        public ActionResult Covid19FaceShield()
-        {
-            return View();
-        }
-
     }
 }

@@ -81,7 +81,6 @@
                                             </a>
                                             <ul class="dropdown-menu">
                                                 <li class="@((IsActiveLink("Index", "covid")||IsActiveLink("PlaceOrder", "covid")) ? "active" : "")"><a href="@Url.Action("Index", "covid")">COVID-19 Products</a></li>
-                                                <li class="@((IsActiveLink("Covid19FaceShield", "Home")) ? "active" : "")"><a href="@Url.Action("Covid19FaceShield", "Home")">Face Shield</a></li>
                                             </ul>
                                         </li>
 
@@ -146,7 +145,6 @@
                                             </a>
                                             <ul class="dropdown-menu">
                                                 <li class="@((IsActiveLink("Index", "covid")||IsActiveLink("PlaceOrder", "covid")) ? "active" : "")"><a href="@Url.Action("Index", "covid")">COVID-19 Products</a></li>
-                                                <li class="@((IsActiveLink("Covid19FaceShield", "Home")) ? "active" : "")"><a href="@Url.Action("Covid19FaceShield", "Home")">Face Shield</a></li>
                                             </ul>
                                         </li>
 
@@ -210,7 +208,6 @@
                     </a>
                     <ul class="dropdown-menu" id="covid-menu-02265" aria-expanded="false">
                         <li class="@((IsActiveLink("Index", "covid")||IsActiveLink("PlaceOrder", "covid")) ? "active" : "")"><a href="@Url.Action("Index", "covid")">COVID-19 Products</a></li>
-                        <li class="@((IsActiveLink("Covid19FaceShield", "Home")) ? "active" : "")"><a href="@Url.Action("Covid19FaceShield", "Home")">Face Shield</a></li>
                     </ul>
                 </li>
                 @if (!User.Identity.IsAuthenticated && !(User.IsAdmin))

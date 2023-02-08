@@ -414,7 +414,6 @@
     <Content Include="App_Data\mails\en\review_from_owner.cshtml" />
     <Content Include="App_Data\mails\en\cancelled_booking_by_borrower.cshtml" />
     <Content Include="App_Data\mails\en\cancelled_booking_by_owner.cshtml" />
-    <Content Include="Areas\Frontend\Views\Home\Covid19FaceShield.cshtml" />
     <Content Include="Areas\Frontend\Views\bc\Index.cshtml" />
     <Content Include="App_Data\mails\en\booking_denie_for_the_borrower.cshtml" />
     <Content Include="App_Data\mails\en\transaction_complete.cshtml" />
