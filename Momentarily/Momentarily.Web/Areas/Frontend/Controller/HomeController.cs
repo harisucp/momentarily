@@ -143,17 +143,16 @@ namespace Momentarily.Web.Areas.Frontend.Controller
             if (ModelState.IsValid)
             {
                 var result = _sendMessageService.SendEmailContactUs(shape.ViewModel);
-                   _sendMessageService.SendEmailContactUsForUser(shape.ViewModel);
 
                 shape.IsError = !result;
                 if (result)
                 {
-                    shape.Message = ViewErrorText.ConcatUsSend;
                     shape.ViewModel = new ContactUsEntry();
+                    ViewBag.IsEmailSent = "True";
                 }
                 else
                 {
-                    shape.Message = "Sending message error";
+                    ViewBag.IsEmailSent = "False";
                 }
             }
             return DisplayShape(shape);

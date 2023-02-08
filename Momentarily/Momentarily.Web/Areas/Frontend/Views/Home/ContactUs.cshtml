@@ -256,6 +256,15 @@
 </style>
 
 <script>
+    var isEmailSent = '@ViewBag.isEmailSent';
+    if (isEmailSent == "True" && isEmailSent != '')
+    {
+        toastr.success("Your message has been sent.");
+    }
+    else if(isEmailSent != '') {
+        toastr.error("Sending message error.");
+    }
+
         $(document).on('click', '#becomeBorrower', function () {
 
         $.ajax({
