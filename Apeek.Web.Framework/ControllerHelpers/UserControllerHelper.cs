@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 using Apeek.Common;
 using Apeek.Common.Controllers;
 using Apeek.Common.Extensions;
@@ -348,5 +349,13 @@ namespace Apeek.Web.Framework.ControllerHelpers
             var result = new Result<PayoutDetailsModel>(CreateResult.Error, new PayoutDetailsModel());            result = AccountDataService.GetCurrentPaypalInfoPaymentDetail(userID);            return result;        }
 
         public List<Entities.Entities.GlobalCodes> getPaymentTypes()        {            List<Entities.Entities.GlobalCodes> types = new List<Entities.Entities.GlobalCodes>(); ;            try            {                types = AccountDataService.GetPaymentTypes();                return types;            }            catch (Exception ex)            {                throw ex;            }        }
+
+        public void LogOff()
+        {
+            Ioc.Get<IDbLogger>().LogMessage(LogSource.Account, "Tring to log off");
+            FormsAuthentication.SignOut();
+            UserAccess.SignOutUser();
+            Ioc.Get<IDbLogger>().LogMessage(LogSource.Account, "Log off performed successfully. Redirecting ...");
+        }
     }
 }
