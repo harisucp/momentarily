@@ -139,6 +139,7 @@ namespace Apeek.Common
     public class ViewErrorText
     {
         public const string UserPwdChanged = "You have changed your password successfully!";
+        public const string UserRstPwdChanged = "You will be logged out upon successfull password change. Re-login will be required!";
         public const string UserPwdNoChanged = "Oops! We are unable to change your password...";
         public const string UserProfileChanged = "Your information has been saved successfully!";
         public const string UserProfileNoChanged = "Oops! We are unable to save this information...";

@@ -16,7 +16,6 @@
     <meta property="og:image" content="@QuickUrl.AbsoluteUrl(Url.Content(" ~/Content/img/home_bg.jpg"))" />
     <link href="https://fonts.googleapis.com/css?family=Anton&display=swap" rel="stylesheet">
 }
-
 @Styles.Render("~/bundles/cssHome")
 @Styles.Render("~/Content/css/jqueryUI")
 @*<script src="~/Scripts/Libs/angular-carousel.js"></script>*@
@@ -431,7 +430,7 @@
                     <div class="copyrightDesc">
                         <ul>
                             <li><a href="/termsofuse">Terms &amp; Conditions</a></li>
-                            <li><a href="/privacypolicy" class="ppBtn"><img src="~/Content/TemplateImg/images/privacy-policy_icon.png" alt="image"/> Privacy Policy</a></li>
+                            <li><a href="/privacypolicy" class="ppBtn"><img src="~/Content/TemplateImg/images/privacy-policy_icon.png" alt="image" /> Privacy Policy</a></li>
 
                         </ul>
                     </div>
@@ -476,16 +475,16 @@
                         </div>
                     </div>
                 </div>
-                
+
             </div>
-            
-      
+
+
         </div>
 
 
 
         @*<button class="chatbox-close" id="chatBotCloseId" style="display: none;"> <i class="fa fa-close fa-2x" aria-hidden="true"></i></button>
-        <button class="chatbox-open" id="chatBotOpenId"><i class="fa fa-comment fa-2x" aria-hidden="true"></i></button>*@
+            <button class="chatbox-open" id="chatBotOpenId"><i class="fa fa-comment fa-2x" aria-hidden="true"></i></button>*@
     </div>
 
     <div id="passwordRestSuccessModal" class="modal fade" role="dialog">
@@ -594,6 +593,12 @@
 @*<script src="//maps.googleapis.com/maps/api/js?key=AIzaSyBP9cfi8Ngb5bgwFu253vGDaaTihNMGjXg&amp;signed_in=false&amp;libraries=places&amp;language=en&amp;callback=googleMapsInitialized"></script>*@
 @*<script src="~/Scripts/Home/ChatBot.js"></script>*@
 <script>
+    $(document).ready(function () {
+        var isPasswordChangeSuccessfull = '@TempData["isPasswordChangeSuccessfull"]';
+        if (isPasswordChangeSuccessfull == "True" && isPasswordChangeSuccessfull != "" ) {
+            toastr.success("Your password has been changed successfully. Please re-login!");
+        }
+    });
 
     var verifiedAccountOrNot = '@TempData["CheckForCBVerifyAccount"]';
 
@@ -1308,7 +1313,7 @@
         opacity: .8;
         filter: alpha(opacity=70);
         display: none;
-        text-align:center;
+        text-align: center;
     }
 
         #divLoading p {
@@ -1339,9 +1344,9 @@
         text-transform: uppercase;
         line-height: 23px;
         padding: 5px 15px;
-    } 
+    }
 
- 
+
 
     .waterMark .thumbImage, .waterMark .featureImage {
         position: relative;
@@ -1444,8 +1449,6 @@
         .modal-dialog.sizeLg {
             margin: 10% auto 0;
         }
-
-       
     }
 
     @@media(max-width:767px) {
@@ -1482,7 +1485,6 @@
         }
 
         .waterMark .featureImage:before {
-          
             width: 100%;
         }
     }
@@ -1638,7 +1640,7 @@
         margin-top: 0px;
         top: auto;
         text-align: center;
-        bottom:0;
+        bottom: 0;
     }
 
     .cbContent #loading-center-absolute {
@@ -1718,48 +1720,57 @@
             -webkit-transform: scale(0);
         }
     }
+
     .rsSpaceMob {
         margin-bottom: 15px;
     }
+
     .yesNoBtn {
-        text-align:right;
+        text-align: right;
     }
-    .yesNoBtn button {
-        width: auto;
-        min-width: 80px;
-    }
+
+        .yesNoBtn button {
+            width: auto;
+            min-width: 80px;
+        }
 
     .tryAgainVerification button {
         margin-top: 0;
     }
 
-    @@media(max-width:767px){
-        input:focus{
-            outline:none;
-            box-shadow:none;
+    @@media(max-width:767px) {
+        input:focus {
+            outline: none;
+            box-shadow: none;
         }
+
         .cbHeader h2 {
             font-size: 20px;
         }
+
         .cbContent p {
             padding: 10px 15px;
         }
+
         .cbContent .col-sm-6:nth-child(odd) {
             padding-right: 15px;
         }
+
         .cbContent .col-sm-6:nth-child(even) {
             padding-left: 15px;
         }
+
         .chatBooatSection button {
             width: auto;
         }
+
         .verificationBtn, .tryAgainVerification {
             text-align: right;
         }
+
         .chatBooat {
             display: none;
         }
-
     }
 
     @@media(max-width:480px) {
@@ -1768,10 +1779,9 @@
             max-height: 340px;
             min-height: 340px;
         }
+
         .chatBooat {
             display: block;
         }
     }
-
-
 </style>
