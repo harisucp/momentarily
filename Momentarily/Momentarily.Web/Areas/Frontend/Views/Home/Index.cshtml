@@ -104,7 +104,7 @@
     <div class="searchContainer1">
         <div class="container">
             <div class="row">
-                <div class="col-sm-12">
+                <div class="col-sm-12">     
                     <div class="proHeading">
                         <h1>Recently Rented Products </h1>
                     </div>
@@ -936,7 +936,7 @@
             url: "/Search/CheckVersion",
             type: "Get",
             success: function (data) {
-                if (data == "True" || data == "true") {
+                if (data == "True" || data == "true" && '@TempData["User"]' == null) {
 
                     $('#myModalLayoutNew').modal();
                 }
@@ -979,12 +979,18 @@
                 date.setDate(date.getDate() + 1)
                 localStorage.setItem("welcome", date);
                 //$.cookie("welcome", "welcome", { expires: date, secure: false });
-                $('#myModalLayoutNew').modal();
+                if ('@TempData["User"]' == null)
+                {
+                    $('#myModalLayoutNew').modal();
+                }
             }
             else {
                 var date = new Date();
                 if (date > new Date(ExpireOn)) {
+                     if ('@TempData["User"]' == null)
+                {
                     $('#myModalLayoutNew').modal();
+                }
                     date.setDate(date.getDate() + 1)
                     localStorage.setItem("welcome", date);
                 }
@@ -1011,15 +1017,13 @@
 
 
         var checkSiteVersion = '@TempData["CheckSiteVersion"]';
-
         if (checkSiteVersion != 'Beta') {
             $(".waterMark").removeClass("waterMark")
         }
 
 
         $("#indexSubmitID").click(function () {
-
-            if (checkSiteVersion == 'Beta') {
+            if (checkSiteVersion == 'Beta' && '@TempData["User"]' == null) {
                 $('#myModalLayoutNew').modal('show');
                 return false;
             }
@@ -1031,8 +1035,7 @@
 
         });
         $(".categoryCls").click(function () {
-
-            if (checkSiteVersion == 'Beta') {
+            if (checkSiteVersion == 'Beta' && '@TempData["User"]' == null) {
                 $('#myModalLayoutNew').modal('show');
                 return false;
             }
@@ -1044,7 +1047,7 @@
 
         });
         $(document).on('click', '.itemCls', function () {
-            if (checkSiteVersion == 'Beta') {
+            if (checkSiteVersion == 'Beta' && '@TempData["User"]' == null) {
                 $('#myModalLayoutNew').modal('show');
                 return false;
             }
@@ -1055,7 +1058,7 @@
             }
         });
         $(document).on('click', '.featureDesc', function () {
-            if (checkSiteVersion == 'Beta') {
+            if (checkSiteVersion == 'Beta' && '@TempData["User"]' == null) {
                 $('#myModalLayoutNew').modal('show');
                 return false;
             }

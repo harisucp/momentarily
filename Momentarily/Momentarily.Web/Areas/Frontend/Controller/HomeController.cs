@@ -50,6 +50,7 @@ namespace Momentarily.Web.Areas.Frontend.Controller
 
             ViewBag.RecentlyRentedItems = _itemDataService.GetMostRecentlyRentedProduct();            ViewBag.FeaturedProduct = _itemDataService.GetMostFeaturedProduct();            TempData["CheckSiteVersion"] = _settings.GetBetaVersion();
             var userVerifyId = UserId.HasValue;
+            TempData["User"]=userVerifyId;
             TempData["CheckForCBVerifyAccount"] = userVerifyId;
             model.Categories = model.Categories.Where(x => x.Name != "All Categories" && x.Name != "Other").ToList();            var shape = _shapeFactory.BuildShape(null, model, PageName.Home.ToString());            return DisplayShape(shape);        }
 
