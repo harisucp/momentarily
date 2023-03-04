@@ -34,9 +34,9 @@ namespace Momentarily.Web.Areas.Frontend.Controller
         public ActionResult Map(MomentarilyItemSearchModel searchModel)
         {
             var userID = UserId.HasValue;
-          var checkWithoutLogin =  _settingsDataService.GetBetaVersion();
-            if(checkWithoutLogin =="Beta" && !userID)
-            {      
+            var checkWithoutLogin = _settingsDataService.GetBetaVersion();
+            if (checkWithoutLogin == "Beta" && !userID)
+            {
                 TempData["checkVersionWithoutLogin"] = "VersionWithoutLogin";
                 return RedirectToAction("Index", "Home");
             }
@@ -209,7 +209,7 @@ namespace Momentarily.Web.Areas.Frontend.Controller
         public bool CheckVersion()        {            bool result = false;
 
             var checkSiteVersion = _settingsDataService.GetBetaVersion();
-            if (checkSiteVersion == "Beta" && !UserId.HasValue)
+            if (checkSiteVersion == "Beta")
             {
                 result = true;
             }

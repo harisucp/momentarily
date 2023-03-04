@@ -101,7 +101,7 @@
 </style>
 
 <script>
-        $(document).on('click', '#becomeBorrower', function () {                $.ajax({            url: "/Search/CheckVersion",            type: "Get",            success: function (data) {                if (data == "True" || data == "true") {                    $('#exampleModalBeta').modal('show');                }                else {                    window.location.href = '/Search/Map';                }            },            error: function () {                toastr.info("Error Occurred");            }        })    });
+        $(document).on('click', '#becomeBorrower', function () {                $.ajax({            url: "/Search/CheckVersion",            type: "Get",            success: function (data) {                if (data != "True") {                    $('#exampleModalBeta').modal('show');                }                else {                    window.location.href = '/Search/Map';                }            },            error: function () {                toastr.info("Error Occurred");            }        })    });
 </script>
 
 @*<script>
