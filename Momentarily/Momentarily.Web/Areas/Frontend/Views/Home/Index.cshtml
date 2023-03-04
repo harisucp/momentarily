@@ -936,7 +936,7 @@
             url: "/Search/CheckVersion",
             type: "Get",
             success: function (data) {
-                if (data == "True" || data == "true" && '@TempData["User"]' == null) {
+                if (data != "True") {
 
                     $('#myModalLayoutNew').modal();
                 }
@@ -979,18 +979,12 @@
                 date.setDate(date.getDate() + 1)
                 localStorage.setItem("welcome", date);
                 //$.cookie("welcome", "welcome", { expires: date, secure: false });
-                if ('@TempData["User"]' == null)
-                {
-                    $('#myModalLayoutNew').modal();
-                }
+                    //$('#myModalLayoutNew').modal();
             }
             else {
                 var date = new Date();
                 if (date > new Date(ExpireOn)) {
-                     if ('@TempData["User"]' == null)
-                {
-                    $('#myModalLayoutNew').modal();
-                }
+                    //$('#myModalLayoutNew').modal();
                     date.setDate(date.getDate() + 1)
                     localStorage.setItem("welcome", date);
                 }
@@ -1008,8 +1002,8 @@
         if (tempUnSubscribeMsg != '') {
             toastr.info(tempUnSubscribeMsg);
         }
-
         varCcheckVersionWithoutLogin = '@TempData["checkVersionWithoutLogin"]';
+
         if (varCcheckVersionWithoutLogin != '') {
             $('#myModalLayoutNew').modal('show');
             return false;
@@ -1023,7 +1017,8 @@
 
 
         $("#indexSubmitID").click(function () {
-            if (checkSiteVersion == 'Beta' && '@TempData["User"]' == null) {
+            debugger;
+            if (checkSiteVersion != 'Beta') {
                 $('#myModalLayoutNew').modal('show');
                 return false;
             }
@@ -1035,7 +1030,7 @@
 
         });
         $(".categoryCls").click(function () {
-            if (checkSiteVersion == 'Beta' && '@TempData["User"]' == null) {
+            if (checkSiteVersion != 'Beta') {
                 $('#myModalLayoutNew').modal('show');
                 return false;
             }
@@ -1047,7 +1042,7 @@
 
         });
         $(document).on('click', '.itemCls', function () {
-            if (checkSiteVersion == 'Beta' && '@TempData["User"]' == null) {
+            if (checkSiteVersion != 'Beta') {
                 $('#myModalLayoutNew').modal('show');
                 return false;
             }
@@ -1058,7 +1053,7 @@
             }
         });
         $(document).on('click', '.featureDesc', function () {
-            if (checkSiteVersion == 'Beta' && '@TempData["User"]' == null) {
+            if (checkSiteVersion != 'Beta') {
                 $('#myModalLayoutNew').modal('show');
                 return false;
             }

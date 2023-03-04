@@ -100,6 +100,7 @@ namespace Apeek.Web.Areas.Frontend.Controllers
         [AllowAnonymous]
         public ActionResult LogOff()
         {
+            Session["IsUserLogin"] = false;
             _helper.LogOff();
             return Redirect(QuickUrl.HomeUrl());
         }

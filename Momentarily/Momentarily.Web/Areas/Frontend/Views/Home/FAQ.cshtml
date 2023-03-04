@@ -30,7 +30,7 @@
             type: "Get",
             async: false ,
             success: function (data) {
-                if (data == "True" || data == "true") {
+                if (data == "True") {
                     versioncheck = 'Beta';
                 }
                 else {
@@ -158,7 +158,7 @@
             type: "Get",
             async: false,
             success: function (data) {
-                if (data == "True" || data == "true") {
+                if (data != "True") {
                     $('#exampleModalBeta').modal('show');
                     event.preventDefault();
 

@@ -78,6 +78,7 @@ namespace Apeek.Web.Framework.Controllers
         }
         protected ActionResult AuthenticateUserWithPrivilagesAndRedirect(int userId, string redirectTo)
         {
+            Session["IsUserLogin"] = true;
             if (UserAccess.AuthenticateUser(userId))
             {
                 Ioc.Get<IDbLogger>().LogMessage(LogSource.Account, "User authenticated successfully. Redirecting ...");

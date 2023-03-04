@@ -239,7 +239,10 @@
                     <p>We have launched our BETA site, which means you can now upload items that you are thinking about loaning out. We are currently limiting the ability to view other rentals, however anything uploaded now will be visible on our official launch day. If you have any feedback or suggestions, drop us a message at <a href="mailto:hello@momentarily.com">hello@momentarily.com</a> We hope you enjoy your experience!</p>
                 </div>
                 <div class=" betaSignUpBtn text-center">
-                    <a href="/account/Register" class="btn btn-green">Sign up and add your items now</a>
+                    @if (Convert.ToBoolean(Session["IsUserLogin"]) != true)
+                    {
+                        <a href="/account/Register" class="btn btn-green">Sign up and add your items now</a>
+                    }
                 </div>
                 @*<div class="subscribeBox">
                     <input type="text" id="subscribeEmailpopup" class="form-control" placeholder="Enter your email" />
@@ -715,7 +718,7 @@
             url: "/Search/CheckVersion",
             type: "Get",
             success: function (data) {
-                if (data == "True" || data == "true") {
+                if (data != "True") {
                     
                     $('#exampleModalBeta').modal('show');
                 }
@@ -736,7 +739,7 @@
             url: "/Search/CheckVersion",
             type: "Get",
             success: function (data) {
-                if (data == "True" || data == "true") {
+                if (data != "True") {
                    
                     $('#exampleModalBeta').modal('show');
                 }

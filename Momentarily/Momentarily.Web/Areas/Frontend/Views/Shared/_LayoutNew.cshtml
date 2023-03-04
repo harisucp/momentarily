@@ -274,7 +274,10 @@
 
                 </div>
                 <div class=" betaSignUpBtn text-center">
-                    <a href="/account/Register" class="btn btn-green">Sign up and add your items now</a>
+                    @if (Convert.ToBoolean(Session["IsUserLogin"]) != true)
+                    {
+                        <a href="/account/Register" class="btn btn-green">Sign up and add your items now</a>
+                    }
                 </div>
                 @*<div class="subscribeBox">
                         <input type="text" id="subscribeEmailpopup" class="form-control" placeholder="Enter your email" />
@@ -744,7 +747,7 @@
             url: "/Search/CheckVersion",
             type: "Get",
             success: function (data) {
-                if (data == "True" || data == "true") {
+                if (data != "True") {
                     $('#myModalLayoutNew').modal('show');
 
                 }
@@ -766,7 +769,7 @@
             url: "/Search/CheckVersion",
             type: "Get",
             success: function (data) {
-                if (data == "True" || data == "true") {
+                if (data == "True") {
                     $('#myModalLayoutNew').modal('show');
                 }
                 else {

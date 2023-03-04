@@ -56,7 +56,7 @@ namespace Momentarily.Common.Definitions
     public class MomentarilyMapProperties
     {
         public const int DefaultPage = 1;
-        public const int DefaultPageSize = 21;
+        public const int DefaultPageSize = 5;
         public const int DefaultRadius = 25;
         public const string DefaultLocation = "";
         public const double DefaultLatitude = 0;

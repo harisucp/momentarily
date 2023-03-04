@@ -271,7 +271,7 @@
             url: "/Search/CheckVersion",
             type: "Get",
             success: function (data) {
-                if (data == "True" || data == "true") {
+                if (data != "True") {
 
                     $('#exampleModalBeta').modal('show');
                 }
