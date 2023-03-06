@@ -463,6 +463,7 @@ namespace Momentarily.Web.Areas.Frontend.Controller
         {
             _helper.LogOff();
             Response.Cookies.Remove("Login");
+            Session["IsUserLogin"] = false;
             return Redirect(QuickUrl.HomeUrl());
         }
         [AllowAnonymous]

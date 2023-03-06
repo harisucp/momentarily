@@ -23,14 +23,14 @@
     <!-- ss <link href="https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet"> -->
     <!-- <link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i&display=swap" rel="stylesheet"> -->
 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-155387094-1"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-81203338-1"></script>
     <script async defer src="//assets.pinterest.com/js/pinit.js"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
 
-        gtag('config', 'UA-155387094-1');
+        gtag('config', 'UA-81203338-1');
     </script>
     <script type="application/ld+json">
         {
@@ -81,7 +81,6 @@
                                             </a>
                                             <ul class="dropdown-menu">
                                                 <li class="@((IsActiveLink("Index", "covid")||IsActiveLink("PlaceOrder", "covid")) ? "active" : "")"><a href="@Url.Action("Index", "covid")">COVID-19 Products</a></li>
-                                                <li class="@((IsActiveLink("Covid19FaceShield", "Home")) ? "active" : "")"><a href="@Url.Action("Covid19FaceShield", "Home")">Face Shield</a></li>
                                             </ul>
                                         </li>
 
@@ -146,7 +145,6 @@
                                             </a>
                                             <ul class="dropdown-menu">
                                                 <li class="@((IsActiveLink("Index", "covid")||IsActiveLink("PlaceOrder", "covid")) ? "active" : "")"><a href="@Url.Action("Index", "covid")">COVID-19 Products</a></li>
-                                                <li class="@((IsActiveLink("Covid19FaceShield", "Home")) ? "active" : "")"><a href="@Url.Action("Covid19FaceShield", "Home")">Face Shield</a></li>
                                             </ul>
                                         </li>
 
@@ -210,7 +208,6 @@
                     </a>
                     <ul class="dropdown-menu" id="covid-menu-02265" aria-expanded="false">
                         <li class="@((IsActiveLink("Index", "covid")||IsActiveLink("PlaceOrder", "covid")) ? "active" : "")"><a href="@Url.Action("Index", "covid")">COVID-19 Products</a></li>
-                        <li class="@((IsActiveLink("Covid19FaceShield", "Home")) ? "active" : "")"><a href="@Url.Action("Covid19FaceShield", "Home")">Face Shield</a></li>
                     </ul>
                 </li>
                 @if (!User.Identity.IsAuthenticated && !(User.IsAdmin))
@@ -277,7 +274,10 @@
 
                 </div>
                 <div class=" betaSignUpBtn text-center">
-                    <a href="/account/Register" class="btn btn-green">Sign up and add your items now</a>
+                    @if (Convert.ToBoolean(Session["IsUserLogin"]) != true)
+                    {
+                        <a href="/account/Register" class="btn btn-green">Sign up and add your items now</a>
+                    }
                 </div>
                 @*<div class="subscribeBox">
                         <input type="text" id="subscribeEmailpopup" class="form-control" placeholder="Enter your email" />
@@ -747,7 +747,7 @@
             url: "/Search/CheckVersion",
             type: "Get",
             success: function (data) {
-                if (data == "True" || data == "true") {
+                if (data != "True") {
                     $('#myModalLayoutNew').modal('show');
 
                 }
@@ -769,7 +769,7 @@
             url: "/Search/CheckVersion",
             type: "Get",
             success: function (data) {
-                if (data == "True" || data == "true") {
+                if (data == "True") {
                     $('#myModalLayoutNew').modal('show');
                 }
                 else {

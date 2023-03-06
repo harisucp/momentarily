@@ -179,9 +179,18 @@ namespace Momentarily.Web.Areas.Frontend.Controller
         [HttpPost]
         public ActionResult UserPwd(Shape<UserPwdModel> shape)
         {
-            return !_helper.UserHasAccess()
-                ? RedirectToHome()
-                : DisplayShape(_helper.UserPwd(shape, ModelState));
+            if (!_helper.UserHasAccess())
+            {
+                return RedirectToHome();
+            }
+          else
+            {
+                _helper.LogOff();
+                Response.Cookies.Remove("Login");
+                DisplayShape(_helper.UserPwd(shape, ModelState));
+                TempData["isPasswordChangeSuccessfull"] = "True";
+                return Redirect(QuickUrl.HomeUrl());
+            }
         }
         public ActionResult ResetPassword()
         {

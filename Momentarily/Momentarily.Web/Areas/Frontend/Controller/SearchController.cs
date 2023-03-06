@@ -34,13 +34,13 @@ namespace Momentarily.Web.Areas.Frontend.Controller
         public ActionResult Map(MomentarilyItemSearchModel searchModel)
         {
             var userID = UserId.HasValue;
-          var checkWithoutLogin =  _settingsDataService.GetBetaVersion();
-            if(checkWithoutLogin =="Beta")
-            {      
+            var checkWithoutLogin = _settingsDataService.GetBetaVersion();
+            if (checkWithoutLogin == "Beta" && !userID)
+            {
                 TempData["checkVersionWithoutLogin"] = "VersionWithoutLogin";
                 return RedirectToAction("Index", "Home");
             }
-            
+
 
             ViewBag.Title = "Borrow - Browse Thousands of Items Available | momentarily";
             ViewBag.Description = "Borrow and save on momentarily by browsing from thousands of items by people willing to share items for a small fraction of the actual cost.";

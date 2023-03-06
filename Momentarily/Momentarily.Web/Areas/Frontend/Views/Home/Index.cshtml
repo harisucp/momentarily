@@ -104,7 +104,7 @@
     <div class="searchContainer1">
         <div class="container">
             <div class="row">
-                <div class="col-sm-12">
+                <div class="col-sm-12">     
                     <div class="proHeading">
                         <h1>Recently Rented Products </h1>
                     </div>
@@ -476,16 +476,16 @@
                         </div>
                     </div>
                 </div>
-                
+
             </div>
-            
-      
+
+
         </div>
 
 
 
         @*<button class="chatbox-close" id="chatBotCloseId" style="display: none;"> <i class="fa fa-close fa-2x" aria-hidden="true"></i></button>
-        <button class="chatbox-open" id="chatBotOpenId"><i class="fa fa-comment fa-2x" aria-hidden="true"></i></button>*@
+            <button class="chatbox-open" id="chatBotOpenId"><i class="fa fa-comment fa-2x" aria-hidden="true"></i></button>*@
     </div>
 
     <div id="passwordRestSuccessModal" class="modal fade" role="dialog">
@@ -594,6 +594,12 @@
 @*<script src="//maps.googleapis.com/maps/api/js?key=AIzaSyBP9cfi8Ngb5bgwFu253vGDaaTihNMGjXg&amp;signed_in=false&amp;libraries=places&amp;language=en&amp;callback=googleMapsInitialized"></script>*@
 @*<script src="~/Scripts/Home/ChatBot.js"></script>*@
 <script>
+    $(document).ready(function () {
+        var isPasswordChangeSuccessfull = '@TempData["isPasswordChangeSuccessfull"]';
+        if (isPasswordChangeSuccessfull == "True" && isPasswordChangeSuccessfull != "" ) {
+            toastr.success("Your password has been changed successfully. Please re-login!");
+        }
+    });
 
     var verifiedAccountOrNot = '@TempData["CheckForCBVerifyAccount"]';
 
@@ -930,7 +936,7 @@
             url: "/Search/CheckVersion",
             type: "Get",
             success: function (data) {
-                if (data == "True" || data == "true") {
+                if (data != "True") {
 
                     $('#myModalLayoutNew').modal();
                 }
@@ -973,12 +979,12 @@
                 date.setDate(date.getDate() + 1)
                 localStorage.setItem("welcome", date);
                 //$.cookie("welcome", "welcome", { expires: date, secure: false });
-                $('#myModalLayoutNew').modal();
+                    //$('#myModalLayoutNew').modal();
             }
             else {
                 var date = new Date();
                 if (date > new Date(ExpireOn)) {
-                    $('#myModalLayoutNew').modal();
+                    //$('#myModalLayoutNew').modal();
                     date.setDate(date.getDate() + 1)
                     localStorage.setItem("welcome", date);
                 }
@@ -996,8 +1002,8 @@
         if (tempUnSubscribeMsg != '') {
             toastr.info(tempUnSubscribeMsg);
         }
-
         varCcheckVersionWithoutLogin = '@TempData["checkVersionWithoutLogin"]';
+
         if (varCcheckVersionWithoutLogin != '') {
             $('#myModalLayoutNew').modal('show');
             return false;
@@ -1005,15 +1011,14 @@
 
 
         var checkSiteVersion = '@TempData["CheckSiteVersion"]';
-
         if (checkSiteVersion != 'Beta') {
             $(".waterMark").removeClass("waterMark")
         }
 
 
         $("#indexSubmitID").click(function () {
-
-            if (checkSiteVersion == 'Beta') {
+            debugger;
+            if (checkSiteVersion != 'Beta') {
                 $('#myModalLayoutNew').modal('show');
                 return false;
             }
@@ -1025,8 +1030,7 @@
 
         });
         $(".categoryCls").click(function () {
-
-            if (checkSiteVersion == 'Beta') {
+            if (checkSiteVersion != 'Beta') {
                 $('#myModalLayoutNew').modal('show');
                 return false;
             }
@@ -1038,7 +1042,7 @@
 
         });
         $(document).on('click', '.itemCls', function () {
-            if (checkSiteVersion == 'Beta') {
+            if (checkSiteVersion != 'Beta') {
                 $('#myModalLayoutNew').modal('show');
                 return false;
             }
@@ -1049,7 +1053,7 @@
             }
         });
         $(document).on('click', '.featureDesc', function () {
-            if (checkSiteVersion == 'Beta') {
+            if (checkSiteVersion != 'Beta') {
                 $('#myModalLayoutNew').modal('show');
                 return false;
             }
@@ -1339,9 +1343,9 @@
         text-transform: uppercase;
         line-height: 23px;
         padding: 5px 15px;
-    } 
+    }
 
- 
+
 
     .waterMark .thumbImage, .waterMark .featureImage {
         position: relative;
@@ -1445,7 +1449,7 @@
             margin: 10% auto 0;
         }
 
-       
+
     }
 
     @@media(max-width:767px) {
@@ -1482,7 +1486,7 @@
         }
 
         .waterMark .featureImage:before {
-          
+
             width: 100%;
         }
     }
@@ -1724,10 +1728,10 @@
     .yesNoBtn {
         text-align:right;
     }
-    .yesNoBtn button {
-        width: auto;
-        min-width: 80px;
-    }
+        .yesNoBtn button {
+            width: auto;
+            min-width: 80px;
+        }
 
     .tryAgainVerification button {
         margin-top: 0;

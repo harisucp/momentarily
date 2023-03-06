@@ -19,14 +19,14 @@
     <link href="~/Content/TemplateImg/css/header.css" rel="stylesheet" />
     <link href="~/Content/css/Footerlayout.css" rel="stylesheet" />
 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-155387094-1"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-81203338-1"></script>
     @*<script async defer src="//assets.pinterest.com/js/pinit.js"></script>*@
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
 
-        gtag('config', 'UA-155387094-1');
+        gtag('config', 'UA-81203338-1');
     </script>
     <script type="application/ld+json">
         {
@@ -75,7 +75,6 @@
                                             </a>
                                             <ul class="dropdown-menu">
                                                 <li class="@((IsActiveLink("Index", "covid")||IsActiveLink("PlaceOrder", "covid")) ? "active" : "")"><a href="@Url.Action("Index", "covid")">COVID-19 Products</a></li>
-                                                <li class="@((IsActiveLink("Covid19FaceShield", "Home")) ? "active" : "")"><a href="@Url.Action("Covid19FaceShield", "Home")">Face Shield</a></li>
                                             </ul>
                                         </li>
                                         <li class="dropdown dropNav">
@@ -136,7 +135,6 @@
                                             </a>
                                             <ul class="dropdown-menu">
                                                 <li class="@((IsActiveLink("Index", "covid")||IsActiveLink("PlaceOrder", "covid")) ? "active" : "")"><a href="@Url.Action("Index", "covid")">COVID-19 Products</a></li>
-                                                <li class="@((IsActiveLink("Covid19FaceShield", "Home")) ? "active" : "")"><a href="@Url.Action("Covid19FaceShield", "Home")">Face Shield</a></li>
                                             </ul>
                                         </li>
                                         <li><a href="@QuickUrl.RegisterUrl()"><span class="fa fa-user"></span> Sign up</a></li>
@@ -195,7 +193,6 @@
                     </a>
                     <ul class="dropdown-menu" id="covid-menu-02265" aria-expanded="false">
                         <li class="@((IsActiveLink("Index", "covid")||IsActiveLink("PlaceOrder", "covid")) ? "active" : "")"><a href="@Url.Action("Index", "covid")">COVID-19 Products</a></li>
-                        <li class="@((IsActiveLink("Covid19FaceShield", "Home")) ? "active" : "")"><a href="@Url.Action("Covid19FaceShield", "Home")">Face Shield</a></li>
                     </ul>
                 </li>
                 @if (!User.Identity.IsAuthenticated && !(User.IsAdmin))
@@ -242,7 +239,10 @@
                     <p>We have launched our BETA site, which means you can now upload items that you are thinking about loaning out. We are currently limiting the ability to view other rentals, however anything uploaded now will be visible on our official launch day. If you have any feedback or suggestions, drop us a message at <a href="mailto:hello@momentarily.com">hello@momentarily.com</a> We hope you enjoy your experience!</p>
                 </div>
                 <div class=" betaSignUpBtn text-center">
-                    <a href="/account/Register" class="btn btn-green">Sign up and add your items now</a>
+                    @if (Convert.ToBoolean(Session["IsUserLogin"]) != true)
+                    {
+                        <a href="/account/Register" class="btn btn-green">Sign up and add your items now</a>
+                    }
                 </div>
                 @*<div class="subscribeBox">
                     <input type="text" id="subscribeEmailpopup" class="form-control" placeholder="Enter your email" />
@@ -718,7 +718,7 @@
             url: "/Search/CheckVersion",
             type: "Get",
             success: function (data) {
-                if (data == "True" || data == "true") {
+                if (data != "True") {
                     
                     $('#exampleModalBeta').modal('show');
                 }
@@ -739,7 +739,7 @@
             url: "/Search/CheckVersion",
             type: "Get",
             success: function (data) {
-                if (data == "True" || data == "true") {
+                if (data != "True") {
                    
                     $('#exampleModalBeta').modal('show');
                 }

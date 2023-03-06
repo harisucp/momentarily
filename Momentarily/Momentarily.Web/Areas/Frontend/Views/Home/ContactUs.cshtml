@@ -256,13 +256,22 @@
 </style>
 
 <script>
+    var isEmailSent = '@ViewBag.isEmailSent';
+    if (isEmailSent == "True" && isEmailSent != '')
+    {
+        toastr.success("Your message has been sent.");
+    }
+    else if(isEmailSent != '') {
+        toastr.error("Sending message error.");
+    }
+
         $(document).on('click', '#becomeBorrower', function () {
 
         $.ajax({
             url: "/Search/CheckVersion",
             type: "Get",
             success: function (data) {
-                if (data == "True" || data == "true") {
+                if (data != "True") {
 
                     $('#exampleModalBeta').modal('show');
                 }
