@@ -62,11 +62,43 @@
                             </div>
                             <div class="row" id="hideBusinessPhone">
                                 <div class="form-group col-md-5">
+
+                                 
                                     <label>Phone</label>
-                                    @Html.TextBoxFor(m => m.ViewModel.PhoneNumber, new { @class = "form-control account-input", @autocomplete ="off", @pattern = "[1-9]{1}[0-9]{9}", @maxlength = "10" })
-                                    <span id="errmsg"></span>
-                                    @Html.ValidationMessageFor(m => m.ViewModel.PhoneNumber, null, new { @class = "error-labels" })
+                                    <div class="row">
+                                        <div class="col-md-12" style="display: inline-flex;width: 100% !important;">
+                                            <span class="col-md-1" id="countrycodespan" style="background: #cecece;padding-top: 5px;width: auto;font-size: 14px;">
+                                                <select disabled style="background-color:transparent;border:none">
+                                                    @foreach (var item in ViewBag.Countries)
+                                                    {
+                                                        if (item.Value == "1")
+                                                        {
+                                                            <option selected="selected" value="@item.Value">+@item.Value</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@item.Value">+@item.Value</option>
+                                                        }
+
+                                                    }
+
+                                                </select>
+                                            
+                                           @* +@Model.ViewModel.CountryId*@
+                                            
+                                            </span>
+                                            @Html.TextBoxFor(m => m.ViewModel.PhoneNumber, new { @class = "form-control account-input", placeholder="Contact", @autocomplete = "off", @pattern = "[1-9]{1}[0-9]{9}", @maxlength = "10" })
+                                        </div> 
+                                        
+
+                                    </div>
+
+                                  
                                 </div>
+                                <span id="errmsg"></span>
+                                @Html.ValidationMessageFor(m => m.ViewModel.PhoneNumber, null, new { @class = "error-labels" })
+                                                             
+
                             </div>
                             <div class="row" id="hideBusinessEmail">
                                 <div class="form-group col-md-5">
@@ -188,15 +220,15 @@
             }
 
         }
-       
-        
-      
-        
+
+
+
+
     });
 
 
     $("#ViewModel_PhoneNumber").keypress(function (e) {
-        debugger
+
         //if the letter is not digit then display error and don't type anything
         var lengthPhone = e.target.value.length;
         if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
@@ -243,6 +275,7 @@
         color: #A63232;
         font-size: 11px;
     }
+
     #subscribe_msg_error {
         margin-top: 30px;
     }

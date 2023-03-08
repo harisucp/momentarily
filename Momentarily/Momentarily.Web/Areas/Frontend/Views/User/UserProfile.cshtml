@@ -61,7 +61,26 @@
                     <label>Mobile phone</label>
                     <div class="row">
                         <div class="col-md-12" style="display: inline-flex;width: 100% !important;">
-                            <span class="col-md-1" id="countrycodespan" style="background: #cecece;padding-top: 5px;width: auto;font-size: 14px;">+@Model.ViewModel.CountryCode</span>
+                            <span class="col-md-1" id="countrycodespan" style="background: #cecece;padding-top: 5px;width: auto;font-size: 14px;">
+                                @*<select name="" style="background-color:transparent;border:none">
+                                    @foreach (var item in ViewBag.Countries)
+                                    {
+                                        if (item.Value == "1")
+                                        {
+                                            <option selected="selected" value="@item.Value">+@item.Value</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.Value">+@item.Value</option>
+                                        }
+
+                                    }
+
+                                </select>*@
+
+                                +@Model.ViewModel.CountryCode
+
+                            </span>
                             @Html.TextBoxFor(m => m.ViewModel.PhoneNumber, new { @class = "form-control account-input" })
                         </div>
                     </div>

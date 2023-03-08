@@ -8,4 +8,9 @@
         //[MaxLength(10, ErrorMessage = "Maximum 10 digits allowed")]
         //[DataType(DataType.PhoneNumber)]
         //[RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Not a valid phone number")]
-        public string PhoneNumber { get; set; }        [Required(ErrorMessage = " Payment Type required.")]        public int PaymentType { get; set; }    }}
+        public string PhoneNumber { get; set; }        [Required(ErrorMessage = " Payment Type required.")]        public int PaymentType { get; set; }
+
+        [Required(ErrorMessage = "The country is required.")]
+        public int? CountryId { get; set; }        
+
+    }}

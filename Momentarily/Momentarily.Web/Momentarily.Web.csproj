@@ -252,6 +252,7 @@
     <Content Include="Content\fonts\specimen_files\specimen_stylesheet.css" />
     <Content Include="Content\fonts\stylesheet.css" />
     <Content Include="Content\Images\Category\Pinterest.png" />
+    <Content Include="Content\Images\Category\Space.png" />
     <Content Include="Content\Images\circleloadinganimation.gif" />
     <Content Include="Content\Images\circleloadinganimation2.gif" />
     <Content Include="AdminContent\css\adminlte.css" />
