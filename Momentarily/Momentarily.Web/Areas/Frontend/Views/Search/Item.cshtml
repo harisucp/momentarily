@@ -475,7 +475,6 @@
     var angularConstants = {
         Item: JSON.parse('@Html.Raw(HttpUtility.JavaScriptStringEncode(Json.Encode(Model.ViewModel)))')
     };
-    debugger;
     function untilDisabled(abc) {
 
         var __startDate = $("#_startDate").val();
@@ -522,9 +521,7 @@
         });
 
         $("#getdates").click(function () {
-         debugger
             $('#myModal').modal('show');
-
             var shareddates =@Html.Raw(Json.Encode(Model.ViewModel.GoodShareDates));
             var bookeddates =@Html.Raw(Json.Encode(Model.ViewModel.GoodBookedDates));
             var datesArray = [];

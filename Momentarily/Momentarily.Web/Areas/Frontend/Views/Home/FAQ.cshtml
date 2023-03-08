@@ -46,10 +46,7 @@
 
 
     $(document).ready(function () {
-        debugger
-
         var version = checkversion();
-
         var target = "_blank";
         if (version == 'Beta') {
             target = "";
@@ -58,7 +55,6 @@
             target = "_blank";
         }
         $('.container p').each(function () {
-            debugger
             var text = $(this).text();
             $(this).html(text.replace('$Terms and Conditions$', '<a target="_blank" href="@Url.Action("Terms", "Home")">Terms and Conditions </a>'
             ).replace('$ items page $', '<a target="' + target + '" href="" class="becomeBorrower">Items Page </a>')

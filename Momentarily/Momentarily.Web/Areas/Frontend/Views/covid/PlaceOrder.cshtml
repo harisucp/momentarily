@@ -525,8 +525,6 @@
         return true;
     }
     function calculateIntialTotalAmount() {
-        debugger;
-
         var quantity = $('#Quantity').val();
         var price = $('#GoodPrice').val();
         var taxpercentage = $('#Tax').val();
@@ -556,8 +554,6 @@
     }
 
     $('#btnsubmit').click(function (e) {
-
-        debugger
         var checkQuantity = calculateOnSubmit();
         if (checkQuantity == false)
         {

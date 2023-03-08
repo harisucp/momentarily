@@ -20,7 +20,6 @@
             });
 
             function initAutocomplete() {   
-debugger             
                 var autocomplete = new google.maps.places.Autocomplete(element[0], {
                     types : scope.placeFilters ? scope.placeFilters.split(",") : [],
 

@@ -6,7 +6,6 @@
 MessageController.$inject = ['$http', '$window', 'clrDateTime', 'MessageService', 'Messages'];
 
 function MessageController($http, $window, clrDateTime, MessageService, Messages) {
-    debugger
     var vm = this;
 
     vm.convertDate = clrDateTime.convertToDate;
@@ -66,7 +65,6 @@ function ConversationController($http, $window, $sce, $timeout, $rootScope, $fil
 
 
     $scope.$on("fileSelected", function (event, args) {
-        debugger
         $scope.$apply(function () {
             switch (args.field) {
                 case "file":

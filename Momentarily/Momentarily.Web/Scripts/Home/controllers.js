@@ -30,7 +30,6 @@ function HomeController(Categories, $location, $anchorScroll) {
     vm.findlocation = findMe;
 
     function findMe($event, form) {
-        debugger
         setLoading('loadingItems', true);
 
         if (navigator.geolocation) {
@@ -95,9 +94,6 @@ function HomeController(Categories, $location, $anchorScroll) {
     }
 
     function submitForm($event, form) {
-        //debugger
-        //console.log("2");
-       
         //if (form.$invalid) {
         //    $event.preventDefault();
         //    form.$submitted = true;

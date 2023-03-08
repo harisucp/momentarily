@@ -18,7 +18,6 @@ function MessageService($http) {
     }
 
     //uploadFileToUrl = function (file, uploadUrl) {
-    //    debugger
     //    return $http({
     //        method: 'POST',
     //        url: uploadUrl,

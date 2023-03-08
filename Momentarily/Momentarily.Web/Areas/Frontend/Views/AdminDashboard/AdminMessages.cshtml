@@ -139,10 +139,7 @@
 <script src="~/Content/TemplateImg/js/bootstrap.min.js"></script>
 <script>
     $(document).ready(function () {
-        debugger
         var html = document.getElementsByClassName('html');
-
-
         for (var i = 0; i < html.length; i++) {
             var mystring = new String(html[i].innerText);
             mystring.replace(/(^")|("$)/g, '')

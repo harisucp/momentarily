@@ -48,7 +48,6 @@ function BookingRequestController(clrDateTime, BookingService, Request) {
     setValues();
 
     function setValues() {
-        debugger
         vm.item = Request.ViewModel;        
     }
 

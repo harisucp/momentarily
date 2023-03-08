@@ -3049,7 +3049,6 @@
     }
 
     function isSameOrAfter(input, units) {
-debugger
         return this.isSame(input, units) || this.isAfter(input, units);
     }
 

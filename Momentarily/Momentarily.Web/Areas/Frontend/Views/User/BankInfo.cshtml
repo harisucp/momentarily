@@ -145,7 +145,6 @@
 
     $("#btnSubmit").on("click", function ()
     {
-        debugger;
         var type = $("#ViewModel_PaymentType").val();
         var phone = $("#ViewModel_PhoneNumber").val();
         var email = $("#ViewModel_PaypalBusinessEmail").val();
@@ -196,7 +195,6 @@
 
 
     $("#ViewModel_PhoneNumber").keypress(function (e) {
-        debugger
         //if the letter is not digit then display error and don't type anything
         var lengthPhone = e.target.value.length;
         if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
@@ -209,9 +207,7 @@
 
 
     //$("#btnSubmit").click(function () {
-    //    debugger
     //    var email = $("#ViewModel_PaypalBusinessEmail").val();
-
     //    //if (email == undefined || email == '') {
     //    //    $("#ViewModel_PaypalBusinessEmail").focus();
     //    //    $("#subscribe_msg_error2").css("display", "block");

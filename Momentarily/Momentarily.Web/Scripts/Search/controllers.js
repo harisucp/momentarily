@@ -16,7 +16,6 @@ function config($locationProvider) {
 SearchController.$inject = ['$scope', '$log', '$compile', '$location', '$interpolate', 'SearchService', 'Filter', 'Items', 'Categories'];
 
 function SearchController($scope, $log, $compile, $location, $interpolate, SearchService, Filter, Items, Categories) {
-    debugger
     var vm = this;
     
     vm.filter = Filter;
@@ -207,13 +206,10 @@ function SearchController($scope, $log, $compile, $location, $interpolate, Searc
 
 SearchItemController.$inject = ['$scope', '$http', 'Item', '$sce', '$filter', '$location', '$timeout', 'ReviewService', 'GoogleMapAPIService'];
 function SearchItemController($scope, $http, Item, $sce, $filter, $location, $timeout, ReviewService, GoogleMapAPIService) {
-    debugger;
     var vm = this;
     
     vm.item = Item;
-    //console.log("=======scope======", $scope);
     console.log("=======items======", Item);
-    debugger;
     vm.format = 'MM/DD/YYYY';
     vm.viewFormat = 'MM-DD-YYYY';
     vm.minDateStart = moment().format(vm.format);
@@ -374,7 +370,6 @@ function SearchItemController($scope, $http, Item, $sce, $filter, $location, $ti
     }
 
     function SetIsMinimumRental() {
-        debugger
         var start = new Date(vm.dateStart);
         var end = new Date(vm.dateEnd);
         var difference = (end - start) / (1000 * 3600 * 24);
