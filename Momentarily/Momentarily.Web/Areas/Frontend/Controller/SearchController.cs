@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using Apeek.Web.Framework.ControllerHelpers;
 
 namespace Momentarily.Web.Areas.Frontend.Controller
 {
@@ -18,12 +19,14 @@ namespace Momentarily.Web.Areas.Frontend.Controller
         private readonly IMomentarilyItemTypeService _typeService;
         private readonly IMomentarilyItemDataService _itemDataService;
         private readonly ISettingsDataService _settingsDataService;
+        private readonly UserControllerHelper _helper;
         public SearchController(ICategoryService categoryService, IMomentarilyItemTypeService typeService, IMomentarilyItemDataService itemDataService, ISettingsDataService settingsDataService)
         {
             _categoryService = categoryService;
             _typeService = typeService;
             _itemDataService = itemDataService;
             _settingsDataService = settingsDataService;
+            _helper = new UserControllerHelper();
         }
 
         public ActionResult Index()
@@ -155,14 +158,21 @@ namespace Momentarily.Web.Areas.Frontend.Controller
         }
         public ActionResult Item(int id)
         {
-            var result = _itemDataService.GetItem(id);
-            if (result.CreateResult == CreateResult.Success)
-            {       
-                result.Obj.CurrentUserIsOwner = this.UserId != null && this.UserId.Value == result.Obj.User.Id;
-                var shape = _shapeFactory.BuildShape(null, result.Obj, PageName.Search.ToString());
-                return DisplayShape(shape);
+            var user = _helper.GetUser();
+            if (user != null)
+            {
+                if (user.Verified && user.IsMobileVerified)
+                {
+                    var result = _itemDataService.GetItem(id);
+                    if (result.CreateResult == CreateResult.Success)
+                    {
+                        result.Obj.CurrentUserIsOwner = this.UserId != null && this.UserId.Value == result.Obj.User.Id;
+                        var shape = _shapeFactory.BuildShape(null, result.Obj, PageName.Search.ToString());
+                        return DisplayShape(shape);
+                    }
+                }
             }
-            return RedirectToHome();
+            return RedirectToAction("UserEmailConfirm", "User");
         }
         [HttpPost]
         public ActionResult GetDates(int id)
