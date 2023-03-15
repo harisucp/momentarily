@@ -15,12 +15,19 @@ using Apeek.Common.Models;
 using System.Globalization;
 using System.Collections.Generic;
 using Apeek.Entities.Entities;
+using Momentarily.ViewModels.Models;
 
 namespace Momentarily.Web.Areas.Frontend.Controller
 {
     [RedirectNotConfirmedFilter]
     public class BookingController : FrontendController
     {
+        private readonly ICategoryService _categoryService;
+        private readonly IMomentarilyItemTypeService _typeService;
+        private readonly IMomentarilyItemDataService _itemDataService;
+        private readonly ISettingsDataService _settingsDataService;
+
+
         private readonly IMomentarilyGoodRequestService _goodRequestService;
         private readonly IMomentarilyItemDataService _goodItemService;
         private readonly IPaymentService _paymentService;
@@ -28,9 +35,15 @@ namespace Momentarily.Web.Areas.Frontend.Controller
         private readonly ISendMessageService _emailMessageService;
         private readonly IAccountDataService _accountDataService;
         private readonly PinPaymentService _pinPaymentService;
-        public BookingController(IMomentarilyGoodRequestService goodRequestService, IMomentarilyItemDataService goodItemService, IPaymentService paymentService, IMomentarilyUserMessageService userMessageService,
+        public BookingController(ICategoryService categoryService, IMomentarilyItemTypeService typeService, IMomentarilyItemDataService itemDataService, ISettingsDataService settingsDataService, IMomentarilyGoodRequestService goodRequestService, IMomentarilyItemDataService goodItemService, IPaymentService paymentService, IMomentarilyUserMessageService userMessageService,
             ISendMessageService emailMessageService, IAccountDataService accountDataService)
         {
+            _categoryService = categoryService;
+            _typeService = typeService;
+            _itemDataService = itemDataService;
+            _settingsDataService = settingsDataService;
+
+
             _goodRequestService = goodRequestService;
             _goodItemService = goodItemService;
             _paymentService = paymentService;

@@ -23,6 +23,7 @@
                         <li class="@((IsActiveLink("RentedItems", "Listing") || IsActiveLink("Booking", "Listing")) ? "active" : "")"><a href="@Url.Action("RentedItems", "Listing")">Sharing</a></li>
 
                         <li class="@((IsActiveLink(QuickUrl.RouteUserProfile()) || IsActiveLink("UserEmail", "User") || IsActiveLink("UserPwd", "User") || IsActiveLink("BankInfo", "User")) ? "active" : "")"><a href="@QuickUrl.UserProfileUrl()">Account Settings</a></li>
+                        <li class="@((IsActiveLink("UnApproved", "Listing") || IsActiveLink("Edit", "Listing") || IsActiveLink("Create", "Listing")  || IsActiveLink("BookingList", "Listing")) ? "active" : "")"><a href="@Url.Action("UnApproved", "Listing")">UnApproved Items</a></li>
                     </ul>
                     <div scroll-arrow-menu="account-scroll-container"></div>
                 </div>

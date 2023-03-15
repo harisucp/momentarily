@@ -1,0 +1,107 @@
+﻿@model Apeek.Common.IShape<List<Momentarily.ViewModels.Models.ListMomentarilyItemViewModel>>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Frontend/Views/Shared/_AccountMenuLayout.cshtml";
+}
+<link href="~/Content/CustomCssFiles/ListingPage.css" rel="stylesheet" />
+<div class="content">
+    <div class="account listing">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9 col-md-offset-3">
+                    <div class="listing-container">
+                        <div class="title-block separated-block">
+                            <h1 class="left-align">Approved Listing</h1>
+
+                            @*@if (Convert.ToBoolean(TempData["PaypalUserInfo"]) == true)
+                                {
+                                    <a href="@Url.Action("Create","Listing")" id="add-new-button1" class="btn add-btn right-align">Add New Listing</a>
+                                }
+                                else
+                                {
+                                    <a id="add-new-button" class="btn add-btn right-align">Add New Listing</a>
+                                }*@
+                        </div>
+                        @if (Model.ViewModel.Count == 0)
+                        {
+                            <div class="list-empty">You have no items listed!</div>
+                        }
+                        else
+                        {
+                            <div class="list">
+                                @foreach (var item in Model.ViewModel)
+                                {
+                                    <div class="item clearfix">
+                                        <div class="left-align left-col-listing">
+                                            <div class="userThumbImage"><img src="/Content/Images/Good/@item.Image" alt="image" class="img-responsive"></div>
+                                            <div>
+                                                <div class="name">
+                                                    <a href="@Url.Action("Approved", "Listing", new {itemId = item.Id})">@item.Name</a>
+                                                </div>
+                                                @if (item.DailyPrice > 0 || item.WeeklyPrice > 0)
+                                                {
+                                                    if (item.DailyPrice > 0 && item.WeeklyPrice > 0)
+                                                    {
+                                                        <div class="pricing">
+
+                                                            <div class="price">$@string.Format("{0:0.00}", item.DailyPrice) per day  /</div>
+
+                                                            <div class="price">$@string.Format("{0:0.00}", item.WeeklyPrice) per week</div>
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="pricing">
+                                                            @if (item.DailyPrice > 0)
+                                                            {
+                                                                <div class="price">$@string.Format("{0:0.00}", item.DailyPrice) per day  </div>
+                                                            }
+                                                            @if (item.WeeklyPrice > 0)
+                                                            {
+                                                                <div class="price">$@string.Format("{0:0.00}", item.WeeklyPrice) per week</div>
+                                                            }
+                                                        </div>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <div class="pricing">
+                                                        <div class="price">Price not added by sharer</div>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/Scripts/Listing")
+<link href="~/Content/ToastMessage/toastr.css" rel="stylesheet" />
+<script src="~/Content/ToastMessage/toastr.min.js"></script>
+<script>
+    var angularConstants = {};
+    angularConstants = {
+        Messages: JSON.parse('@Html.Raw(HttpUtility.JavaScriptStringEncode(Json.Encode(Model)))')
+    };
+
+        var checkPaypalUserInfo = '@TempData["PaypalUserInfo"]';
+    if (checkPaypalUserInfo != "True")
+    {
+        toastr.error("Please update the payment details first...");
+    }
+
+    $("#add-new-button").click(function () {
+        debugger
+            //toastr.options.timeOut = 0;
+            //toastr.options.extendedTimeOut = 0;
+            toastr.error("Please update the payment details first...");
+            //toastr.options.onclick = function (e) { e.stopPropogation(); }
+    });
+</script>

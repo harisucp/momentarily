@@ -315,14 +315,7 @@ namespace Momentarily.Web.Areas.Frontend.Controller
 
 
 
-
-
-
-
-
-
-
-                #region Old Implemented Code                //var createRecipientResult = _braintreePaymentsService.CreateOrUpdateRecipient(
+            #region Old Implemented Code                //var createRecipientResult = _braintreePaymentsService.CreateOrUpdateRecipient(
                                                              //    UserId: user.Id,
                                                              //    Individual: new MerchantAccountIndividual
                                                              //    {

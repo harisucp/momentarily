@@ -436,6 +436,8 @@
     <Content Include="Areas\Frontend\Views\CAMaster\Index.cshtml" />
     <Content Include="Areas\Frontend\Views\CAMaster\Import.cshtml" />
     <Content Include="Areas\Frontend\Views\AdminDashboard\UserReviews.cshtml" />
+    <Content Include="Areas\Frontend\Views\Listing\UnApproved.cshtml" />
+    <Content Include="Areas\Frontend\Views\Listing\Approved.cshtml" />
     <None Include="bundleconfig.json" />
     <None Include="Content\css\account.scss" />
     <Content Include="Content\css\account.css">

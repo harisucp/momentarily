@@ -37,6 +37,7 @@ namespace Momentarily.ViewModels.Models
         public ListViewModel<ReviewViewModel> SeekersReviews { get; set; }
         public int RentsCount { get; set; }
         public bool CurrentUserIsOwner { get; set; }
+        public bool IsApproved { get; set; }
         public decimal CancelledPercentage { get; set; }
         public List<string> GoodShareDates { get; set; }
         public List<string> GoodBookedDates { get; set; }

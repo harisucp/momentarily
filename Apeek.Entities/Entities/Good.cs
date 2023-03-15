@@ -30,6 +30,7 @@ namespace Apeek.Entities.Entities
         public virtual bool AgreeToDeliver { get; set; }
         public virtual bool AgreeToShareImmediately { get; set; }
         public virtual bool IsArchive { get; set; }
+        public virtual bool IsApproved { get; set; }
         public virtual int CategoryId { get; set; }
         public virtual string CategorList { get; set; }
         public virtual Dictionary<string, GoodPropertyValue> GoodPropertyValues { get; set; }

@@ -13,7 +13,9 @@ namespace Momentarily.UI.Service.Services
     public interface IMomentarilyItemDataService : IGoodService<MomentarilyItem, MomentarilyItemMapViewModel>, IDependency
     {
         List<ListMomentarilyItemViewModel> GetUsersItems(int userId);
+        List<ListMomentarilyItemViewModel> GetUnApprovedUsersItems(int userId);
         Result<MomentarilyItem> SaveUserItem(MomentarilyItem item, int userId);
+        Result<MomentarilyItem> ApproveUserItem(MomentarilyItem item, int userId);
         Result<MomentarilyItem> GetMyItem(int userId, int itemId);
         Result<FilteredGoodsModel> GetFilteredItems(MomentarilyItemSearchModel searchModel);
         Result<MomentarilyItemMapViewModel> GetItem(int itemId);

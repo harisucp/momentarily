@@ -13,6 +13,7 @@ namespace Momentarily.Entities.Mapping
             Map(x => x.MinimumRentPeriod, "minimum_rent_period");
             Map(x => x.Price, "price");
             Map(x => x.IsArchive, "is_archive");
+            Map(x => x.IsApproved, "is_approved");
             Map(x => x.PricePerWeek, "price_per_week");
             Map(x => x.PricePerMonth, "price_per_month");
             Map(x => x.RentPeriodDay, "rent_period_day");

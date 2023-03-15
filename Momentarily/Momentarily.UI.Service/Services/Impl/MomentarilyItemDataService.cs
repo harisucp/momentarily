@@ -114,6 +114,7 @@ namespace Momentarily.UI.Service.Services.Impl
                                             g.price_per_week        AS PricePerWeek,
 				                            g.price_per_month	    AS PricePerMonth,
                                             g.rent_period_day	    AS RentPeriodDay,                                            g.rent_period_week	    AS RentPeriodWeek,
+                                            g.is_approved           AS IsApproved,
                                             gL.latitude             AS Latitude, 
                                             gL.longitude            AS Longitude, 
                                             uI.file_name            AS UserImageFileName, 
@@ -141,7 +142,7 @@ namespace Momentarily.UI.Service.Services.Impl
                                        LEFT JOIN dbo.c_user_img AS uI ON uG.user_id = uI.user_id AND uI.type = {0} 
                                        LEFT JOIN dbo.c_good_img AS gI ON g.id = gI.good_id AND gI.type = {1} AND gI.sequence = 0 
                                        LEFT JOIN dbo.c_good_request AS gr ON g.id = gr.good_id AND gr.status_id = {2}
-                                        LEFT JOIN dbo.c_report_abuse AS abuse ON g.id = abuse.good_id",
+                                       LEFT JOIN dbo.c_report_abuse AS abuse ON g.id = abuse.good_id",
                                        (int)ImageType.Thumb, (int)ImageType.Original, (int)UserRequestStatus.Paid));
                     }
                     else
@@ -225,6 +226,7 @@ namespace Momentarily.UI.Service.Services.Impl
                     if (searchModel.PriceTo.HasValue)
                         filterQuery.Append(string.Format(@"AND g.price <= {0} ", searchModel.PriceTo));
                     filterQuery.Append("AND g.is_archive = 0 ");
+                    filterQuery.Append("AND g.is_approved = 1 ");
                     filterQuery.Append("AND gPv.good_property_id = @propId ");
                     filterQuery.Append(string.Format(@" AND(g.NAME like '%{0}%'OR g.description like '%{0}%') ",
                         string.IsNullOrWhiteSpace(searchModel.Keyword) ? "" : searchModel.Keyword.Replace(" ", "%")));
@@ -381,6 +383,38 @@ namespace Momentarily.UI.Service.Services.Impl
             }
             return new List<ListMomentarilyItemViewModel>();
         }
+        public List<ListMomentarilyItemViewModel> GetUnApprovedUsersItems(int userId)
+        {
+            try
+            {
+                List<ListMomentarilyItemViewModel> items = null;
+                Uow.Wrap(u =>
+                {
+                    items = (from g in _repGood.Table
+                             join ug in _repUserGood.Table on g.Id equals ug.GoodId
+                             where ug.UserId == userId && g.IsApproved == false
+                             select new ListMomentarilyItemViewModel
+                             {
+                                 Id = g.Id,
+                                 Name = g.Name,
+                                 DailyPrice = g.Price,
+                                 WeeklyPrice = g.PricePerWeek,
+                                 MounthlyPrice = g.PricePerMonth,
+                                 Image = (from img in _repGoodImg.Table where img.GoodId == g.Id && img.Type == (int)ImageType.Original select img.FileName).FirstOrDefault(),
+                                 BookingCount = _repGoodRequest.Table.Count(gr => gr.GoodId == g.Id),
+                                 CreateDate = g.CreateDate
+                             }).ToList();
+                
+                }, null, LogSource.GoodService);
+                return items;
+            }
+            catch (Exception ex)
+            {
+                Ioc.Get<IDbLogger>().LogError(LogSource.GoodService, string.Format("Cannot load Momentarily Items: {0}", ex));
+            }
+            return new List<ListMomentarilyItemViewModel>();
+        }
+
         public Result<MomentarilyItem> GetMyItem(int userId, int itemId)
         {
             try
@@ -397,6 +431,19 @@ namespace Momentarily.UI.Service.Services.Impl
             return new Result<MomentarilyItem>(CreateResult.Error, new MomentarilyItem());
         }
         public Result<MomentarilyItem> SaveUserItem(MomentarilyItem item, int userId)
+        {
+            try
+            {
+                return SaveGood(item, userId);
+            }
+            catch (Exception ex)
+            {
+                Ioc.Get<IDbLogger>().LogError(LogSource.GoodService, string.Format("Cannot save Momentarily Item: {0}", ex));
+            }
+            return new Result<MomentarilyItem>(CreateResult.Error, new MomentarilyItem());
+        }
+
+        public Result<MomentarilyItem> ApproveUserItem(MomentarilyItem item, int userId)
         {
             try
             {
@@ -591,7 +638,7 @@ namespace Momentarily.UI.Service.Services.Impl
                                 join ug in _repUserGood.Table on g.Id equals ug.GoodId
                                 where ug.UserId == userId && g.Id == itemId
                                 select g).FirstOrDefault();
-                    if (item != null && item.IsArchive != true)
+                    if (item != null && item.IsArchive != true) 
                     {
                         item.IsArchive = true;
                         _repGood.Update(item);

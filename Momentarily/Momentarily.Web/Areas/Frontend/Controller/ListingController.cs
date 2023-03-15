@@ -31,6 +31,8 @@ namespace Momentarily.Web.Areas.Frontend.Controller
     public class ListingController : FrontendController
     {
         private readonly IMomentarilyItemDataService _itemDataService;
+        private readonly IMomentarilyItemDataService _approvedItemUserDataService;
+        private readonly IMomentarilyItemDataService _unApproveditemDataService;
         private readonly IMomentarilyItemTypeService _typeService;
         private readonly ICategoryService _categoryService;
         private readonly IMomentarilyGoodRequestService _goodRequestService;
@@ -43,7 +45,7 @@ namespace Momentarily.Web.Areas.Frontend.Controller
         private readonly AccountControllerHelper<MomentarilyRegisterModel> _helper;
         private readonly ISendMessageService _sendMessageService;
 
-        public ListingController(IMomentarilyItemDataService itemDataService,
+        public ListingController(IMomentarilyItemDataService itemDataService, IMomentarilyItemDataService unApproveditemDataService, IMomentarilyItemDataService approvedItemUserDataService,
             IMomentarilyItemTypeService typeService, ICategoryService categoryService,
             IMomentarilyGoodRequestService goodRequestService, IMomentarilyUserMessageService userMessageService,
             ISendMessageService emailMessageService, IAccountDataService accountDataService, IPaymentService paymentService,
@@ -51,6 +53,8 @@ namespace Momentarily.Web.Areas.Frontend.Controller
         {
             _itemDataService = itemDataService;
             _typeService = typeService;
+            _approvedItemUserDataService = approvedItemUserDataService;
+            _unApproveditemDataService = unApproveditemDataService;
             _categoryService = categoryService;
             _goodRequestService = goodRequestService;
             _userMessageService = userMessageService;
@@ -198,7 +202,56 @@ namespace Momentarily.Web.Areas.Frontend.Controller
                 return DisplayShape(shape);
             }
             return RedirectToAction("Index");
+        } 
+        
+        [Authorize]
+        [HttpGet]
+        public ActionResult UnApproved()
+        {
+            if (!UserId.HasValue || !UserAccess.HasAccess(Privileges.CanViewUsers, UserId))
+                    return RedirectToHome();
+                var usersItems = _unApproveditemDataService.GetUnApprovedUsersItems(UserId.Value).OrderByDescending(x => x.CreateDate).ToList(); 
+                var shape = _shapeFactory.BuildShape(null, usersItems, PageName.Listing.ToString());
+                bool getPaypalInfoUser = _accountDataService.getExsistPaypalInfoOrNotInDb(UserId.Value);
+                TempData["PaypalUserInfo"] = getPaypalInfoUser;
+                return DisplayShape(shape);
         }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult Approved(int itemId)
+        {
+            if (!UserId.HasValue || !UserAccess.HasAccess(Privileges.CanViewUsers, UserId))
+                return RedirectToHome();
+            var result = _itemDataService.GetMyItem(UserId.Value, itemId);
+            //TempData["categoryTags"] = result.Obj.CategorList;
+            if (result.CreateResult == CreateResult.Success)
+            {
+                result.Obj.Description = result.Obj.Description.Replace("<br/>", Environment.NewLine);
+                var newModel = new CreateMomentarilyItemViewModel
+                {
+                    Categories = _categoryService.GetRootChilds(),
+                    Types = _typeService.GetAllTypes(),
+                    Item = result.Obj
+                };
+                return View("Approved", newModel);
+            }
+            return RedirectToAction("Index");
+        }
+        [Authorize]
+        [HttpPost]
+        public ActionResult Approved(MomentarilyItem model)
+        {
+            if (!UserId.HasValue || !UserAccess.HasAccess(Privileges.CanViewUsers, UserId))
+                return RedirectToHome();
+            var good = _goodItemService.GetMyGood(UserId.Value, model.Id);
+            good.Obj.IsApproved = true;
+            model.IsApproved = true;
+            var result = _approvedItemUserDataService.ApproveUserItem(good.Obj, UserId.Value);
+            return RedirectToAction("UnApproved");
+
+        }
+
         [Authorize]
         [HttpGet]
         public ActionResult Booking(int id)
@@ -480,6 +533,7 @@ namespace Momentarily.Web.Areas.Frontend.Controller
                 {
                     model.Images = model.Images.Where(x => x.FileName != null).ToList();
                 }
+                model.IsApproved = false;
                 //if (!string.IsNullOrWhiteSpace(model.Description))
                 //    model.Description = Regex.Replace(model.Description, @"\r\n?|\n", "<br/>");
 
