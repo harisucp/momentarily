@@ -22,18 +22,33 @@
     <link href="~/Content/CustomCssFiles/DivLoading.css" rel="stylesheet" />
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-81203338-1"></script>
     <script async defer src="//assets.pinterest.com/js/pinit.js"></script>
-    <script>
+    @*OLD Gtags Implementation*@
+
+    <!--<script async src="https://www.googletagmanager.com/gtag/js?id=UA-155387094-1"></script>-->
+    <!--<script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
 
-        gtag('config', 'UA-81203338-1');
-    </script>
+        gtag('config', 'UA-155387094-1');
+    </script>-->
+    <script>
+        (function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-TN8WBHQ');</script>
 </head>
 
 <body ng-app="MomentarilyApp" ng-cloak ng-controller="LayoutController as shared">
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TN8WBHQ"
+                height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
 
     @if (Convert.ToBoolean(Session["IsAdmin"]) == false)
     {
@@ -62,6 +77,7 @@
                                             </a>
                                             <ul class="dropdown-menu">
                                                 <li class="@((IsActiveLink("Index", "covid")||IsActiveLink("PlaceOrder", "covid")) ? "active" : "")"><a href="@Url.Action("Index", "covid")">COVID-19 Products</a></li>
+                                                <li class="@((IsActiveLink("Covid19FaceShield", "Home")) ? "active" : "")"><a href="@Url.Action("Covid19FaceShield", "Home")">Face Shield</a></li>
                                             </ul>
                                         </li>
                                         <li class="dropdown dropNav">
@@ -122,6 +138,7 @@
                                             </a>
                                             <ul class="dropdown-menu">
                                                 <li class="@((IsActiveLink("Index", "covid")||IsActiveLink("PlaceOrder", "covid")) ? "active" : "")"><a href="@Url.Action("Index", "covid")">COVID-19 Products</a></li>
+                                                <li class="@((IsActiveLink("Covid19FaceShield", "Home")) ? "active" : "")"><a href="@Url.Action("Covid19FaceShield", "Home")">Face Shield</a></li>
                                             </ul>
                                         </li>
                                         <li><a href="@QuickUrl.RegisterUrl()"><span class="fa fa-user"></span> Sign up</a></li>
@@ -189,6 +206,7 @@
                     </a>
                     <ul class="dropdown-menu" id="covid-menu-02265" aria-expanded="false">
                         <li class="@((IsActiveLink("Index", "covid")||IsActiveLink("PlaceOrder", "covid")) ? "active" : "")"><a href="@Url.Action("Index", "covid")">COVID-19 Products</a></li>
+                        <li class="@((IsActiveLink("Covid19FaceShield", "Home")) ? "active" : "")"><a href="@Url.Action("Covid19FaceShield", "Home")">Face Shield</a></li>
                     </ul>
                 </li>
                 @if (!User.Identity.IsAuthenticated && !(User.IsAdmin))
@@ -238,10 +256,7 @@
                 </div>
 
                 <div class=" betaSignUpBtn text-center">
-                    @if (Convert.ToBoolean(Session["IsUserLogin"]) != true)
-                    {
-                        <a href="/account/Register" class="btn btn-green">Sign up and add your items now</a>
-                    }
+                    <a href="/account/Register" class="btn btn-green">Sign up and add your items now</a>
                 </div>
                 @*<div class="subscribeBox">
                         <input type="text" id="subscribeEmailpopup" class="form-control" placeholder="Enter your email" />
@@ -708,7 +723,7 @@
             url: "/Search/CheckVersion",
             type: "Get",
             success: function (data) {
-                if (data != "True") {
+                if (data == "True" || data == "true") {
 
                     $('#exampleModalBetaUser').modal('show');
                 }
@@ -729,7 +744,7 @@
             url: "/Search/CheckVersion",
             type: "Get",
             success: function (data) {
-                if (data != "True") {
+                if (data == "True" || data == "true") {
 
                     $('#exampleModalBetaUser').modal('show');
                 }
