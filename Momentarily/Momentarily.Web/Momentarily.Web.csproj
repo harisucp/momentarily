@@ -307,7 +307,7 @@
     <Content Include="AdminContent\js\pages\dashboard2.js" />
     <Content Include="AdminContent\js\pages\dashboard3.js" />
     <Content Include="Content\Images\circleloadinganimationOrignal.gif" />
-    <Content Include="Content\Images\Good\noimgavailable.jpg" />
+    <Content Include="Content\Images\Good\5355-89IG2NOaPkaHy4zyvEI22g-Original.jpg" />
     <Content Include="Content\Images\imgpsh_fullsize_anim.png" />
     <Content Include="Content\Images\loading.gif" />
     <Content Include="Areas\Frontend\Views\AdminDashboard\AdminPwd.cshtml" />
@@ -534,8 +534,6 @@
     <Content Include="Content\Images\Category\profile-thumb.svg" />
     <Content Include="Content\Images\Category\profile-thumbNew.svg" />
     <Content Include="Content\Images\Category\Tools.svg" />
-    <Content Include="Content\Images\Good\error-bg.png" />
-    <Content Include="Content\Images\Good\subscribebanner.jpg" />
     <Content Include="Content\Images\no_photo_Thumb.jpg" />
     <Content Include="Content\Img\add-photo.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
