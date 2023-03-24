@@ -19,15 +19,30 @@
     <link href="~/Content/TemplateImg/css/header.css" rel="stylesheet" />
     <link href="~/Content/css/Footerlayout.css" rel="stylesheet" />
 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-155387094-1"></script>
     @*<script async defer src="//assets.pinterest.com/js/pinit.js"></script>*@
-    <script>
+
+    @*OLD Gtags Implementation*@
+
+    <!--<script async src="https://www.googletagmanager.com/gtag/js?id=UA-155387094-1"></script>-->
+    <!--<script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
 
         gtag('config', 'UA-155387094-1');
-    </script>
+    </script>-->
+    <script>
+        (function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-TN8WBHQ');</script>
+
+
+
     <script type="application/ld+json">
         {
         "context": "https://schema.org",
@@ -47,6 +62,12 @@
 </head>
 
 <body ng-app="MomentarilyApp" ng-cloak ng-controller="LayoutController as shared">
+
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TN8WBHQ"
+                height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+
 
     @if (Convert.ToBoolean(Session["IsAdmin"]) == false)
     {
@@ -87,8 +108,8 @@
                                             {
                                                 <img src="~/Content/Img/profile-thumb.svg" alt="" />
                                             }
-                                             
-                                           
+
+
                                             <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
                                                 <span> @User.FirstName @User.LastName</span> <span class="fa fa-angle-down"></span>
                                             </a>
@@ -144,7 +165,7 @@
                                         <li class="becomeNav"><a href="@Url.Action("Create", "Listing")" class="btn btn-primary btn-sm"> Share </a></li>
                                         <li class="becomeNav becomeBorrowerCls" id="becomeBorrower"><a class="btn btn-primary btn-sm"> Borrow </a></li>
                                     </ul>
-                                  
+
                                 </div>
                             </nav>
                         </div>
@@ -206,10 +227,12 @@
                 @if (User.Identity.IsAuthenticated && !(User.IsAdmin))
                 {
                     <li>
-                        <a href="#">@User.FirstName @User.LastName <span role="button" class="offcanvas-menu-toggler collapsed userProDDMenu" data-toggle="collapse" data-target="#collapse-menu-02265" aria-expanded="false" aria-controls="collapse-menu-02">
-    <i class="fa fa-plus"></i><i class="fa fa-minus"></i>
-</span> </a>
-                      
+                        <a href="#">
+                            @User.FirstName @User.LastName <span role="button" class="offcanvas-menu-toggler collapsed userProDDMenu" data-toggle="collapse" data-target="#collapse-menu-02265" aria-expanded="false" aria-controls="collapse-menu-02">
+                                <i class="fa fa-plus"></i><i class="fa fa-minus"></i>
+                            </span>
+                        </a>
+
                         <ul class="collapse" id="collapse-menu-02265" aria-expanded="false">
                             <li><a href="@Url.Action("UserProfile", "User")">My Profile</a></li>
                             <li><a href="@Url.Action("Index", "UserDashboard")">My Dashboard</a></li>
@@ -222,7 +245,7 @@
                     </li>
                 }
                 <li class="becomeNav"><a href="@Url.Action("Create", "Listing")" class="btn btn-primary btn-md"> Share </a></li>
-                <li class="becomeNav" id="becomeBorrower"><a  class="btn btn-primary btn-md"> Borrow </a></li>
+                <li class="becomeNav" id="becomeBorrower"><a class="btn btn-primary btn-md"> Borrow </a></li>
             </ul>
         </div>
 
@@ -245,9 +268,9 @@
                     <a href="/account/Register" class="btn btn-green">Sign up and add your items now</a>
                 </div>
                 @*<div class="subscribeBox">
-                    <input type="text" id="subscribeEmailpopup" class="form-control" placeholder="Enter your email" />
-                    <button type="button" id="subscribepopupbtn" class="btn btn-green">Subscribe</button>
-                </div>*@
+                        <input type="text" id="subscribeEmailpopup" class="form-control" placeholder="Enter your email" />
+                        <button type="button" id="subscribepopupbtn" class="btn btn-green">Subscribe</button>
+                    </div>*@
             </div>
 
         </div>
@@ -262,24 +285,24 @@
 
     </div>
     @*<div class="modal fade socialPopupModal" id="exampleModalBeta" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content col-12">
-                <div class="modal-header">
-                    <h5 class="modal-title">Alert!</h5> <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
-                </div>
-                <div class="modal-body">
-                    <div class="icon-container1 d-flex row">
-                        <div class="col-sm-12">
-                            <p>Welcome to the beta site for <b>momentarily</b>.  Currently we are not allowing rentals, however you can begin to upload items in our system so that when we go live, you will be all set to go!</p>
+            <div class="modal-dialog" role="document">
+                <div class="modal-content col-12">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Alert!</h5> <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="icon-container1 d-flex row">
+                            <div class="col-sm-12">
+                                <p>Welcome to the beta site for <b>momentarily</b>.  Currently we are not allowing rentals, however you can begin to upload items in our system so that when we go live, you will be all set to go!</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>*@
+        </div>*@
     <script src="~/Content/TemplateImg/js/jquery.min.js"></script>
     <script src="~/Content/TemplateImg/js/bootstrap.min.js"></script>
-    
+
     @Scripts.Render("~/bundles/angular")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/UI-select")
