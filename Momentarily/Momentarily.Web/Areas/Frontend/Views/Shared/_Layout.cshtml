@@ -21,13 +21,26 @@
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-81203338-1"></script>
     @*<script async defer src="//assets.pinterest.com/js/pinit.js"></script>*@
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
 
-        gtag('config', 'UA-81203338-1');
-    </script>
+            gtag('config', 'UA-81203338-1');
+        </script>
+
+    <!-- Google Tag Manager -->
+    <script>
+        (function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-TN8WBHQ');</script>
+    <!-- End Google Tag Manager -->
+
     <script type="application/ld+json">
         {
         "context": "https://schema.org",
@@ -47,6 +60,7 @@
 </head>
 
 <body ng-app="MomentarilyApp" ng-cloak ng-controller="LayoutController as shared">
+
 
     @if (Convert.ToBoolean(Session["IsAdmin"]) == false)
     {
@@ -86,8 +100,8 @@
                                             {
                                                 <img src="~/Content/Img/profile-thumb.svg" alt="" />
                                             }
-                                             
-                                           
+
+
                                             <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
                                                 <span> @User.FirstName @User.LastName</span> <span class="fa fa-angle-down"></span>
                                             </a>
@@ -142,7 +156,7 @@
                                         <li class="becomeNav"><a href="@Url.Action("Create", "Listing")" class="btn btn-primary btn-sm"> Share </a></li>
                                         <li class="becomeNav becomeBorrowerCls" id="becomeBorrower"><a class="btn btn-primary btn-sm"> Borrow </a></li>
                                     </ul>
-                                  
+
                                 </div>
                             </nav>
                         </div>
@@ -203,10 +217,12 @@
                 @if (User.Identity.IsAuthenticated && !(User.IsAdmin))
                 {
                     <li>
-                        <a href="#">@User.FirstName @User.LastName <span role="button" class="offcanvas-menu-toggler collapsed userProDDMenu" data-toggle="collapse" data-target="#collapse-menu-02265" aria-expanded="false" aria-controls="collapse-menu-02">
-    <i class="fa fa-plus"></i><i class="fa fa-minus"></i>
-</span> </a>
-                      
+                        <a href="#">
+                            @User.FirstName @User.LastName <span role="button" class="offcanvas-menu-toggler collapsed userProDDMenu" data-toggle="collapse" data-target="#collapse-menu-02265" aria-expanded="false" aria-controls="collapse-menu-02">
+                                <i class="fa fa-plus"></i><i class="fa fa-minus"></i>
+                            </span>
+                        </a>
+
                         <ul class="collapse" id="collapse-menu-02265" aria-expanded="false">
                             <li><a href="@Url.Action("UserProfile", "User")">My Profile</a></li>
                             <li><a href="@Url.Action("Index", "UserDashboard")">My Dashboard</a></li>
@@ -219,7 +235,7 @@
                     </li>
                 }
                 <li class="becomeNav"><a href="@Url.Action("Create", "Listing")" class="btn btn-primary btn-md"> Share </a></li>
-                <li class="becomeNav" id="becomeBorrower"><a  class="btn btn-primary btn-md"> Borrow </a></li>
+                <li class="becomeNav" id="becomeBorrower"><a class="btn btn-primary btn-md"> Borrow </a></li>
             </ul>
         </div>
 
@@ -245,9 +261,9 @@
                     }
                 </div>
                 @*<div class="subscribeBox">
-                    <input type="text" id="subscribeEmailpopup" class="form-control" placeholder="Enter your email" />
-                    <button type="button" id="subscribepopupbtn" class="btn btn-green">Subscribe</button>
-                </div>*@
+                        <input type="text" id="subscribeEmailpopup" class="form-control" placeholder="Enter your email" />
+                        <button type="button" id="subscribepopupbtn" class="btn btn-green">Subscribe</button>
+                    </div>*@
             </div>
 
         </div>
@@ -262,24 +278,24 @@
 
     </div>
     @*<div class="modal fade socialPopupModal" id="exampleModalBeta" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content col-12">
-                <div class="modal-header">
-                    <h5 class="modal-title">Alert!</h5> <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
-                </div>
-                <div class="modal-body">
-                    <div class="icon-container1 d-flex row">
-                        <div class="col-sm-12">
-                            <p>Welcome to the beta site for <b>momentarily</b>.  Currently we are not allowing rentals, however you can begin to upload items in our system so that when we go live, you will be all set to go!</p>
+            <div class="modal-dialog" role="document">
+                <div class="modal-content col-12">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Alert!</h5> <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="icon-container1 d-flex row">
+                            <div class="col-sm-12">
+                                <p>Welcome to the beta site for <b>momentarily</b>.  Currently we are not allowing rentals, however you can begin to upload items in our system so that when we go live, you will be all set to go!</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>*@
+        </div>*@
     <script src="~/Content/TemplateImg/js/jquery.min.js"></script>
     <script src="~/Content/TemplateImg/js/bootstrap.min.js"></script>
-    
+
     @Scripts.Render("~/bundles/angular")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/UI-select")
@@ -301,6 +317,12 @@
         </footer>
     }
 
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TN8WBHQ"
+                height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
 
 </body>
 
@@ -310,6 +332,7 @@
         max-width: 600px;
         margin: 20px auto;
     }
+
         .betaSignUpBtn a {
             padding: 8px 15px;
             max-width: 350px;
@@ -367,6 +390,7 @@
         #divLoading span > img {
             padding-left: 44px;
         }
+
     .popupCloseBtn {
         position: absolute;
         right: 10px;
@@ -504,6 +528,7 @@
             right: -30px;
         }
     }
+
     #cookie-prompt {
         position: fixed;
         width: 100%;
@@ -611,59 +636,59 @@
 </style>
 
 <script type="text/javascript">
-        var cookiePromptTest = false;
+    var cookiePromptTest = false;
 
-        $(document).ready(function () {
-            if (cookiePromptTest || checkCookie("cookiePrompt") != "on") {
-                $(".mainheader").before('<div id="cookie-prompt" class="cookiealert" style="">' +
-                    '<div class="row">' +
-                    '<div class="container">' +
-                    '<span class="cookieCloseBtn"><i class="fa fa-times" aria-hidden="true"></i></span>' +
-                    '<div class="col-md-10 col-sm-9"><p class="text-left">We use cookies and other tracking technologies to improve your browsing experience on our website, to analyze our website traffic, and to understand where our visitors are coming from.Please read our cookie policy for more information. By browsing our website,you consent to our use of cookies and other tracking technologies. <a href="/privacypolicy" target="_blank">Click here</a> for more information. </p></div>' +
-                    '<div class="col-md-2 col-sm-3"><p class="accept"><a href="javascript:void(0);"  onclick="closeCookiePrompt()" class="cookieBtn">Accept Cookies</a></p></div>' +
-                    '</div></div></div>');
-            }
-            else {
-
-            }
-        });
-
-        function closeCookiePrompt() {
-            if (!cookiePromptTest) {
-                createCookie("cookiePrompt", "on", 300);
-            }
-            $("#cookie-prompt").remove();
+    $(document).ready(function () {
+        if (cookiePromptTest || checkCookie("cookiePrompt") != "on") {
+            $(".mainheader").before('<div id="cookie-prompt" class="cookiealert" style="">' +
+                '<div class="row">' +
+                '<div class="container">' +
+                '<span class="cookieCloseBtn"><i class="fa fa-times" aria-hidden="true"></i></span>' +
+                '<div class="col-md-10 col-sm-9"><p class="text-left">We use cookies and other tracking technologies to improve your browsing experience on our website, to analyze our website traffic, and to understand where our visitors are coming from.Please read our cookie policy for more information. By browsing our website,you consent to our use of cookies and other tracking technologies. <a href="/privacypolicy" target="_blank">Click here</a> for more information. </p></div>' +
+                '<div class="col-md-2 col-sm-3"><p class="accept"><a href="javascript:void(0);"  onclick="closeCookiePrompt()" class="cookieBtn">Accept Cookies</a></p></div>' +
+                '</div></div></div>');
         }
+        else {
 
-        function createCookie(name, value, days) {
-            if (days) {
-                var date = new Date();
-                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                //date.setTime(date.getTime() + (days * 2000));
-                var expires = "; expires=" + date.toGMTString();
-            }
-            else var expires = "";
-            document.cookie = name + "=" + value + expires + "; path=/";
         }
+    });
 
-        function checkCookie(name) {
-            var nameEQ = name + "=";
-            var ca = document.cookie.split(';');
-            for (var i = 0; i < ca.length; i++) {
-                var c = ca[i];
-                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-            }
-            return null;
+    function closeCookiePrompt() {
+        if (!cookiePromptTest) {
+            createCookie("cookiePrompt", "on", 300);
         }
+        $("#cookie-prompt").remove();
+    }
 
-        function eraseCookie(name) {
-            createCookie(name, "", -1);
+    function createCookie(name, value, days) {
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            //date.setTime(date.getTime() + (days * 2000));
+            var expires = "; expires=" + date.toGMTString();
         }
-        $(document).on('click', '.cookieCloseBtn', function () {
-            
-            $("#cookie-prompt").css("display", "none");
-        })
+        else var expires = "";
+        document.cookie = name + "=" + value + expires + "; path=/";
+    }
+
+    function checkCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
+
+    function eraseCookie(name) {
+        createCookie(name, "", -1);
+    }
+    $(document).on('click', '.cookieCloseBtn', function () {
+
+        $("#cookie-prompt").css("display", "none");
+    })
 </script>
 <script>
 
@@ -713,13 +738,13 @@
 
     });
     $(document).on('click', '#becomeBorrower', function () {
-   
+
         $.ajax({
             url: "/Search/CheckVersion",
             type: "Get",
             success: function (data) {
                 if (data != "True") {
-                    
+
                     $('#exampleModalBeta').modal('show');
                 }
                 else {
@@ -740,7 +765,7 @@
             type: "Get",
             success: function (data) {
                 if (data != "True") {
-                   
+
                     $('#exampleModalBeta').modal('show');
                 }
                 else {
@@ -780,7 +805,7 @@
                         $('#exampleModalBeta').modal('hide');
                         $('#divLoading').hide();
                         $('#subscribeEmailpopup').val('');
-                        
+
                     }
                     else if (data == "Already subscribed.") {
                         toastr.info("Already Subscribed");
