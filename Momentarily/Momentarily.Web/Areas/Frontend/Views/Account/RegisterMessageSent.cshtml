@@ -30,19 +30,29 @@
                                 To confirm your mobile number, enter the password below and click the submit button
                             </p>
                         </div>
+                        <div style="color: #cf2d1e">
+                            <strong> Note : </strong>  Please note that you have a limited number of attempts to submit the OTP. Specifically, 
+                            you have @ViewBag.AllowedOTP attempts to successfully send the OTP. If you exceed this limit and fail to submit the OTP successfully,
+                            your account will be locked for a period of 24 hours. We encourage you to take your time and carefully 
+                            enter the OTP to avoid any inconvenience.
+                            Thank you for your cooperation.
+                        </div>
+                        <hr />
                         <div class="form-group">
                             <input type="text" id="otpnumber" />
                             @Html.HiddenFor(x => x.ViewModel.VC)
                             @Html.HiddenFor(x => x.ViewModel.PhoneNumber)
                             <button type="button" id="addotp" class="btn btn-red">Submit</button>
-                            <a href="#" id="resendotp" >Resend OTP</a>
+                            <button style="text-size-adjust:10px" id="resendotp">Resend OTP</button>
+                            <span id="timer"> </span>
                         </div>
-                       
-                           
-                      
+                        <div class="form-group">
+                            <p id="responseMsg"> </p>
+                        </div>
+
                     </div>
                 }
-                </div>
+            </div>
         </div>
         @*<div class="row">
                 <div class="col-md-6 col-md-offset-3">
@@ -94,40 +104,72 @@
         #divLoading span > img {
             padding-left: 44px;
         }
+    #timer {
+        color: #cf2d1e;
+        font-size: x-large;
+        margin-left: 10%;
+        position: relative;
+        top: 5px;
+    }
 </style>
 <script>
+
+
     $(document).ready(function () {
+        loadTimer();
+        let myParagraph = $('#responseMsg');
+        myParagraph.text("");
         $('#resendotp').click(function () {
-
+           // loadTimer();
+            myParagraph.text("");
             $('#divLoading').show();
-
             var vcd = $('#ViewModel_VC').val();
             var phone = $('#ViewModel_PhoneNumber').val();
             $.ajax({
                 url: "/Account/ResendOTP",
                 type: "Get",
                 data: { vc: vcd, number: phone },
-                success: function (data) { 
-
-                    if (data == "true" || data == "True") {
-
+                success: function (data) {
+                    //$('#resendotp').attr("disabled", "disabled");
+                    
+                    debugger;
+                    if (data.Success) {
                         setTimeout(function () {
                             $('#divLoading').hide();
-                            alert("OTP Sent");
+                            loadTimer();
+                            /*$("#timer").show();*/
+                            myParagraph.css({
+                                "color": "rgb(16, 163, 127)",
+                                "font-size":"x-large"
+                            })
+                            myParagraph.text("OTP Sent Successfully !!!")
+                         //   alert("OTP Sent");
                         }, 2000);
 
                     }
                     else {
                         setTimeout(function () {
                             $('#divLoading').hide();
-                            alert("Something Went Wrong,Please Try Again!");
+                            $("#timer").hide();
+                            myParagraph.css({
+                                "color": "#cf2d1e",
+                                "font-size": "x-large"
+                            })
+                            myParagraph.text(`${data.StatusCode} - ${data.Message}`)
+                           // alert(`${data.StatusCode} - ${data.Message}`);
                         }, 2000);
+                      
                     }
                 },
                 error: function () {
+
                     setTimeout(function () {
                         $('#divLoading').hide();
-                        alert("Error,Please Try Again!");
+                        myParagraph.css({
+                            "color": "#cf2d1e",
+                            "font-size": "x-large"
+                        })
+                        myParagraph.text(`${data.StatusCode} - ${data.Message}`)
                     }, 2000);
 
                 }
@@ -135,10 +177,30 @@
         })
 
 
-
-
+        function loadTimer() {
+            $('#resendotp').hide();
+            $("#timer").show();
+            var timer = 120; // Timer in seconds
+            var interval = setInterval(function () {
+                var minutes = Math.floor(timer / 60); // Convert seconds to minutes
+                var seconds = timer % 60; //Get Remaining seconds
+                var formattedtime = padNumber(minutes) + " : " + padNumber(seconds);  // Format timer as "mm : ss"
+                $("#timer").text(formattedtime); // Display formated timer
+                timer--;
+                //Condition agar hamary pass timer less than 0 hay to wo clear hojana chaye text khtam hojanaa chaye and also wo jo disabled the button wo enabled hojanaa chaye
+                if (timer < 0) {
+                    clearInterval(interval); // Clear interval when timer reaches 0
+                    $("#timer").text(""); // Remove timer text
+                    //$("#resendotp").removeAttr("disabled");
+                    $('#resendotp').show();
+                }
+            }, 1000); // Update timer every 1 second
+        }
+        function padNumber(number) {
+            return number.toString().padStart(2, '0'); // Pad single digit numbers with leading zero
+        }
         $('#addotp').click(function () {
-            
+
             var vcd = $('#ViewModel_VC').val();
             var myotp = $('#otpnumber').val();
             if (myotp != "") {
@@ -148,13 +210,13 @@
                     data: { otp: myotp, Vcode: vcd },
                     success: function (data) {
                         if (data == "true" || data == "True") {
-                            
+
                             $.ajax({
                                 url: "/User/VerifyMobileNumber",
                                 type: "Get",
                                 data: { otp: myotp, vc: vcd },
                                 success: function (data) {
-                                    
+
                                     if (data == "true" || data == "True") {
 
                                         alert("Your mobile number has been verified successfully. Please check your email and confirm your account with momentarily(Ignore if already confirmed).");

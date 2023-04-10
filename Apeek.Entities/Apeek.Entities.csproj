@@ -297,6 +297,7 @@
     <Compile Include="Web\LoginStatus.cs" />
     <Compile Include="Web\OrderBy.cs" />
     <Compile Include="Web\PagingInfo.cs" />
+    <Compile Include="Web\RecaptchaSettings.cs" />
     <Compile Include="Web\RegisterResult.cs" />
     <Compile Include="Web\RegisterStatus.cs" />
     <Compile Include="Web\SeoEntry.cs" />

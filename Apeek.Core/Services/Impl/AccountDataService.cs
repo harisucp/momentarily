@@ -78,7 +78,6 @@ namespace Apeek.Core.Services.Impl
             _repositoryPaypalPayment = repositoryPaypalPayment;
             _repositoryResolvedDisputeDetail = repositoryResolvedDisputeDetail;
             _repositoryGoodImg = repositoryGoodImg;
-
         }
 
 
@@ -1772,6 +1771,106 @@ namespace Apeek.Core.Services.Impl
                 user = (from usr in _repUser.Table join userGood in _repositoryUserGood.Table on usr.Id equals userGood.UserId where userGood.GoodId == goodId select usr).FirstOrDefault();
             }, null, LogSource.PersonService);
             return user;
+        }
+        public Result<User> ManageUserOTP(int userId, int OTPAllowed)
+        {
+            try
+            {
+                User userDetail = null;
+                Result<User> _MainResponse = new Result<User>();
+                Uow.Wrap(u =>
+                {
+                    userDetail = _repUser.GetUser(userId);
+                }, null, LogSource.UserMessageService);
+               
+                if (!ReferenceEquals(userDetail, null))
+                {
+                    if (Convert.ToBoolean(userDetail.IsLockout) && userDetail.OTPCount >= OTPAllowed)
+                    {
+                        if (CheckIn24Hours(userDetail.OTPGeneratedDate))
+                        {
+                            userDetail.IsLockout = false;
+                            userDetail.OTPCount = 0;
+                            Uow.Wrap(u =>
+                            {
+                                _repUser.Update(userDetail);
+                            }, null, LogSource.UserMessageService);
+
+                            _MainResponse.Success = true;
+
+                        }
+                        else
+                        {
+                            _MainResponse.Message = "your account is locked please try again after 24 hours";
+                            _MainResponse.Success = false;
+                            _MainResponse.StatusCode = "OTP_002";
+                            _MainResponse.Obj = new User() { IsLockout = userDetail.IsLockout, Id = userDetail.Id };
+                        }
+                    }
+                    else if (userDetail.OTPCount >= OTPAllowed)
+                    {
+                        userDetail.IsLockout = true;
+                        Uow.Wrap(u =>
+                        {
+                            _repUser.Update(userDetail);
+                        }, null, LogSource.UserMessageService);
+                        _MainResponse.Message = "Invalid OTP !due to too many requests your account is locked.Please try after 24 hours";
+                        _MainResponse.Success = false;
+                        _MainResponse.StatusCode = "OTP_003";
+                        _MainResponse.Obj = new User() { IsLockout = userDetail.IsLockout, Id = userDetail.Id };
+                    }
+                    else
+                    {
+                        _MainResponse.Success = true;
+                    };
+                }
+                else
+                {
+                    _MainResponse.Success = false;
+                    _MainResponse.Message = "Invalid User, Not Exist";
+                    _MainResponse.StatusCode = "OTP_001";
+                }
+                return _MainResponse;
+            }
+            catch (Exception ex)
+            {
+                return null;
+                //throw;
+            }
+            
+        }
+        public bool UpdateOTPRequests(int userId)
+        {
+            try
+            {
+                User userDetail = null;
+                Uow.Wrap(u =>
+                {
+                    userDetail = _repUser.GetUser(userId);
+                }, null, LogSource.UserMessageService);
+                if (!ReferenceEquals(userDetail, null))
+                {
+                    userDetail.OTPCount ++;
+                    userDetail.OTPGeneratedDate = DateTime.UtcNow;
+                    Uow.Wrap(u =>
+                    {
+                        _repUser.Update(userDetail);
+                    }, null, LogSource.UserMessageService);
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
+        }
+        public  bool CheckIn24Hours(DateTime? date)
+        {
+            DateTime booking = Convert.ToDateTime(date);
+            DateTime ending = booking.AddHours(23).AddMinutes(59).AddSeconds(59);
+            var n = DateTime.Compare(DateTime.UtcNow, ending);
+            return ((n == -1)) ? false : true;
         }
     }
 }

@@ -32,6 +32,9 @@ namespace Apeek.Entities.Mappings
             Map(x => x.IsBlocked, "is_blocked");
             Map(x => x.IsRemoved, "is_removed");
             Map(x => x.CreatedDate, "created_date");
+            Map(x => x.IsLockout, "IsLockout");
+            Map(x => x.OTPCount, "OTPCount");
+            Map(x => x.OTPGeneratedDate, "OTPGeneratedDate");
             References(x => x.Address, "address_id");
             HasMany(x => x.UserImages)
                 .KeyColumn("user_id")

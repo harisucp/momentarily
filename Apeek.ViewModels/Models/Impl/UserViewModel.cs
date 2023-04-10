@@ -25,5 +25,8 @@ namespace Apeek.ViewModels.Models.Impl
         public bool IsAdmin { get; set; }
         public bool IsBlocked { get; set; }
         public bool IsMobileVerified { get; set; }
+        public  int OTPCount { get; set; }
+        public  bool IsLockout { get; set; }
+        public  DateTime? OTPGeneratedDate { get; set; }
     }
 }
