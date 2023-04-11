@@ -31,11 +31,9 @@
                             </p>
                         </div>
                         <div style="color: #cf2d1e">
-                            <strong> Note : </strong>  Please note that you have a limited number of attempts to submit the OTP. Specifically, 
-                            you have @ViewBag.AllowedOTP attempts to successfully send the OTP. If you exceed this limit and fail to submit the OTP successfully,
-                            your account will be locked for a period of 24 hours. We encourage you to take your time and carefully 
-                            enter the OTP to avoid any inconvenience.
-                            Thank you for your cooperation.
+                            <strong> NOTE: </strong> 
+                            This is to inform you that you have @ViewBag.AllowedOTP successful attempts to send an OTP request within 24 hours.
+                            Otherwise, your OTP requests will get blocked. Please enter OTP carefully to avoid any inconvenience. Thank you!
                         </div>
                         <hr />
                         <div class="form-group">
@@ -43,7 +41,7 @@
                             @Html.HiddenFor(x => x.ViewModel.VC)
                             @Html.HiddenFor(x => x.ViewModel.PhoneNumber)
                             <button type="button" id="addotp" class="btn btn-red">Submit</button>
-                            <button style="text-size-adjust:10px" id="resendotp">Resend OTP</button>
+                            <button  class="btn btn-red" id="resendotp">Resend OTP</button>
                             <span id="timer"> </span>
                         </div>
                         <div class="form-group">
@@ -74,7 +72,7 @@
     </p>
 
 </div>
-<footer class="pull-right btmfooter">@DateTime.UtcNow.Year Mometarily <sup><b><small>TM</small></b></sup></footer>
+<footer class="pull-right btmfooter">@DateTime.UtcNow.Year Momentarily <sup><b><small>TM</small></b></sup></footer>
 @Scripts.Render("~/Scripts/Libs/jquery")
 
 
@@ -132,18 +130,16 @@
                 success: function (data) {
                     //$('#resendotp').attr("disabled", "disabled");
                     
-                    debugger;
                     if (data.Success) {
                         setTimeout(function () {
                             $('#divLoading').hide();
                             loadTimer();
                             /*$("#timer").show();*/
                             myParagraph.css({
-                                "color": "rgb(16, 163, 127)",
+                                "color": "#cf2d1e",
                                 "font-size":"x-large"
                             })
-                            myParagraph.text("OTP Sent Successfully !!!")
-                         //   alert("OTP Sent");
+                            myParagraph.text("OTP Sent Successfully!")
                         }, 2000);
 
                     }
@@ -155,8 +151,7 @@
                                 "color": "#cf2d1e",
                                 "font-size": "x-large"
                             })
-                            myParagraph.text(`${data.StatusCode} - ${data.Message}`)
-                           // alert(`${data.StatusCode} - ${data.Message}`);
+                            myParagraph.text(`${data.Message}`)
                         }, 2000);
                       
                     }

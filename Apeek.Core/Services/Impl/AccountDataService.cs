@@ -1801,7 +1801,7 @@ namespace Apeek.Core.Services.Impl
                         }
                         else
                         {
-                            _MainResponse.Message = "your account is locked please try again after 24 hours";
+                            _MainResponse.Message = "Please try for an OTP after 24 hours. Thanks!";
                             _MainResponse.Success = false;
                             _MainResponse.StatusCode = "OTP_002";
                             _MainResponse.Obj = new User() { IsLockout = userDetail.IsLockout, Id = userDetail.Id };
@@ -1814,7 +1814,7 @@ namespace Apeek.Core.Services.Impl
                         {
                             _repUser.Update(userDetail);
                         }, null, LogSource.UserMessageService);
-                        _MainResponse.Message = "Invalid OTP !due to too many requests your account is locked.Please try after 24 hours";
+                        _MainResponse.Message = "Please try for an OTP after 24 hours. Thanks!";
                         _MainResponse.Success = false;
                         _MainResponse.StatusCode = "OTP_003";
                         _MainResponse.Obj = new User() { IsLockout = userDetail.IsLockout, Id = userDetail.Id };
