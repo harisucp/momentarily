@@ -104,7 +104,8 @@ namespace Apeek.Core.Services
 
         User DeleteUser(int userid);
         string GetCountryCodeByPhoneNumber(string number);
-        Result<PayoutDetailsModel> CreatePaypalInfoPaymentDetail(Shape<PayoutDetailsModel> shape);        Result<PayoutDetailsModel> GetCurrentPaypalInfoPaymentDetail(int userId);
+        Result<PayoutDetailsModel> CreatePaypalInfoPaymentDetail(Shape<PayoutDetailsModel> shape);
+        Result<PayoutDetailsModel> GetCurrentPaypalInfoPaymentDetail(int userId);
         int GetOwnerIdbyGoodId(int goodId);
         string getUserPhoneNumberForTemplate(int userid);
         List<Entities.Entities.GlobalCodes> GetPaymentTypes();
@@ -122,5 +123,7 @@ namespace Apeek.Core.Services
         bool getExsistPaypalInfoOrNotInDb(int userId);
 
         User GetGoodBasedUser(int goodId);
+        Result<User> ManageUserOTP(int userId,int AllowedOTP);
+        bool UpdateOTPRequests(int userId);
     }
 }

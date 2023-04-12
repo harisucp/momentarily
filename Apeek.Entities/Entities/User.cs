@@ -38,6 +38,9 @@ namespace Apeek.Entities.Entities
         public virtual bool IsRemoved { get; set; }
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public virtual DateTime? CreatedDate { get; set; }
+        public virtual int OTPCount { get; set; }
+        public virtual bool IsLockout { get; set; }
+        public virtual DateTime? OTPGeneratedDate { get; set; }
     }
     public class PersonFreeText
     {

@@ -34,5 +34,8 @@ namespace Apeek.ViewModels.Models.Impl
         public bool IsMobileVerified { get; set; }
         [Required(ErrorMessage = "The country is required.")]
         public string CountryCode { get; set; }
+        public  int OTPCount { get; set; }
+        public  bool IsLockout { get; set; }
+        public  DateTime? OTPGeneratedDate { get; set; }
     }
 }
