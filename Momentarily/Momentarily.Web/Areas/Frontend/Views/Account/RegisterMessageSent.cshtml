@@ -175,7 +175,7 @@
         function loadTimer() {
             $('#resendotp').hide();
             $("#timer").show();
-            var timer = 5; // Timer in seconds
+            var timer = 120; // Timer in seconds
             var interval = setInterval(function () {
                 var minutes = Math.floor(timer / 60); // Convert seconds to minutes
                 var seconds = timer % 60; //Get Remaining seconds
