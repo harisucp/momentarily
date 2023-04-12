@@ -21,6 +21,8 @@ using Momentarily.Test.Core.Service.Impl;
 using Apeek.NH.Repository.Repositories;
 using Apeek.Core.Services;
 using System.Linq;
+using Apeek.Common.Models;
+using Apeek.Entities.Entities;
 
 namespace Momentarily.Web.Areas.Frontend.Controller
 {
@@ -53,15 +55,16 @@ namespace Momentarily.Web.Areas.Frontend.Controller
         [AllowAnonymous]
         public ActionResult Register()
         {
+           // var validateOTP = _helper.ManageOTPRequests(6364, 3);
             TempData["NoAccessFooter"] = "NoAccess";
             TempData["password"] = "";
             TempData["confirm"] = "";
             TempData["date"] = "empty";
+            ViewBag.SiteKey   = ConfigurationManager.AppSettings["CaptchaSitekey"];
             var model = Activator.CreateInstance<MomentarilyRegisterModel>();
             model.CountryId = 1;
             var CountriesyList = new SelectList(_helper.getAllCountries(), "PhoneCode", "Name");
             ViewBag.Countries = CountriesyList;
-
             var shape = _shapeFactory.BuildShape(null, model, PageName.Register.ToString());
             shape.ViewModel.IsExternal = false;
             return DisplayShape(shape);
@@ -72,7 +75,19 @@ namespace Momentarily.Web.Areas.Frontend.Controller
         [AllowAnonymous]
         public ActionResult Register(Shape<MomentarilyRegisterModel> shape)
         {
+            string EncodedResponse = Request.Form["g-Recaptcha-Response"];
+            string SecretKey = ConfigurationManager.AppSettings["CaptchaSecretKey"].ToString();
+            int OTPAllowed = Convert.ToInt32(ConfigurationManager.AppSettings["OTPRequestAllowed"]);
+            bool IsCaptchaValid = (ReCaptchaClass.Validate(EncodedResponse, SecretKey) == "true" ? true : false);
 
+            if (!IsCaptchaValid)
+            {
+                //Not-Valid Request
+                shape.IsError = true;
+                TempData["NoAccessFooter"] = "NoAccess";
+                ModelState.AddModelError("ViewModel.RecaptchaMessage", "Please verify Google Recaptcha");
+                // return View(shape);
+            }
             var yearDiff = 0;
             int _year = 0;
             int _month = 0;
@@ -115,15 +130,16 @@ namespace Momentarily.Web.Areas.Frontend.Controller
 
                 if (user != null)
                 {
+                    // var validateOTP = _helper.ManageOTPRequests(user.Id, OTPAllowed);
                     TwilioSmsSendProviderTest test = new TwilioSmsSendProviderTest();
                     OTP = test.GenerateOTP();
                     bool sent = test.SendOTP(OTP, shape.ViewModel.PhoneNumber, user.VerificationCode, Convert.ToString(shape.ViewModel.CountryId));
-                    //_helper.subscribeEmail(SignUpListId, user.Email, user.FirstName + " " + user.LastName, true);
+                    bool isUpdated = _accountDataService.UpdateOTPRequests(user.Id);
                     if (shape.ViewModel.IgnoreMarketingEmails == false)
                     {
                         _helper.subscribeEmail(SubscriberListId, user.Email, user.FirstName + " " + user.LastName, true);
                         bool saveSubscriber = _helper.saveSubscriber(shape.ViewModel.Email);
-                       
+
                     }
 
                     //if (shape.ViewModel.IsExternal == true)
@@ -136,15 +152,13 @@ namespace Momentarily.Web.Areas.Frontend.Controller
                     //string ItemListURL = "/Search/Map?Location=&Latitude=0&Longitude=0&SearchByMap=false&NeLatitude=0&NeLongitude=0&SwLatitude=0&SwLongitude=0&DateStart=%2FDate(1575969961000)%2F&DateEnd=%2FDate(1577179561000)%2F&Page=1&PageSize=21&Radius=25&Keyword=&RentPeriod=1&SortBy=1";
                     //var sendMsgWelcomeUser = _sendMessageService.SendEmailWelcomeTemplate(user.Email, user.FullName, ItemListURL);
                     MessageSentModel sentmodel = new MessageSentModel();
-                        sentmodel.IsExternal = false;
-                        sentmodel.VC = user.VerificationCode;
-                        sentmodel.PhoneNumber = shape.ViewModel.PhoneNumber;
-                        sentmodel.Email = user.Email;
-                        sentmodel.IsVerified = false;
-                        sentmodel.IsMobileVerified = false;
-                        return RedirectToAction("OTPMessageSent", sentmodel);
-                    //}
-
+                    sentmodel.IsExternal = false;
+                    sentmodel.VC = user.VerificationCode;
+                    sentmodel.PhoneNumber = shape.ViewModel.PhoneNumber;
+                    sentmodel.Email = user.Email;
+                    sentmodel.IsVerified = false;
+                    sentmodel.IsMobileVerified = false;
+                    return RedirectToAction("OTPMessageSent", sentmodel);
                 }
             }
             else
@@ -288,7 +302,7 @@ namespace Momentarily.Web.Areas.Frontend.Controller
                     TwilioSmsSendProviderTest test = new TwilioSmsSendProviderTest();
                     OTP = test.GenerateOTP();
                     bool sent = test.SendOTP(OTP, shape.ViewModel.PhoneNumber, user.VerificationCode, Convert.ToString(shape.ViewModel.CountryId));
-
+                    bool isUpdated = _accountDataService.UpdateOTPRequests(user.Id);
                     MessageSentModel sentmodel = new MessageSentModel();
                     sentmodel.IsExternal = true;
                     sentmodel.VC = user.VerificationCode;
@@ -504,6 +518,7 @@ namespace Momentarily.Web.Areas.Frontend.Controller
         [HttpGet]
         public ActionResult OTPMessageSent(MessageSentModel model)
         {
+            ViewBag.AllowedOTP = Convert.ToInt32(ConfigurationManager.AppSettings["OTPRequestAllowed"]);
             TempData["NoAccessFooter"] = "NoAccess";
             var shape = _shapeFactory.BuildShape(null, model, PageName.LoginMessageSent.ToString());
             return View("RegisterMessageSent", shape);
@@ -521,19 +536,30 @@ namespace Momentarily.Web.Areas.Frontend.Controller
             }
         }
 
-        public bool ResendOTP(string vc,string number)
+        public JsonResult ResendOTP(string vc,string number)
         {
+            Result<User> validateOTP = new Result<User>();
             try
             {
-                TwilioSmsSendProviderTest test = new TwilioSmsSendProviderTest();
-                OTP = test.GenerateOTP();
-                var countrycode = _accountDataService.GetCountryCodeByPhoneNumber(number);                bool sent = test.SendOTP(OTP, number, vc, countrycode);
-                return sent;
+                int OTPAllowed = Convert.ToInt32(ConfigurationManager.AppSettings["OTPRequestAllowed"]);
+                int userId = _accountDataService.GetUser(vc).Id;
+                 validateOTP = _helper.ManageOTPRequests(userId, OTPAllowed);
+                if (validateOTP.Success)
+                {
+                    TwilioSmsSendProviderTest test = new TwilioSmsSendProviderTest();
+                    OTP = test.GenerateOTP();
+                    var countrycode = _accountDataService.GetCountryCodeByPhoneNumber(number);
+                    bool sent = test.SendOTP(OTP, number, vc, countrycode);
+                   if (sent) _accountDataService.UpdateOTPRequests(userId);
+                }
             }
-            catch
+            catch(Exception ex)
             {
-                return false;
+                validateOTP.Success = false;
+                validateOTP.StatusCode = "OTP_004";
+                validateOTP.Message = validateOTP.StatusCode+"-Something went wrong ! Please contact to administrator";
             }
+            return Json(validateOTP,JsonRequestBehavior.AllowGet);
         }
         [AllowAnonymous]
         [ChildActionOnly]
@@ -721,7 +747,7 @@ namespace Momentarily.Web.Areas.Frontend.Controller
                     TwilioSmsSendProviderTest test = new TwilioSmsSendProviderTest();
                     OTP = test.GenerateOTP();
                     bool sent = test.SendOTP(OTP, shape.ViewModel.PhoneNumber, user.VerificationCode, Convert.ToString(shape.ViewModel.CountryId));
-
+                    bool isUpdated = _accountDataService.UpdateOTPRequests(user.Id);
                     MessageSentModel sentmodel = new MessageSentModel();
                     sentmodel.IsExternal = true;
                     sentmodel.VC = user.VerificationCode;

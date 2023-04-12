@@ -46,5 +46,7 @@ namespace Apeek.ViewModels.Models
         public bool IsMobileVerified { get; set; }
         [Required(ErrorMessage = "The country is required.")]
         public int? CountryId { get; set; }
+        public string RecaptchaMessage { get; set; }
+        public string OTPErrorMsg { get; set; }
     }
 }

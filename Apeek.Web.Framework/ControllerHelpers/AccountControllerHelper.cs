@@ -499,6 +499,16 @@ namespace Apeek.Web.Framework.ControllerHelpers
                 throw ex;
             }
         }
-
+        public Result<User> ManageOTPRequests(int userId,int AllowedOTP )
+        {
+            try
+            {
+                return AccountDataService.ManageUserOTP(userId, AllowedOTP);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
