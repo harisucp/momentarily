@@ -136,8 +136,8 @@
                             loadTimer();
                             /*$("#timer").show();*/
                             myParagraph.css({
-                                "color": "#cf2d1e",
-                                "font-size":"x-large"
+                                "color": "green",
+                                "font-size":"14px"
                             })
                             myParagraph.text("OTP Sent Successfully!")
                         }, 2000);
@@ -149,7 +149,7 @@
                             $("#timer").hide();
                             myParagraph.css({
                                 "color": "#cf2d1e",
-                                "font-size": "x-large"
+                                "font-size": "14px"
                             })
                             myParagraph.text(`${data.Message}`)
                         }, 2000);
@@ -162,7 +162,7 @@
                         $('#divLoading').hide();
                         myParagraph.css({
                             "color": "#cf2d1e",
-                            "font-size": "x-large"
+                            "font-size": "14px"
                         })
                         myParagraph.text(`${data.StatusCode} - ${data.Message}`)
                     }, 2000);
