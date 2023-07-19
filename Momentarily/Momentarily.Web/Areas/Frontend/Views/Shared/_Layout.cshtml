@@ -95,15 +95,16 @@
                                         <li><a id="search_button" href="#"><img src="~/Content/TemplateImg/OtherImages/searchicon.png" alt="image" /> </a></li>
                                         <li class="active"><a href="@Url.Action("HowItWorks", "Home")">How it Works</a></li>
                                         <li><a href="@Url.Action("FAQ", "Home")">Faq</a></li>
-                                        <li><a href="@Url.Action("ContactUs", "Home")">Help</a></li>
-                                        <li class="dropdown dropNav covidMenu afterLoginCovidMenu">
+                                        @*<li><a href="@Url.Action("ContactUs", "Home")">Help</a></li>*@
+                                        <li><a href="@Url.Action("index", "sendhelp")">Help</a></li>
+                                        @*<li class="dropdown dropNav covidMenu afterLoginCovidMenu">
                                             <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
                                                 <span> COVID-19</span> <span class="fa fa-angle-down"></span>
                                             </a>
                                             <ul class="dropdown-menu">
                                                 <li class="@((IsActiveLink("Index", "covid")||IsActiveLink("PlaceOrder", "covid")) ? "active" : "")"><a href="@Url.Action("Index", "covid")">COVID-19 Products</a></li>
                                             </ul>
-                                        </li>
+                                        </li>*@
                                         <li class="dropdown dropNav">
                                             @if (!string.IsNullOrWhiteSpace(User.UserIconUrl))
                                             {
@@ -155,15 +156,16 @@
                                     <ul class="nav navbar-nav navbar-right">
                                         <li class="active"><a href="@Url.Action("HowItWorks", "Home")">How it Works</a></li>
                                         <li><a href="@Url.Action("FAQ", "Home")">Faq</a></li>
-                                        <li><a href="@Url.Action("ContactUs", "Home")">Help</a></li>
-                                        <li class="dropdown dropNav covidMenu">
+                                        @*<li><a href="@Url.Action("ContactUs", "Home")">Help</a></li>*@
+                                        <li><a href="@Url.Action("index", "sendhelp")">Help</a></li>
+                                        @*<li class="dropdown dropNav covidMenu">
                                             <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
                                                 <span> COVID-19</span> <span class="fa fa-angle-down"></span>
                                             </a>
                                             <ul class="dropdown-menu">
                                                 <li class="@((IsActiveLink("Index", "covid")||IsActiveLink("PlaceOrder", "covid")) ? "active" : "")"><a href="@Url.Action("Index", "covid")">COVID-19 Products</a></li>
                                             </ul>
-                                        </li>
+                                        </li>*@
                                         <li><a href="@QuickUrl.RegisterUrl()"><span class="fa fa-user"></span> Sign up</a></li>
                                         <li><a href="@QuickUrl.LoginUrl(null)"><span class="fa fa-sign-in"></span> Log in</a></li>
                                         <li class="becomeNav"><a href="@Url.Action("Create", "Listing")" class="btn btn-primary btn-sm"> Share </a></li>
@@ -211,8 +213,9 @@
             <ul>
                 <li class="active"><a href="@Url.Action("HowItWorks", "Home")">How it Works</a></li>
                 <li><a href="@Url.Action("FAQ", "Home")">Faq</a></li>
-                <li><a href="@Url.Action("ContactUs", "Home")">Help</a></li>
-                <li class="dropdown dropNav covidMenu">
+                @*<li><a href="@Url.Action("ContactUs", "Home")">Help</a></li>*@
+                <li><a href="@Url.Action("index", "sendhelp")">Help</a></li>
+                @*<li class="dropdown dropNav covidMenu">
                     <a href="#">
                         <span> COVID-19</span> <span role="button" class="offcanvas-menu-toggler collapsed covidDDMenu" data-toggle="collapse" data-target="#covid-menu-02265" aria-expanded="false" aria-controls="collapse-menu-02">
                             <i class="fa fa-plus"></i><i class="fa fa-minus"></i>
@@ -221,7 +224,7 @@
                     <ul class="dropdown-menu" id="covid-menu-02265" aria-expanded="false">
                         <li class="@((IsActiveLink("Index", "covid")||IsActiveLink("PlaceOrder", "covid")) ? "active" : "")"><a href="@Url.Action("Index", "covid")">COVID-19 Products</a></li>
                     </ul>
-                </li>
+                </li>*@
                 @if (!User.Identity.IsAuthenticated && !(User.IsAdmin))
                 {
                     <li><a href="@QuickUrl.RegisterUrl()"><span class="fa fa-user"></span> Sign up</a></li>
