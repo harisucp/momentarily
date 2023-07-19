@@ -74,53 +74,66 @@
                                     <button type="button" class="navbar-toggle" data-toggle="collapse" id="offcanvas-toggler">
                                         <img src="~/Content/TemplateImg/OtherImages/menu-bar.png" alt="image" />
                                     </button>
-                                    <a class="navbar-brand" href="@QuickUrl.HomeUrl()"><img src="~/Content/TemplateImg/OtherImages/logo.png" alt="image" width="180" /></a>
-                                </div>
-                                <div class="collapse navbar-collapse" id="myNavbar">
-                                    <ul class="nav navbar-nav navbar-right">
-                                        <li><a id="search_button" href="#"><img src="~/Content/TemplateImg/OtherImages/searchicon.png" alt="image" /> </a></li>
-                                        <li class="active"><a href="@Url.Action("HowItWorks", "Home")">How it Works</a></li>
-                                        <li><a href="@Url.Action("FAQ", "Home")">Faq</a></li>
-                                        @*<li><a href="@Url.Action("ContactUs", "Home")">Help</a></li>*@
-                                        <li><a href="@Url.Action("index", "sendhelp")">Help</a></li>
->
-                                        @*<li class="dropdown dropNav covidMenu afterLoginCovidMenu">
-                                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
-                                                <span> COVID-19</span> <span class="fa fa-angle-down"></span>
-                                            </a>
-                                            <ul class="dropdown-menu">
-                                                <li class="@((IsActiveLink("Index", "covid")||IsActiveLink("PlaceOrder", "covid")) ? "active" : "")"><a href="@Url.Action("Index", "covid")">COVID-19 Products</a></li>
-                                            </ul>
-                                        </li>*@
-                                        <li class="dropdown dropNav">
-                                            @if (!string.IsNullOrWhiteSpace(User.UserIconUrl))
-                                            {
-                                                <img src="@User.UserIconUrl" alt="" />
-                                            }
-                                            else
-                                            {
-                                                <img src="~/Content/Img/profile-thumb.svg" alt="" />
-                                            }
+                                    <div style="display: inline-flex; align-items:center; justify-content: flex-start;">
+                                        <a class="navbar-brand" href="@QuickUrl.HomeUrl()" style="margin-bottom:1px" style="max-width:100%">
+                                            <img src="~/Content/TemplateImg/OtherImages/logo.png" alt="image" width="180" style="display:inline; margin-top:-6px;" />
+                                        </a>
+                                        <strong style="color: #dc3545;
+                                                            border: 1px solid rgba(76, 90, 103, 0.5);
+                                                            border-radius: 3px;
+                                                            padding: 2px 6px;
+                                                            font-weight: 500;
+                                                            font-size: 15px;
+                                                        ">
+                                            BETA
+                                        </strong>
+                                    </div>
+                                    </div>
+                                    <div class="collapse navbar-collapse" id="myNavbar">
+                                        <ul class="nav navbar-nav navbar-right">
+                                            <li><a id="search_button" href="#"><img src="~/Content/TemplateImg/OtherImages/searchicon.png" alt="image" /> </a></li>
+                                            <li class="active"><a href="@Url.Action("HowItWorks", "Home")">How it Works</a></li>
+                                            <li><a href="@Url.Action("FAQ", "Home")">Faq</a></li>
+                                            @*<li><a href="@Url.Action("ContactUs", "Home")">Help</a></li>*@
+                                            <li><a href="@Url.Action("index", "sendhelp")">Help</a></li>
+                                            
+                                            @*<li class="dropdown dropNav covidMenu afterLoginCovidMenu">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                        <span> COVID-19</span> <span class="fa fa-angle-down"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="@((IsActiveLink("Index", "covid")||IsActiveLink("PlaceOrder", "covid")) ? "active" : "")"><a href="@Url.Action("Index", "covid")">COVID-19 Products</a></li>
+                    </ul>
+                </li>*@
+                                            <li class="dropdown dropNav">
+                                                @if (!string.IsNullOrWhiteSpace(User.UserIconUrl))
+                                                {
+                                                    <img src="@User.UserIconUrl" alt="" />
+                                                }
+                                                else
+                                                {
+                                                    <img src="~/Content/Img/profile-thumb.svg" alt="" />
+                                                }
 
 
-                                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
-                                                <span> @User.FirstName @User.LastName</span> <span class="fa fa-angle-down"></span>
-                                            </a>
-                                            <ul class="dropdown-menu">
-                                                <li class="@((IsActiveLink(QuickUrl.RouteUserProfile()) || IsActiveLink("UserEmail", "User") || IsActiveLink("UserPwd", "User") || IsActiveLink("BankInfo", "User")) ? "active" : "")"><a href="@QuickUrl.UserProfileUrl()">My Profile</a></li>
-                                                <li class="@((IsActiveLink("Index", "UserDashboard")) ? "active" : "")"><a href="@Url.Action("Index", "UserDashboard")">My Dashboard</a></li>
-                                                <li class="@((IsActiveLink("Index", "Listing") || IsActiveLink("Edit", "Listing") || IsActiveLink("Create", "Listing") || IsActiveLink("BookingList", "Listing")) ? "active" : "")"><a href="@Url.Action("Index", "Listing")">Manage Listings</a></li>
-                                                <li class="@((IsActiveLink("Index", "Message") || IsActiveLink("Conversation", "Message") || IsActiveLink("Pay", "Payment")) ? "active" : "")"><a href="@Url.Action("Index", "Message")">My Messages {{shared.hasUnreadMessages()?'('+shared.UserData.UnreadMessagesCount+')':''}}</a></li>
-                                                <li class="@((IsActiveLink("Index", "Booking") || IsActiveLink("Request", "Booking")) ? "active" : "")"><a href="@Url.Action("Index", "Booking")">Borrowing</a></li>
-                                                <li class="@((IsActiveLink("RentedItems", "Listing")|| IsActiveLink("Booking", "Listing")) ? "active" : "")"><a href="@Url.Action("RentedItems", "Listing")">Sharing</a></li>
-                                                <li><a href="@QuickUrl.LogOffUrl()">Log Out </a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="becomeNav"><a href="@Url.Action("Create", "Listing")" class="btn btn-primary btn-md"> Share </a></li>
-                                        <li class="becomeNav becomeBorrowerCls" id="becomeBorrower"><a class="btn btn-primary btn-sm"> Borrow </a></li>
-                                    </ul>
-                                </div>
-                            </nav>
+                                                <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                                                    <span> @User.FirstName @User.LastName</span> <span class="fa fa-angle-down"></span>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li class="@((IsActiveLink(QuickUrl.RouteUserProfile()) || IsActiveLink("UserEmail", "User") || IsActiveLink("UserPwd", "User") || IsActiveLink("BankInfo", "User")) ? "active" : "")"><a href="@QuickUrl.UserProfileUrl()">My Profile</a></li>
+                                                    <li class="@((IsActiveLink("Index", "UserDashboard")) ? "active" : "")"><a href="@Url.Action("Index", "UserDashboard")">My Dashboard</a></li>
+                                                    <li class="@((IsActiveLink("Index", "Listing") || IsActiveLink("Edit", "Listing") || IsActiveLink("Create", "Listing") || IsActiveLink("BookingList", "Listing")) ? "active" : "")"><a href="@Url.Action("Index", "Listing")">Manage Listings</a></li>
+                                                    <li class="@((IsActiveLink("Index", "Message") || IsActiveLink("Conversation", "Message") || IsActiveLink("Pay", "Payment")) ? "active" : "")"><a href="@Url.Action("Index", "Message")">My Messages {{shared.hasUnreadMessages()?'('+shared.UserData.UnreadMessagesCount+')':''}}</a></li>
+                                                    <li class="@((IsActiveLink("Index", "Booking") || IsActiveLink("Request", "Booking")) ? "active" : "")"><a href="@Url.Action("Index", "Booking")">Borrowing</a></li>
+                                                    <li class="@((IsActiveLink("RentedItems", "Listing")|| IsActiveLink("Booking", "Listing")) ? "active" : "")"><a href="@Url.Action("RentedItems", "Listing")">Sharing</a></li>
+                                                    <li><a href="@QuickUrl.LogOffUrl()">Log Out </a></li>
+                                                </ul>
+                                            </li>
+                                            <li class="becomeNav"><a href="@Url.Action("Create", "Listing")" class="btn btn-primary btn-md"> Share </a></li>
+                                            <li class="becomeNav becomeBorrowerCls" id="becomeBorrower"><a class="btn btn-primary btn-sm"> Borrow </a></li>
+                                        </ul>
+                                    </div>
+</nav>
                         </div>
                     </div>
                 </div>
@@ -137,7 +150,19 @@
                                     <button type="button" class="navbar-toggle" data-toggle="collapse" id="offcanvas-toggler">
                                         <img src="~/Content/TemplateImg/OtherImages/menu-bar.png" alt="image" />
                                     </button>
-                                    <a class="navbar-brand" href="@QuickUrl.HomeUrl()"><img src="~/Content/TemplateImg/OtherImages/logo.png" alt="image" width="180" /></a>
+                                    <a class="navbar-brand" href="@QuickUrl.HomeUrl()" style="max-width:100%">
+
+                                        <img src="~/Content/TemplateImg/OtherImages/logo.png" alt="image" width="180" style="display:inline;  margin-top:-6px;" />
+
+                                        <strong style="color: #dc3545;
+                                                border: 1px solid rgba(76, 90, 103, 0.5);
+                                                border-radius: 3px;
+                                                padding: 2px 6px;
+                                                font-weight: 500;
+                                                font-size: 15px;">
+                                            BETA
+                                        </strong>
+                                    </a>
                                 </div>
                                 <div class="collapse navbar-collapse" id="myNavbar">
                                     <ul class="nav navbar-nav navbar-right">

@@ -88,7 +88,23 @@
                                     <button type="button" class="navbar-toggle" data-toggle="collapse" id="offcanvas-toggler">
                                         <img src="~/Content/TemplateImg/OtherImages/menu-bar.png" alt="image" />
                                     </button>
-                                    <a class="navbar-brand" href="@QuickUrl.HomeUrl()"><img src="~/Content/TemplateImg/OtherImages/logo.png" alt="image" width="180" /></a>
+
+                                    <div style="display: inline-flex;align-items:center;  justify-content: flex-start;">
+
+                                        <a class="navbar-brand" href="@QuickUrl.HomeUrl()" style="margin-bottom:1px" style="max-width:100%">
+                                            <img src="~/Content/TemplateImg/OtherImages/logo.png" alt="image" width="180" style="margin-top:-6px;" />
+                                        </a>
+
+                                        <strong style="color: #dc3545;
+                                                border: 1px solid rgba(76, 90, 103, 0.5);
+                                                border-radius: 3px;
+                                                padding: 2px 6px;
+                                                font-weight: 500;
+                                                font-size: 15px;
+                                                                                    ">
+                                            BETA
+                                        </strong>
+                                    </div>
                                 </div>
                                 <div class="collapse navbar-collapse" id="myNavbar">
                                     <ul class="nav navbar-nav navbar-right">
@@ -150,7 +166,19 @@
                                     <button type="button" class="navbar-toggle" data-toggle="collapse" id="offcanvas-toggler">
                                         <img src="~/Content/TemplateImg/OtherImages/menu-bar.png" alt="image" />
                                     </button>
-                                    <a class="navbar-brand" href="@QuickUrl.HomeUrl()"><img src="~/Content/TemplateImg/OtherImages/logo.png" alt="image" width="180" /></a>
+                                    <a class="navbar-brand" href="@QuickUrl.HomeUrl()" style="max-width:100%"><img src="~/Content/TemplateImg/OtherImages/logo.png"  alt="image" width="180" style="display:inline;  margin-top:-6px;" />
+                                    
+                                                                                       <strong style="color: #dc3545;
+                                                                                              border: 1px solid rgba(76, 90, 103, 0.5);
+                                                                                              border-radius: 3px;
+                                                                                              padding: 2px 6px;
+                                                                                              font-weight: 500;
+                                                                                              font-size: 15px;">
+                                                                                           BETA
+                                                                                       </strong>
+                                    
+                                    
+                                    </a>
                                 </div>
                                 <div class="collapse navbar-collapse" id="myNavbar">
                                     <ul class="nav navbar-nav navbar-right">
@@ -210,6 +238,7 @@
         <a href="#" class="close-offcanvas"><i class="fa fa-remove"></i></a>
         <div class="offcanvas-inner">
             <a href="@QuickUrl.HomeUrl()"><h3 class="title">momentarily </h3></a>
+
             <ul>
                 <li class="active"><a href="@Url.Action("HowItWorks", "Home")">How it Works</a></li>
                 <li><a href="@Url.Action("FAQ", "Home")">Faq</a></li>
@@ -238,7 +267,7 @@
                                 <i class="fa fa-plus"></i><i class="fa fa-minus"></i>
                             </span>
                         </a>
-
+                            
                         <ul class="collapse" id="collapse-menu-02265" aria-expanded="false">
                             <li><a href="@Url.Action("UserProfile", "User")">My Profile</a></li>
                             <li><a href="@Url.Action("Index", "UserDashboard")">My Dashboard</a></li>

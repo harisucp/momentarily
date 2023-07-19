@@ -92,7 +92,24 @@
                                     <button type="button" class="navbar-toggle" data-toggle="collapse" id="offcanvas-toggler">
                                         <img src="~/Content/TemplateImg/OtherImages/menu-bar.png" alt="image" />
                                     </button>
-                                    <a class="navbar-brand" href="@QuickUrl.HomeUrl()"><img src="~/Content/TemplateImg/OtherImages/logo.png" alt="image" width="180" /></a>
+                                    <div style="display: inline-flex; align-items:center; justify-content: flex-start;">
+                                    
+                                            <a class="navbar-brand" href="@QuickUrl.HomeUrl()" style="margin-bottom:1px" style="max-width:100%">
+                                                <img src="~/Content/TemplateImg/OtherImages/logo.png" alt="image" width="180" style="display:inline; margin-top:-6px;" />
+                                            </a>
+                                        
+                                            <strong   
+                                                        style="color: #dc3545;
+                                                            border: 1px solid rgba(76, 90, 103, 0.5);
+                                                            border-radius: 3px;
+                                                            padding: 2px 6px;
+                                                            font-weight: 500;
+                                                            font-size: 15px;
+                                                        ">
+                                                BETA
+                                            </strong>
+                                       
+                                    </div>
                                 </div>
                                 <div class="collapse navbar-collapse" id="myNavbar">
                                     <ul class="nav navbar-nav navbar-right">
@@ -160,21 +177,33 @@
                                     <button type="button" class="navbar-toggle" data-toggle="collapse" id="offcanvas-toggler">
                                         <img src="~/Content/TemplateImg/OtherImages/menu-bar.png" alt="image" />
                                     </button>
-                                    <a class="navbar-brand" href="@QuickUrl.HomeUrl()"><img src="~/Content/TemplateImg/OtherImages/logo.png" alt="image" width="180" /></a>
+                                    <a class="navbar-brand" href="@QuickUrl.HomeUrl()" style="max-width:100%">
+                                        <img src="~/Content/TemplateImg/OtherImages/logo.png" alt="image" width="180" style="display:inline;  margin-top:-6px;" />
+                                     
+                                            <strong  style="color: #dc3545;
+                                                border: 1px solid rgba(76, 90, 103, 0.5);
+                                                border-radius: 3px;
+                                                padding: 2px 6px;
+                                                font-weight: 500;
+                                                font-size: 15px;">
+                                                BETA
+                                            </strong>
+                                      
+                                    </a>
                                 </div>
                                 <div class="collapse navbar-collapse" id="myNavbar">
                                     <ul class="nav navbar-nav navbar-right">
                                         <li class="active"><a href="@Url.Action("HowItWorks", "Home")">How it Works</a></li>
                                         <li><a href="@Url.Action("FAQ", "Home")">Faq</a></li>
-                                        <li><a href="@Url.Action("index", "sendhelp")">Help</a></li>
-                                        @*<li class="dropdown dropNav covidMenu">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
-                <span> COVID-19</span> <span class="fa fa-angle-down"></span>
-            </a>
-            <ul class="dropdown-menu">
-                <li class="@((IsActiveLink("Index", "covid")||IsActiveLink("PlaceOrder", "covid")) ? "active" : "")"><a href="@Url.Action("Index", "covid")">COVID-19 Products</a></li>
-            </ul>
-        </li>*@
+                                        <li><a href="@Url.Action("ContactUs", "Home")">Help</a></li>
+                                        <li class="dropdown dropNav covidMenu">
+                                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                                                <span> COVID-19</span> <span class="fa fa-angle-down"></span>
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li class="@((IsActiveLink("Index", "covid")||IsActiveLink("PlaceOrder", "covid")) ? "active" : "")"><a href="@Url.Action("Index", "covid")">COVID-19 Products</a></li>
+                                            </ul>
+                                        </li>
 
 
                                         <li><a href="@QuickUrl.RegisterUrl()"><span class="fa fa-user"></span> Sign up</a></li>
@@ -224,12 +253,15 @@
         <a href="#" class="close-offcanvas"><i class="fa fa-remove"></i></a>
         <div class="offcanvas-inner">
             <a href="@QuickUrl.HomeUrl()"><h3 class="title">momentarily </h3></a>
+            <strong class="beta-text">BETA
+
+
+            </strong>
             <ul>
                 <li class="active"><a href="@Url.Action("HowItWorks", "Home")">How it Works</a></li>
                 <li><a href="@Url.Action("FAQ", "Home")">Faq</a></li>
-                @*<li><a href="@Url.Action("ContactUs", "Home")">Help</a></li>*@
-                <li><a href="@Url.Action("index", "sendhelp")">Help</a></li>
-                @*<li class="dropdown dropNav covidMenu">
+                <li><a href="@Url.Action("ContactUs", "Home")">Help</a></li>
+                <li class="dropdown dropNav covidMenu">
                     <a href="#">
                         <span> COVID-19</span> <span role="button" class="offcanvas-menu-toggler collapsed covidDDMenu" data-toggle="collapse" data-target="#covid-menu-02265" aria-expanded="false" aria-controls="collapse-menu-02">
                             <i class="fa fa-plus"></i><i class="fa fa-minus"></i>
@@ -238,7 +270,7 @@
                     <ul class="dropdown-menu" id="covid-menu-02265" aria-expanded="false">
                         <li class="@((IsActiveLink("Index", "covid")||IsActiveLink("PlaceOrder", "covid")) ? "active" : "")"><a href="@Url.Action("Index", "covid")">COVID-19 Products</a></li>
                     </ul>
-                </li>*@
+                </li>
                 @if (!User.Identity.IsAuthenticated && !(User.IsAdmin))
                 {
                     <li><a href="@QuickUrl.RegisterUrl()"><span class="fa fa-user"></span> Sign up</a></li>
@@ -351,6 +383,16 @@
 
 </html>
 <style>
+    @@media (max-width: 767px) {
+  
+}
+
+
+
+
+
+
+
 
     .betaSignUpBtn {
         max-width: 600px;
@@ -672,60 +714,60 @@
 
 
 <script type="text/javascript">
-        var cookiePromptTest = false;
+    var cookiePromptTest = false;
 
-        $(document).ready(function () {
+    $(document).ready(function () {
 
-            if (cookiePromptTest || checkCookie("cookiePrompt") != "on") {
+        if (cookiePromptTest || checkCookie("cookiePrompt") != "on") {
 
-                $(".mainheader").before('<div id="cookie-prompt" class="cookiealert" style="">' +
-                    '<div class="row">' +
-                    '<div class="container">' +
-                    '<span class="cookieCloseBtn"><i class="fa fa-times" aria-hidden="true"></i></span>' +
-                    '<div class="col-md-10 col-sm-9"><p class="text-left">We use cookies and other tracking technologies to improve your browsing experience on our website, to analyze our website traffic, and to understand where our visitors are coming from.Please read our cookie policy for more information. By browsing our website,you consent to our use of cookies and other tracking technologies. <a href="/privacypolicy" target="_blank">Click here</a> for more information. </p></div>' +
-                    '<div class="col-md-2 col-sm-3"><p class="accept"><a href="javascript:void(0);"  onclick="closeCookiePrompt()" class="cookieBtn">Accept Cookies</a></p></div>' +
-                    '</div></div></div>');
-            }
-            else {
-
-            }
-        });
-
-        function closeCookiePrompt() {
-            if (!cookiePromptTest) {
-                createCookie("cookiePrompt", "on", 300);
-            }
-            $("#cookie-prompt").remove();
+            $(".mainheader").before('<div id="cookie-prompt" class="cookiealert" style="">' +
+                '<div class="row">' +
+                '<div class="container">' +
+                '<span class="cookieCloseBtn"><i class="fa fa-times" aria-hidden="true"></i></span>' +
+                '<div class="col-md-10 col-sm-9"><p class="text-left">We use cookies and other tracking technologies to improve your browsing experience on our website, to analyze our website traffic, and to understand where our visitors are coming from.Please read our cookie policy for more information. By browsing our website,you consent to our use of cookies and other tracking technologies. <a href="/privacypolicy" target="_blank">Click here</a> for more information. </p></div>' +
+                '<div class="col-md-2 col-sm-3"><p class="accept"><a href="javascript:void(0);"  onclick="closeCookiePrompt()" class="cookieBtn">Accept Cookies</a></p></div>' +
+                '</div></div></div>');
         }
+        else {
 
-        function createCookie(name, value, days) {
-            if (days) {
-                var date = new Date();
-                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                var expires = "; expires=" + date.toGMTString();
-            }
-            else var expires = "";
-            document.cookie = name + "=" + value + expires + "; path=/";
         }
+    });
 
-        function checkCookie(name) {
-            var nameEQ = name + "=";
-            var ca = document.cookie.split(';');
-            for (var i = 0; i < ca.length; i++) {
-                var c = ca[i];
-                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-                if (c.indexOf(nameEQ) == 0)
-                 return c.substring(nameEQ.length, c.length);
-            }
-            return null;
+    function closeCookiePrompt() {
+        if (!cookiePromptTest) {
+            createCookie("cookiePrompt", "on", 300);
         }
+        $("#cookie-prompt").remove();
+    }
 
-        function eraseCookie(name) {
-            createCookie(name, "", -1);
+    function createCookie(name, value, days) {
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            var expires = "; expires=" + date.toGMTString();
         }
-        $(document).on('click', '.cookieCloseBtn', function () {
-            $("#cookie-prompt").css("display", "none");
-        })
+        else var expires = "";
+        document.cookie = name + "=" + value + expires + "; path=/";
+    }
+
+    function checkCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) == 0)
+                return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
+
+    function eraseCookie(name) {
+        createCookie(name, "", -1);
+    }
+    $(document).on('click', '.cookieCloseBtn', function () {
+        $("#cookie-prompt").css("display", "none");
+    })
 </script>
 <script>
     //$('document').ready(function () {
