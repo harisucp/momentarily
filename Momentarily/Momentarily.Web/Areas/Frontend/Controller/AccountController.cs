@@ -23,6 +23,7 @@ using Apeek.Core.Services;
 using System.Linq;
 using Apeek.Common.Models;
 using Apeek.Entities.Entities;
+using System.Globalization;
 
 namespace Momentarily.Web.Areas.Frontend.Controller
 {
@@ -86,6 +87,10 @@ namespace Momentarily.Web.Areas.Frontend.Controller
                 shape.IsError = true;
                 TempData["NoAccessFooter"] = "NoAccess";
                 ModelState.AddModelError("ViewModel.RecaptchaMessage", "Please verify Google Recaptcha");
+
+                ModelState.SetModelValue("g-Recaptcha-Response", new ValueProviderResult(string.Empty, string.Empty, CultureInfo.InvariantCulture));
+
+                ViewBag.SiteKey = ConfigurationManager.AppSettings["CaptchaSitekey"];
                 // return View(shape);
             }
             var yearDiff = 0;

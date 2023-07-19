@@ -183,8 +183,13 @@ namespace Momentarily.Web.Areas.Frontend.Controller
             {
                 return RedirectToHome();
             }
-          else
+
+            else
             {
+                if (!ModelState.IsValid)
+                {
+                    return View(shape);
+                }
                 _helper.LogOff();
                 Response.Cookies.Remove("Login");
                 DisplayShape(_helper.UserPwd(shape, ModelState));

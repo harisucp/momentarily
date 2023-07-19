@@ -307,7 +307,6 @@
     <Content Include="AdminContent\js\pages\dashboard2.js" />
     <Content Include="AdminContent\js\pages\dashboard3.js" />
     <Content Include="Content\Images\circleloadinganimationOrignal.gif" />
-    <Content Include="Content\Images\Good\5355-89IG2NOaPkaHy4zyvEI22g-Original.jpg" />
     <Content Include="Content\Images\imgpsh_fullsize_anim.png" />
     <Content Include="Content\Images\loading.gif" />
     <Content Include="Areas\Frontend\Views\AdminDashboard\AdminPwd.cshtml" />
@@ -436,6 +435,7 @@
     <Content Include="Areas\Frontend\Views\CAMaster\Index.cshtml" />
     <Content Include="Areas\Frontend\Views\CAMaster\Import.cshtml" />
     <Content Include="Areas\Frontend\Views\AdminDashboard\UserReviews.cshtml" />
+    <Content Include="Areas\Frontend\Views\SendHelp\Index.cshtml" />
     <None Include="bundleconfig.json" />
     <None Include="Content\css\account.scss" />
     <Content Include="Content\css\account.css">
@@ -3297,6 +3297,7 @@
     <Compile Include="Areas\Frontend\Controller\SearchController.cs" />
     <Compile Include="Areas\Frontend\Controller\AccountController.cs" />
     <Compile Include="Areas\Frontend\Controller\HomeController.cs" />
+    <Compile Include="Areas\Frontend\Controller\SendHelpController.cs" />
     <Compile Include="Areas\Frontend\Controller\UserController.cs" />
     <Compile Include="Areas\Frontend\Controller\UserDashboardController.cs" />
     <Compile Include="ControllerHelpers\MomentarilyAccountControllerHelper.cs" />
@@ -3709,6 +3710,7 @@
   <ItemGroup>
     <Folder Include="App_Data\mails\ru\" />
     <Folder Include="App_Data\mails\uk\" />
+    <Folder Include="Content\Images\Good\" />
     <Folder Include="Content\Images\User\" />
     <Folder Include="Content\ImportFies\" />
     <Folder Include="UserContent\charisma-master\bower_components\datatables\examples\examples_support\themes\ui-lightness\images\" />
