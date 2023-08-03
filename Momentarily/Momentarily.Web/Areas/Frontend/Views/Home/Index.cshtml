@@ -953,6 +953,8 @@
     });
     $(document).ready(function () {
 
+        //$('#myModalLayoutNew').modal();
+
         var cbemailId = $("#cbemailId").val();
         var cbphoneno = $("#cbphoneno").val();
 
@@ -1012,9 +1014,9 @@
 
 
         var checkSiteVersion = '@TempData["CheckSiteVersion"]';
-        if (checkSiteVersion != 'Beta') {
-            $(".waterMark").removeClass("waterMark")
-        }
+        //if (checkSiteVersion != 'Beta') {
+        //    $(".waterMark").removeClass("waterMark")
+        //}
 
 
         $("#indexSubmitID").click(function () {
