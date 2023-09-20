@@ -82,6 +82,7 @@
     <Compile Include="Common\RepositoryHelper.cs" />
     <Compile Include="Repositories\IGoodShareDateRepository.cs" />
     <Compile Include="Repositories\Impl\GoodShareDateRepository.cs" />
+    <Compile Include="Repositories\Impl\RepositoryTwilioLogMessages.cs" />
     <Compile Include="Repositories\Impl\RepositoryCancelledRequest.cs" />
     <Compile Include="Repositories\Impl\RepositorySendyList.cs" />
     <Compile Include="Repositories\Impl\RepositoryCAMasterBulkEmail.cs" />
@@ -120,6 +121,7 @@
     <Compile Include="Repositories\Impl\RepositoryUserGood.cs" />
     <Compile Include="Repositories\Impl\RepositoryUserNotification.cs" />
     <Compile Include="Repositories\Impl\RepositoryWebhookReponse.cs" />
+    <Compile Include="Repositories\Impl\RepositoryTwilioMessage.cs" />
     <Compile Include="Repositories\IRepositoryCancelledRequest.cs" />
     <Compile Include="Repositories\IRepositorySendyList.cs" />
     <Compile Include="Repositories\IRepositoryCAMasterBulkEmail.cs" />
@@ -159,6 +161,7 @@
     <Compile Include="Repositories\IRepositoryResolvedDisputeDetail.cs" />
     <Compile Include="Repositories\IRepositoryStockDetail.cs" />
     <Compile Include="Repositories\IRepositorySubscibes.cs" />
+    <Compile Include="Repositories\IRepositoryTwilioLogMessages.cs" />
     <Compile Include="Repositories\IRepositoryUser.cs" />
     <Compile Include="Repositories\IRepositoryUserCoupon.cs" />
     <Compile Include="Repositories\IRepositoryUserGood.cs" />
@@ -166,6 +169,7 @@
     <Compile Include="Repositories\IRepositoryUserNotification.cs" />
     <Compile Include="Repositories\Impl\RepositoryPhoneNumber.cs" />
     <Compile Include="Repositories\IRepositoryWebhookResponse.cs" />
+    <Compile Include="Repositories\IRepositoryTwilioMessage.cs" />
     <Compile Include="Transformers\NHibernateExtensions.cs" />
     <Compile Include="Transformers\ExpandoObjectResultSetTransformer.cs" />
     <Compile Include="Transformers\TransformerValueList.cs" />

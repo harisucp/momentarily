@@ -17,6 +17,7 @@ namespace Apeek.ViewModels.Models
         string GoogleId { get; set; }
         string FacebookId { get; set; }
         bool IgnoreMarketingEmails { get; set; }
+        bool GeneralUpdate { get; set; }
         bool IsAdmin { get; set; }
         bool IsBlocked { get; set; }
         bool IsMobileVerified { get; set; }

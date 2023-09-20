@@ -27,9 +27,10 @@ namespace Momentarily.Web.Areas.Frontend.Controller
         private readonly IMomentarilyUserMessageService _userMessageService;
         private readonly ISendMessageService _emailMessageService;
         private readonly IAccountDataService _accountDataService;
+        private readonly ITwilioNotificationService _twilioNotificationService;
         private readonly PinPaymentService _pinPaymentService;
         public BookingController(IMomentarilyGoodRequestService goodRequestService, IMomentarilyItemDataService goodItemService, IPaymentService paymentService, IMomentarilyUserMessageService userMessageService,
-            ISendMessageService emailMessageService, IAccountDataService accountDataService)
+            ISendMessageService emailMessageService, IAccountDataService accountDataService, ITwilioNotificationService twilioNotificationService)
         {
             _goodRequestService = goodRequestService;
             _goodItemService = goodItemService;
@@ -37,6 +38,7 @@ namespace Momentarily.Web.Areas.Frontend.Controller
             _userMessageService = userMessageService;
             _emailMessageService = emailMessageService;
             _accountDataService = accountDataService;
+            _twilioNotificationService = twilioNotificationService;
             _pinPaymentService = new PinPaymentService();
         }
         [Authorize]
@@ -102,18 +104,20 @@ namespace Momentarily.Web.Areas.Frontend.Controller
         [Authorize]
         [HttpGet]
         public ActionResult CancelRequest(int id)        {            if (!UserId.HasValue || !UserAccess.HasAccess(Privileges.CanViewUsers, UserId) || id == 0)                return RedirectToHome();            var resultRequest = _goodRequestService.GetUserRequest(UserId.Value, id);            if (resultRequest.CreateResult == CreateResult.Success)            {                if (_goodRequestService.CanSeekerCancel(resultRequest.Obj.StatusId))                {                    if (resultRequest.Obj.StatusId == (int)UserRequestStatus.Paid)//if paid
-                    {                        var StartDate = resultRequest.Obj.StartDate.ToString("MM/dd/yyyy");                        var StartTime = resultRequest.Obj.StartTime;                        DateTime startDateTime = DateTime.ParseExact(StartDate + " " + StartTime, "MM/dd/yyyy h:mm tt", CultureInfo.InvariantCulture);                        var Differences = (startDateTime - DateTime.Now).TotalHours;                                                   var payment = _paymentService.GetPaypalPayment(resultRequest.Obj.Id);                            bool refund = RefundCapturedAmount( payment, resultRequest, Differences);                                               _goodRequestService.CancelUserRequest(UserId.Value, id);                        _goodRequestService.AddCancelledRequest(UserId.Value, id);                    }                    else                    {                      var _res = _goodRequestService.CancelUserRequestBeforePayment(UserId.Value, id);                        if(_res)
+                    {                        var StartDate = resultRequest.Obj.StartDate.ToString("MM/dd/yyyy");                        var StartTime = resultRequest.Obj.StartTime;                        DateTime startDateTime = DateTime.ParseExact(StartDate + " " + StartTime, "MM/dd/yyyy h:mm tt", CultureInfo.InvariantCulture);                        var Differences = (startDateTime - DateTime.Now).TotalHours;
+
+                        var payment = _paymentService.GetPaypalPayment(resultRequest.Obj.Id);
+                        bool refund = RefundCapturedAmount(payment, resultRequest, Differences);
+
+                        _goodRequestService.CancelUserRequest(UserId.Value, id);                        _goodRequestService.AddCancelledRequest(UserId.Value, id);                    }                    else                    {
+                        var _res = _goodRequestService.CancelUserRequestBeforePayment(UserId.Value, id);                        if (_res)
                         {
+                            var countryCode = _accountDataService.GetCountryCodeByPhoneNumber(resultRequest.Obj.OwnerPhone);
                             _goodRequestService.AddCancelledRequest(UserId.Value, id);
+                            _twilioNotificationService.CancellationAlert(resultRequest.Obj.OwnerPhone, countryCode, resultRequest.Obj.OwnerId, resultRequest.Obj.GoodName, resultRequest.Obj.StartDate);
                             _emailMessageService.SendEmailCancelBookingByBorrower(resultRequest.Obj.OwnerId, resultRequest.Obj.OwnerName, resultRequest.Obj.OwnerEmail);
-                          
-
                         }
-                        
-
                     }
-
-
                 }            }            return RedirectToAction("Request", new { id = id });        }
 
         [Authorize]

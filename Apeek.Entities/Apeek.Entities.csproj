@@ -123,6 +123,7 @@
     <Compile Include="Entities\DatacolServiceKeys.cs" />
     <Compile Include="Entities\Disputes.cs" />
     <Compile Include="Entities\Dns.cs" />
+    <Compile Include="Entities\Enums\TwilioMessageType.cs" />
     <Compile Include="Entities\EventManager\EventManagerTaskConfig.cs" />
     <Compile Include="Entities\EventManager\QueueItem.cs" />
     <Compile Include="Entities\EventManager\QueueItemDataPoint.cs" />
@@ -175,6 +176,8 @@
     <Compile Include="Entities\Subscribes.cs" />
     <Compile Include="Entities\Translate.cs" />
     <Compile Include="Entities\TranslateCase.cs" />
+    <Compile Include="Entities\TwilioLogMessage.cs" />
+    <Compile Include="Entities\TwilioMessage.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Entities\UserAccountAssociation.cs" />
     <Compile Include="Entities\UserCoupon.cs" />
@@ -256,6 +259,8 @@
     <Compile Include="Mappings\StatusMap.cs" />
     <Compile Include="Mappings\StockDetailMap.cs" />
     <Compile Include="Mappings\SubscribesMap.cs" />
+    <Compile Include="Mappings\TwilioLogMessageMap.cs" />
+    <Compile Include="Mappings\TwilioMessageMap.cs" />
     <Compile Include="Mappings\UserCouponMap.cs" />
     <Compile Include="Mappings\UserGoodMap.cs" />
     <Compile Include="Mappings\UserMap.cs" />

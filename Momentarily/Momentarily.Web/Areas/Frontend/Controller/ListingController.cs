@@ -42,12 +42,13 @@ namespace Momentarily.Web.Areas.Frontend.Controller
         private readonly IPaymentService _paymentService;
         private readonly AccountControllerHelper<MomentarilyRegisterModel> _helper;
         private readonly ISendMessageService _sendMessageService;
+        private readonly ITwilioNotificationService _twilioNotificationService;
 
         public ListingController(IMomentarilyItemDataService itemDataService,
             IMomentarilyItemTypeService typeService, ICategoryService categoryService,
             IMomentarilyGoodRequestService goodRequestService, IMomentarilyUserMessageService userMessageService,
             ISendMessageService emailMessageService, IAccountDataService accountDataService, IPaymentService paymentService,
-            IMomentarilyItemDataService goodItemService, ISendMessageService sendMessageService)
+            IMomentarilyItemDataService goodItemService, ISendMessageService sendMessageService, ITwilioNotificationService twilioNotificationService)
         {
             _itemDataService = itemDataService;
             _typeService = typeService;
@@ -60,6 +61,7 @@ namespace Momentarily.Web.Areas.Frontend.Controller
             _paymentService = paymentService;
             _braintreePaymentsService = new BraintreePaymentsService();
             _sendMessageService = sendMessageService;
+            _twilioNotificationService = twilioNotificationService;
             _helper = new AccountControllerHelper<MomentarilyRegisterModel>();
         }
         [Authorize]
@@ -219,6 +221,9 @@ namespace Momentarily.Web.Areas.Frontend.Controller
                 {
                     _userMessageService.SendApproveGoodRequestMessage(UserId.Value, requestChangeStatus.UserId,
                         requestChangeStatus.Id, QuickUrl);
+                    var phoneNumber = _accountDataService.GetUserPhone(user.Id);
+                    var countryCode = _accountDataService.GetCountryCodeByPhoneNumber(phoneNumber);
+                    _twilioNotificationService.BookingConfirmation(phoneNumber, countryCode, user.Id, result.Obj.GoodName, result.Obj.StartDate);
                     _emailMessageService.SendEmailApproveBookingMessage(user.Email, result.Obj.GoodName,
                         QuickUrl.UserRequestAbsoluteUrl(requestChangeStatus.Id),
                         QuickUrl.RequestPaymentAbsoluteUrl(requestChangeStatus.Id), user.FullName);
@@ -248,6 +253,9 @@ namespace Momentarily.Web.Areas.Frontend.Controller
                             discountAmount = 0;
                             discountType = "";
                         }
+                        var phoneNumber = _accountDataService.GetUserPhone(resultRequest.Obj.UserId);
+                        var countryCode = _accountDataService.GetCountryCodeByPhoneNumber(phoneNumber);
+                        _twilioNotificationService.CancellationAlert(phoneNumber, countryCode, resultRequest.Obj.UserId, resultRequest.Obj.GoodName, resultRequest.Obj.StartDate);
                         _emailMessageService.SendEmailCancelBookingBySharer(resultRequest.Obj.UserId, resultRequest.Obj.UserName, resultRequest.Obj.UserEmail, couponCode);
                     }                }            }
 

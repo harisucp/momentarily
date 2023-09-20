@@ -26,6 +26,7 @@ namespace Apeek.Entities.Mappings
             Map(x => x.GoogleId, "google_id");
             Map(x => x.FacebookId, "facebook_id");
             Map(x => x.IgnoreMarketingEmails, "ignore_marketing_emails");
+            Map(x => x.GeneralUpdate, "general_updates");
             Map(x => x.SendLinkDate, "send_link_date");
             Map(x => x.IsAdmin, "is_admin"); 
             Map(x => x.IsMobileVerified, "is_mobile_verified"); 
