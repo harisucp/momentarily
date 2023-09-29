@@ -222,7 +222,7 @@ namespace Apeek.Core.Services.Impl
                     LiveSecretKey = _settings.Find(x => x.Key == SettingKey.PinPaymentLiveSecretKeyKey).Value,
                     TestPublishKey= _settings.Find(x => x.Key == SettingKey.PinPaymentTestPublishKeyKey).Value,
                     TestSecretKey = _settings.Find(x => x.Key == SettingKey.PinPaymentTestSecretKeyKey).Value
-                };
+                };  
             }
             catch (Exception ex)
             {

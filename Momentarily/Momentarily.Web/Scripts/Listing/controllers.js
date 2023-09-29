@@ -57,7 +57,7 @@ function BookingRequestController(clrDateTime, BookingRequest, ListingService) {
 
     function cancelRequest($event) {
         
-        var userConfirms = confirm("Are You sure You want to cancel Your booking?");
+        var userConfirms = confirm("Are you sure you want to cancel?");
         if (userConfirms) {
             ListingService.cancelRequest();
         } else {

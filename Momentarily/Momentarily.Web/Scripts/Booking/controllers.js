@@ -53,7 +53,7 @@ function BookingRequestController(clrDateTime, BookingService, Request) {
 
     function cancelRequest($event) {
         
-        var userConfirms = confirm("Are You sure You want to cancel Your booking?");
+        var userConfirms = confirm("Are you sure you want to cancel?");
         if (userConfirms) {
             //var requestId = vm.item.Id;
             //BookingService.CancelRequest(requestId);
