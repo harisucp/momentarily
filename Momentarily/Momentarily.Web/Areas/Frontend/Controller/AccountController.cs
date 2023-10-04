@@ -80,7 +80,7 @@ namespace Momentarily.Web.Areas.Frontend.Controller
         [HttpPost]
         [AllowAnonymous]
         public ActionResult Register(Shape<MomentarilyRegisterModel> shape)
-        {
+            {
             string EncodedResponse = Request.Form["g-Recaptcha-Response"];
             string SecretKey = ConfigurationManager.AppSettings["CaptchaSecretKey"].ToString();
             int OTPAllowed = Convert.ToInt32(ConfigurationManager.AppSettings["OTPRequestAllowed"]);
@@ -148,7 +148,7 @@ namespace Momentarily.Web.Areas.Frontend.Controller
                     bool sent = _twilioNotificationService.SendOTPVerificationCode(shape.ViewModel.PhoneNumber, Convert.ToString(shape.ViewModel.CountryId), user.VerificationCode, OTP, user.Id);
 
                     bool isUpdated = _accountDataService.UpdateOTPRequests(user.Id);
-                    if (shape.ViewModel.IgnoreMarketingEmails == false)
+                    if (shape.ViewModel.IgnoreMarketingEmails != false)
                     {
                         _helper.subscribeEmail(SubscriberListId, user.Email, user.FirstName + " " + user.LastName, true);
                         bool saveSubscriber = _helper.saveSubscriber(shape.ViewModel.Email);

@@ -35,51 +35,89 @@ namespace Apeek.Core.Services.Impl
 			_repoTwilioLogMessages = repoTwilioLogMessages;
 			_repUser = repositoryUser;
 		}
+		// Service created by mubeen 
+		//public bool SendMessage(string text, string phoneNumber, string countryCode, string verificationCode, string OTP)
+		//{
+		//	try
+		//	{
+		//		var url = "";
+		//		if (verificationCode != null)
+		//		{
+		//			url = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority +
+		//			HttpContext.Current.Request.ApplicationPath.TrimEnd('/') + "/User/VerifyMobileLink?vc=" + verificationCode;
+		//			string anchor = "<a href='" + url + "'>Verify Me</a>";
+		//			url = anchor;
+
+		//		}
+
+		//		else
+		//		{
+		//			url = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority +
+		//			HttpContext.Current.Request.ApplicationPath.TrimEnd('/') + "/Account/Unsubscribe";
+		//			string anchors = "<a href='" + url + "'>Unsubscribe</a>";
+		//			url = anchors;   
+
+		//		}
+
+		//		TwilioClient.Init(_accountSid, _authToken);
+		//		ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls
+		//											| SecurityProtocolType.Tls11
+		//											| SecurityProtocolType.Tls12
+		//											| SecurityProtocolType.Ssl3;
+		//		var message = MessageResource.Create(
+		//			body: text + "       " + url,
+		//			from: new Twilio.Types.PhoneNumber(_phoneNumber),
+		//			to: new Twilio.Types.PhoneNumber("+" + countryCode + phoneNumber)
+		//		);
+		//		return true;
+		//	}
+
+		//	catch (Exception ex)
+		//	{
+		//		return false;
+		//	}
+		//}
+
+
 		public bool SendMessage(string text, string phoneNumber, string countryCode, string verificationCode, string OTP)
-		{
-			try
-			{
-				var url = "";
-				if (verificationCode != null)
-				{
-					url = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority +
-					HttpContext.Current.Request.ApplicationPath.TrimEnd('/') + "/User/VerifyMobileLink?vc=" + verificationCode;
-					string anchor = "<a href='" + url + "'>Verify Me</a>";
-					url = anchor;
+        {
+            try
+            {
+                var url = "";
+                if (verificationCode != null)
+                {
+                    url = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority +
+                        HttpContext.Current.Request.ApplicationPath.TrimEnd('/') + "/User/VerifyMobileLink?vc=" + verificationCode;
+                }
 
-				}
+                else
+                {
+                    url = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority +
+                        HttpContext.Current.Request.ApplicationPath.TrimEnd('/') + "/Account/Unsubscribe";
+                }
 
-				else
-				{
-					url = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority +
-					HttpContext.Current.Request.ApplicationPath.TrimEnd('/') + "/Account/Unsubscribe";
-					string anchors = "<a href='" + url + "'>Unsubscribe</a>";
-					url = anchors;
-
-				}
-
-				TwilioClient.Init(_accountSid, _authToken);
-				ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls
-													| SecurityProtocolType.Tls11
-													| SecurityProtocolType.Tls12
-													| SecurityProtocolType.Ssl3;
-				var message = MessageResource.Create(
-					body: text + "       " + url,
+                TwilioClient.Init(_accountSid, _authToken);
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls
+                                                       | SecurityProtocolType.Tls11
+                                                       | SecurityProtocolType.Tls12
+                                                       | SecurityProtocolType.Ssl3;
+                var message = MessageResource.Create(
+                    body: text + " " + "<a href='" + url + "'>Link</a>", //" [Link](" + url + ")", //text + " " + url,
 					from: new Twilio.Types.PhoneNumber(_phoneNumber),
-					to: new Twilio.Types.PhoneNumber("+" + countryCode + phoneNumber)
-				);
-				return true;
-			}
+                    to: new Twilio.Types.PhoneNumber("+" + countryCode + phoneNumber)
+                );
+                return true;
+            }
 
-			catch (Exception ex)
-			{
-				return false;
-			}
-		}
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
 
 
 
-		public bool BookingConfirmation(string phoneNumber, string countryCode, int userId, string ItemName, DateTime bookingTime)
+        public bool BookingConfirmation(string phoneNumber, string countryCode, int userId, string ItemName, DateTime bookingTime)
 		{
 			var value = ConvertEnumToString(TwilioMessageType.BookingConfirmation);
 			value = value.Insert(17, ItemName);

@@ -654,7 +654,7 @@ namespace Momentarily.Web.Areas.Frontend.Controller
                     return RedirectToAction("Booking", new { id = model.GoodRequestId });
                 }
             }
-            return RedirectToAction("Booking", new { id = model.GoodRequestId });
+            return RedirectToAction("Booking", new { id = model.GoodRequestId });   
         }
 
 
