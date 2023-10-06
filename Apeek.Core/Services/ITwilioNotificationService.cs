@@ -17,7 +17,7 @@ namespace Apeek.Core.Services
         bool DeliveryStatus(string phoneNumber, string countryCode, int userId);
         bool PickupStatus(string phoneNumber, string countryCode, int userId);
         bool CancellationAlert(string phoneNumber, string countryCode, int userId, string itemName, DateTime dateTime);
-        bool RentalDueDate(string phoneNumber, string countryCode, int userId);
+        bool RentalDueDate(string phoneNumber, string countryCode, int userId,string text);
         bool UpcomingAppointmentsForPickup(string phoneNumber, string countryCode, int userId);
         bool UpcomingAppointmentsForDelivery(string phoneNumber, string countryCode, int userId);
         bool LastMinuteChangesAndUpdates(string phoneNumber, string countryCode, int userId);

@@ -256,13 +256,15 @@ namespace Apeek.Core.Services.Impl
                                         {
                                             Id = req.Id,
                                             GoodName = good.Name,
+                                            StartTime = booking.StartTime,
+                                            EndTime = booking.EndTime,
                                             StartDate = booking.StartDate,
                                             EndDate = booking.EndDate,
                                             CustomerCost = req.CustomerCost,
                                             StatusId = req.StatusId,
                                             GoodImageUrl = (from img in _repositoryGoodImg.Table where img.GoodId == req.GoodId && img.Type == (int)ImageType.Original select img.FileName).FirstOrDefault(),
                                             StatusName = Enum.GetName(typeof(UserRequestStatus), req.StatusId),
-                                            CreateDate = req.CreateDate
+                                            CreateDate = req.CreateDate,
 
                                         }).ToList();
                     //var userRequests = _repGoodRequest.Table.Where(p => p.UserId == userId).ToList();

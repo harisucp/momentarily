@@ -124,7 +124,7 @@ namespace Apeek.Core.Services.Impl
 			value = value.Replace("##########", bookingTime.ToString("dd/MM/yyyy"));
 			value = value.Replace("##########", bookingTime.ToString("hh:mm:ss tt"));
 			User user = GetUser(userId);
-			if (user != null && !user.GeneralUpdate)
+			if (user != null && user.GeneralUpdate)//!user.GeneralUpdate
 			{
 				var messageUpdatedOrNot = UpdateTwilioMessage(userId, TwilioMessageType.BookingConfirmation);
 				if (messageUpdatedOrNot)
@@ -149,7 +149,7 @@ namespace Apeek.Core.Services.Impl
 			value = value.Replace("###", amount);
 			value = value.Insert(19, " " + itemName + " ");
 			User user = GetUser(userId);
-			if (user != null && !user.GeneralUpdate)
+			if (user != null && user.GeneralUpdate)//!user.generalupate
 			{
 
 				var messageUpdatedOrNot = UpdateTwilioMessage(userId, TwilioMessageType.PaymentConfirmation);
@@ -213,7 +213,7 @@ namespace Apeek.Core.Services.Impl
 			value = value.Insert(17, itemName);
 			value = value.Replace("##########", dateTime.ToString("dd/MM/yyyy"));
 			User user = GetUser(userId);
-			if (user != null && !user.GeneralUpdate)
+			if (user != null && user.GeneralUpdate)//!user.GeneralUpdate
 			{
 				var messageUpdatedOrNot = UpdateTwilioMessage(userId, TwilioMessageType.CancellationAlert);
 				if (messageUpdatedOrNot)
@@ -228,19 +228,19 @@ namespace Apeek.Core.Services.Impl
 			}
 			return false;
 		}
-		public bool RentalDueDate(string phoneNumber, string countryCode, int userId)
+		public bool RentalDueDate(string phoneNumber, string countryCode, int userId,string text)
 		{
 			var value = ConvertEnumToString(TwilioMessageType.RentalDueDate);
 			value = value.Insert(26, "Item Name");
 			value = value.Replace("#####", "Date");
 			value = value.Replace("####", "Time");
 			User user = GetUser(userId);
-			if (user != null && !user.GeneralUpdate)
+			if (user != null && user.GeneralUpdate)//!user.GeneralUpdate
 			{
 				var messageUpdatedOrNot = UpdateTwilioMessage(userId, TwilioMessageType.RentalDueDate);
 				if (messageUpdatedOrNot)
-				{
-					var result = SendMessage(TwilioMessageType.RentalDueDate.ToString(), phoneNumber, countryCode, null, null);
+				{//TwilioMessageType.RentalDueDate.ToString()
+					var result = SendMessage(text, phoneNumber, countryCode, null, null);
 					if (result)
 					{
 						SaveTwilioLogMessage(userId, value);

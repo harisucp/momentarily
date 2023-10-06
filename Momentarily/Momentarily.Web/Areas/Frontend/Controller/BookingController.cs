@@ -52,6 +52,42 @@ namespace Momentarily.Web.Areas.Frontend.Controller
             {
                 var goodRequests = result.Obj.OrderByDescending(x => x.CreateDate).AsEnumerable();
                 var shape = _shapeFactory.BuildShape(null, goodRequests, PageName.UserRequests.ToString());
+
+                var user = _accountDataService.GetUser(UserId.Value);
+       
+                //foreach (var booking in goodRequests)
+                //{
+                //    if (user != null)
+                //    {
+                //        var phoneNumber = _accountDataService.GetUserPhone(user.Id);
+                //        var countryCode = _accountDataService.GetCountryCodeByPhoneNumber(phoneNumber);
+                //        _twilioNotificationService.RentalDueDate(phoneNumber, countryCode, user.Id);
+
+                //    }
+
+                //}
+                if (user != null)
+                {
+                    var phoneNumber = _accountDataService.GetUserPhone(user.Id);
+                    var countryCode = _accountDataService.GetCountryCodeByPhoneNumber(phoneNumber);
+
+                    foreach (var booking in goodRequests)
+                    {
+                        var bookingEndTimeStr = booking.EndTime; // Assuming booking.EndTime is a string
+                        DateTime bookingEndTime;
+
+                        if (DateTime.TryParse(bookingEndTimeStr, out bookingEndTime))
+                        {
+                            var timeUntilEnd = bookingEndTime - DateTime.Now;
+                            if (timeUntilEnd.TotalHours <= 24)
+                            {
+                                // Send notification
+                                var text = $"Your rental for {booking.GoodName} is due on {bookingEndTime.ToString("yyyy-MM-dd")} at {bookingEndTime.ToString("HH:mm")}. Please prepare for return.";
+                                _twilioNotificationService.RentalDueDate(phoneNumber, countryCode, user.Id,text);
+                            }
+                        }
+                    }
+                }
                 return DisplayShape(shape);
             }
             return RedirectToHome();

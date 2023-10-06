@@ -9,7 +9,7 @@ namespace Apeek.Entities.Entities.Enums
 {
     public enum TwilioMessageType
     {
-        [EnumMember (Value = "Your booking for  is confirmed for ##### at ####")]
+        [EnumMember (Value = "Your booking for  is confirmed for ########## at ##########")]
         BookingConfirmation = 1,
         [EnumMember(Value = "Payment of ### for  is successful. Your receipt is on its way to your email.")]
         PaymentConfirmation,
@@ -29,7 +29,7 @@ namespace Apeek.Entities.Entities.Enums
         LastMinuteChangesAndUpdates,
         [EnumMember(Value = "Your momentarily verification code is ########.")]
         TemporarySecurityCode,
-        [EnumMember(Value = "Hello, in order to activate your account on momentarily, please enter ######## , or click on this link to activate")]
+        [EnumMember(Value = "Hello, in order to activate your account on momentarily, please enter ########.")]
         SendOTPVerificationCode
     }
 }
