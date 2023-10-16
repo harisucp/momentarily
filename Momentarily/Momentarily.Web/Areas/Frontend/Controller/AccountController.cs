@@ -24,6 +24,7 @@ using System.Linq;
 using Apeek.Common.Models;
 using Apeek.Entities.Entities;
 using System.Globalization;
+using Momentarily.Entities.Entities;
 
 namespace Momentarily.Web.Areas.Frontend.Controller
 {
@@ -41,14 +42,18 @@ namespace Momentarily.Web.Areas.Frontend.Controller
         public static string OTP = "None";
         private readonly IAccountDataService  _accountDataService;
         private readonly ISendMessageService _sendMessageService;
+        private readonly IUserDataService<MomentarilyItem> _userDataService;
+        private readonly ITwilioNotificationService _twilioNotificationService;
         private string RedirectUrl = System.Web.HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + "/Account/SaveUser";
         private string RedirectUrlForLogin = System.Web.HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority)+ "/Account/LoginUser";
-        public AccountController(IAccountDataService accountDataService, ISendMessageService sendMessageService)
+        public AccountController(IAccountDataService accountDataService, ISendMessageService sendMessageService, ITwilioNotificationService twilioNotificationService, IUserDataService<MomentarilyItem> userDataService)
         {
             _helper = new AccountControllerHelper<MomentarilyRegisterModel>();
             _externalLoginHelper = new ExternalLoginControllerHelper();
             _accountDataService = accountDataService;
             _sendMessageService = sendMessageService;
+            _twilioNotificationService = twilioNotificationService;
+            _userDataService = userDataService;
         }
 
 
@@ -75,7 +80,7 @@ namespace Momentarily.Web.Areas.Frontend.Controller
         [HttpPost]
         [AllowAnonymous]
         public ActionResult Register(Shape<MomentarilyRegisterModel> shape)
-        {
+            {
             string EncodedResponse = Request.Form["g-Recaptcha-Response"];
             string SecretKey = ConfigurationManager.AppSettings["CaptchaSecretKey"].ToString();
             int OTPAllowed = Convert.ToInt32(ConfigurationManager.AppSettings["OTPRequestAllowed"]);
@@ -98,7 +103,7 @@ namespace Momentarily.Web.Areas.Frontend.Controller
             int _month = 0;
             int _day = 0;
 
-            if(shape.ViewModel.FirstName != null)
+            if (shape.ViewModel.FirstName != null)
             {
                 shape.ViewModel.FirstName = FirstCharToUpper(shape.ViewModel.FirstName);
             }
@@ -115,7 +120,7 @@ namespace Momentarily.Web.Areas.Frontend.Controller
             }
             TempData["password"] = shape.ViewModel.Password;
             TempData["confirm"] = shape.ViewModel.ConfirmPassword;
-           
+
             if (shape.ViewModel.DateOfBirthday.Year != 1)
             {
                 shape.ViewModel.DateOfBirthday = DateTime.Parse(shape.ViewModel.DateOfBirthday.ToString("MM/dd/yyyy"));
@@ -137,14 +142,24 @@ namespace Momentarily.Web.Areas.Frontend.Controller
                 {
                     // var validateOTP = _helper.ManageOTPRequests(user.Id, OTPAllowed);
                     TwilioSmsSendProviderTest test = new TwilioSmsSendProviderTest();
-                    OTP = test.GenerateOTP();
-                    bool sent = test.SendOTP(OTP, shape.ViewModel.PhoneNumber, user.VerificationCode, Convert.ToString(shape.ViewModel.CountryId));
+                    //OTP = test.GenerateOTP();
+                    //bool sent = test.SendOTP(OTP, shape.ViewModel.PhoneNumber, user.VerificationCode, Convert.ToString(shape.ViewModel.CountryId));
+                    OTP = _twilioNotificationService.GenerateOTP();
+                    bool sent = _twilioNotificationService.SendOTPVerificationCode(shape.ViewModel.PhoneNumber, Convert.ToString(shape.ViewModel.CountryId), user.VerificationCode, OTP, user.Id);
+
                     bool isUpdated = _accountDataService.UpdateOTPRequests(user.Id);
-                    if (shape.ViewModel.IgnoreMarketingEmails == false)
+                    if (shape.ViewModel.IgnoreMarketingEmails != false)
                     {
                         _helper.subscribeEmail(SubscriberListId, user.Email, user.FirstName + " " + user.LastName, true);
                         bool saveSubscriber = _helper.saveSubscriber(shape.ViewModel.Email);
+                    }
 
+                    int userId = user.Id; 
+                    User retrievedUser = _accountDataService.GetUser(userId);
+                    if (retrievedUser != null)
+                    {
+                        bool isGeneralUpdatesEnabled = shape.ViewModel.GeneralUpdate;
+                        //Unsubscribe(userId);
                     }
 
                     //if (shape.ViewModel.IsExternal == true)
@@ -162,7 +177,7 @@ namespace Momentarily.Web.Areas.Frontend.Controller
                     sentmodel.PhoneNumber = shape.ViewModel.PhoneNumber;
                     sentmodel.Email = user.Email;
                     sentmodel.IsVerified = false;
-                    sentmodel.IsMobileVerified = false;
+                    sentmodel.IsMobileVerified = false; 
                     return RedirectToAction("OTPMessageSent", sentmodel);
                 }
             }
@@ -175,8 +190,18 @@ namespace Momentarily.Web.Areas.Frontend.Controller
             return View(shape);
         }
 
+		public ActionResult Unsubscribe(int userId)
+		{
+			var user = _accountDataService.GetUser(userId);
+			if (user != null)
+			{
+				_accountDataService.UpdateGeneralUpdateColumn(userId);
+			}
+			return View();
+		}
 
-        private string FirstCharToUpper(string input)
+
+		private string FirstCharToUpper(string input)
         {
             switch (input)
             {
@@ -304,9 +329,11 @@ namespace Momentarily.Web.Areas.Frontend.Controller
                 var user = _helper.Register(shape, QuickUrl, ModelState, ControllerContext.HttpContext.Request);
                 if (user != null)
                 {
-                    TwilioSmsSendProviderTest test = new TwilioSmsSendProviderTest();
-                    OTP = test.GenerateOTP();
-                    bool sent = test.SendOTP(OTP, shape.ViewModel.PhoneNumber, user.VerificationCode, Convert.ToString(shape.ViewModel.CountryId));
+                    //TwilioSmsSendProviderTest test = new TwilioSmsSendProviderTest();
+                    //OTP = test.GenerateOTP();
+                    //bool sent = test.SendOTP(OTP, shape.ViewModel.PhoneNumber, user.VerificationCode, Convert.ToString(shape.ViewModel.CountryId));
+                    OTP = _twilioNotificationService.GenerateOTP();
+                    bool sent = _twilioNotificationService.SendOTPVerificationCode(shape.ViewModel.PhoneNumber, Convert.ToString(shape.ViewModel.CountryId), user.VerificationCode, OTP, user.Id);
                     bool isUpdated = _accountDataService.UpdateOTPRequests(user.Id);
                     MessageSentModel sentmodel = new MessageSentModel();
                     sentmodel.IsExternal = true;
@@ -551,11 +578,14 @@ namespace Momentarily.Web.Areas.Frontend.Controller
                  validateOTP = _helper.ManageOTPRequests(userId, OTPAllowed);
                 if (validateOTP.Success)
                 {
-                    TwilioSmsSendProviderTest test = new TwilioSmsSendProviderTest();
-                    OTP = test.GenerateOTP();
+                    //TwilioSmsSendProviderTest test = new TwilioSmsSendProviderTest();
+                    //OTP = test.GenerateOTP();
+                    //var countrycode = _accountDataService.GetCountryCodeByPhoneNumber(number);
+                    //bool sent = test.SendOTP(OTP, number, vc, countrycode);
+                    OTP = _twilioNotificationService.GenerateOTP();
                     var countrycode = _accountDataService.GetCountryCodeByPhoneNumber(number);
-                    bool sent = test.SendOTP(OTP, number, vc, countrycode);
-                   if (sent) _accountDataService.UpdateOTPRequests(userId);
+                    bool sent = _twilioNotificationService.SendOTPVerificationCode(number, countrycode, vc, OTP, userId);
+                    if (sent) _accountDataService.UpdateOTPRequests(userId);
                 }
             }
             catch(Exception ex)
@@ -749,9 +779,12 @@ namespace Momentarily.Web.Areas.Frontend.Controller
                 var user = _helper.Register(shape, QuickUrl, ModelState, ControllerContext.HttpContext.Request);
                 if (user != null)
                 {
-                    TwilioSmsSendProviderTest test = new TwilioSmsSendProviderTest();
-                    OTP = test.GenerateOTP();
-                    bool sent = test.SendOTP(OTP, shape.ViewModel.PhoneNumber, user.VerificationCode, Convert.ToString(shape.ViewModel.CountryId));
+                    //TwilioSmsSendProviderTest test = new TwilioSmsSendProviderTest();
+                    //OTP = test.GenerateOTP();
+                    //bool sent = test.SendOTP(OTP, shape.ViewModel.PhoneNumber, user.VerificationCode, Convert.ToString(shape.ViewModel.CountryId));
+                    OTP = _twilioNotificationService.GenerateOTP();
+                    bool sent = _twilioNotificationService.SendOTPVerificationCode(shape.ViewModel.PhoneNumber, Convert.ToString(shape.ViewModel.CountryId), user.VerificationCode, OTP, user.Id);
+
                     bool isUpdated = _accountDataService.UpdateOTPRequests(user.Id);
                     MessageSentModel sentmodel = new MessageSentModel();
                     sentmodel.IsExternal = true;

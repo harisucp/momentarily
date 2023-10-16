@@ -25,6 +25,7 @@ namespace Apeek.Core.Services
         int GetTotalLendersCount();
         int GetTotalBorrowersCount();
         List<User> GetAllUser();
+
         List<Subscribes> GetAllSubscriber();
         int UserBlocked(int userId, bool checkedValue);
 

@@ -31,6 +31,7 @@ namespace Apeek.Entities.Entities
         public virtual string GoogleId { get; set; }
         public virtual string FacebookId { get; set; }
         public virtual bool IgnoreMarketingEmails { get; set; }
+        public virtual bool GeneralUpdate { get; set; }
         public virtual DateTime? SendLinkDate { get; set; }
         public virtual bool IsAdmin { get; set; }
         public virtual bool IsBlocked { get; set; }

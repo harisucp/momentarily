@@ -41,6 +41,7 @@ namespace Momentarily.Web.Areas.Frontend.Controller
         private readonly IMomentarilyItemDataService _itemDataService;
         private readonly AccountControllerHelper<MomentarilyRegisterModel> _helper;
         protected readonly IRepositoryGoodRequest _repGoodRequest;
+        private readonly ITwilioNotificationService _twilioNotificationService;
 
         public PaymentController(IMomentarilyGoodRequestService goodRequestService, IMomentarilyUserMessageService userMessageService,
             IPaymentService paymentService, ISendMessageService sendMessageService,
@@ -48,7 +49,8 @@ namespace Momentarily.Web.Areas.Frontend.Controller
             IMomentarilyAccountDataService accountService,
             IPinPaymentStoreDataService pinPaymentStoreDataService,
             IMomentarilyItemDataService itemDataService,
-            IRepositoryGoodRequest repGoodRequest
+            IRepositoryGoodRequest repGoodRequest,
+            ITwilioNotificationService twilioNotificationService
             )
         {
             _goodRequestService = goodRequestService;
@@ -63,6 +65,7 @@ namespace Momentarily.Web.Areas.Frontend.Controller
             _braintreePaymentsService = new BraintreePaymentsService();
             _helper = new AccountControllerHelper<MomentarilyRegisterModel>();
             _repGoodRequest = repGoodRequest;
+            _twilioNotificationService = twilioNotificationService;
         }
         [Authorize]
         [HttpGet]
@@ -271,8 +274,14 @@ namespace Momentarily.Web.Areas.Frontend.Controller
                         var getUserRequestResult = _goodRequestService.GetUserRequest(UserId.Value, goodRequestId);
                         var sendmessage = _userMessageService.SendPayGoodRequestMessage(UserId.Value, getUserRequestResult.Obj.OwnerId, goodRequestId, QuickUrl);
 
-                        string getPickupLocation = _goodRequestService.getItemPickupLocation(getUserRequestResult.Obj.GoodId);                        var item = _itemDataService.GetItem(getUserRequestResult.Obj.GoodId);                        User sharerInfo = _accountDataService.GetUser(getUserRequestResult.Obj.OwnerId);                        User borrowerInfo = _accountDataService.GetUser(UserId.Value);                        string sharerPhone = _accountDataService.getUserPhoneNumberForTemplate(getUserRequestResult.Obj.OwnerId);                        string borrowerPhone = _accountDataService.getUserPhoneNumberForTemplate(UserId.Value);
+                        string getPickupLocation = _goodRequestService.getItemPickupLocation(getUserRequestResult.Obj.GoodId);                        var item = _itemDataService.GetItem(getUserRequestResult.Obj.GoodId);                        
+                        User sharerInfo = _accountDataService.GetUser(getUserRequestResult.Obj.OwnerId);
+                        var sharerPhoneNumber = _accountDataService.GetUserPhone(sharerInfo.Id);                        var sharerCountryCode = _accountDataService.GetCountryCodeByPhoneNumber(sharerPhoneNumber);                        User borrowerInfo = _accountDataService.GetUser(UserId.Value);                        var borrowerPhoneNumber = _accountDataService.GetUserPhone(borrowerInfo.Id);                        var borrowerCountryCode = _accountDataService.GetCountryCodeByPhoneNumber(borrowerPhoneNumber);                         string sharerPhone = _accountDataService.getUserPhoneNumberForTemplate(getUserRequestResult.Obj.OwnerId);                        string borrowerPhone = _accountDataService.getUserPhoneNumberForTemplate(UserId.Value);
                         //var send = _sendMessageService.SendPaymentEmailTemplate(executedPayment, getUserRequestResult, item.Obj.GoodImageUrl);
+                       
+                        _twilioNotificationService.PaymentConfirmation(borrowerPhoneNumber, borrowerCountryCode, borrowerInfo.Id, getUserRequestResult.Obj.CustomerCost.ToString(), getUserRequestResult.Obj.GoodName);
+                        _twilioNotificationService.PaymentConfirmation(sharerPhoneNumber, sharerCountryCode, sharerInfo.Id, getUserRequestResult.Obj.CustomerCost.ToString(), getUserRequestResult.Obj.GoodName);
+
                         var sendInvoceDetail = _sendMessageService.SendPaymentEmailTemplateInvoiceDetail(executedPayment, getUserRequestResult, item.Obj.GoodImageUrl, sharerInfo, borrowerInfo, sharerPhone, borrowerPhone, getPickupLocation);                        var sendInvoceDetailForOwner = _sendMessageService.SendPaymentEmailTemplateInvoiceDetailForOwnerEmail(executedPayment, getUserRequestResult, item.Obj.GoodImageUrl, sharerInfo, borrowerInfo, sharerPhone, borrowerPhone, getPickupLocation);                        int borrowerId = getUserRequestResult.Obj.UserId;                        string borrowerName = getUserRequestResult.Obj.UserName;                        string borrowerEmail = getUserRequestResult.Obj.UserEmail;
                         //string promoCode = "PR0ABCD12";
                         var couponDetail = _accountDataService.GetDetailThankYouCoupon();                        string couponCode = string.Empty;                        double discountAmount = 0;                        string discountType = string.Empty;                        if (couponDetail != null)                        {                            couponCode = couponDetail.CouponCode;                            discountAmount = couponDetail.CouponDiscount;                            discountType = couponDetail.CouponDiscountType == 1 ? "%" : "$";                        }                        else                        {                            couponCode = "XXXXXXX";                            discountAmount = 0;                            discountType = "";                        }                        string ItemListURL = "/Search/Map?Location=&Latitude=0&Longitude=0&SearchByMap=false&NeLatitude=0&NeLongitude=0&SwLatitude=0&SwLongitude=0&DateStart=%2FDate(1575969961000)%2F&DateEnd=%2FDate(1577179561000)%2F&Page=1&PageSize=21&Radius=25&Keyword=&RentPeriod=1&SortBy=1";                        bool checkIdCouponCodeAlreadyUsed = _goodRequestService.CheckCouponForcurrentUserToSendThankYouTemplate(couponCode, currentuserid, goodRequestId);                        if (!checkIdCouponCodeAlreadyUsed)

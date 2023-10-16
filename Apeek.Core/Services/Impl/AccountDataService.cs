@@ -124,7 +124,7 @@ namespace Apeek.Core.Services.Impl
         }
         public User GetUser(int personId)
         {
-            User user = null;
+            User user = null;   
             Uow.Wrap(u =>
             {
                 user = _repUser.GetUser(personId);
@@ -938,6 +938,27 @@ namespace Apeek.Core.Services.Impl
             }
             return result;
         }
+        public Result<User> UpdateGeneralUpdateColumn(int userId)
+        {
+            var result = new Result<User>(CreateResult.Error, new User());
+
+            Uow.Wrap(u =>
+            {
+                var user = _repUser.GetUser(userId);
+
+                if (user != null)
+                {
+                    user.GeneralUpdate = false;
+                    _repUser.Update(user);
+
+                    result.Obj = user;
+                    result.CreateResult = CreateResult.Success;
+                }
+            });
+
+            return result;
+        }
+
         public void RegenerateVerificationCode(User user)
         {
             Uow.Wrap(u =>

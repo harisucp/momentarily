@@ -31,7 +31,9 @@ namespace Momentarily.Web.Areas.Frontend.Controller
         private readonly BraintreePaymentsService _braintreePaymentsService;
         private string SubscriberListId = "hMFdFOy89j4lo14A6v5zaw";
         private readonly AccountControllerHelper<IRegisterModel> _accountHelper;
-        public UserController()
+        private readonly ITwilioNotificationService _twilioNotificationService;
+
+        public UserController(ITwilioNotificationService twilioNotificationService)
         {
             _helper = new UserControllerHelper();
             _pinPaymentService = new PinPaymentService();
@@ -40,6 +42,7 @@ namespace Momentarily.Web.Areas.Frontend.Controller
             _braintreePaymentsService = new BraintreePaymentsService();
 
             _accountHelper = new AccountControllerHelper<IRegisterModel>();
+            _twilioNotificationService = twilioNotificationService;
         }
         [Authorize]
         [HttpGet]
@@ -153,9 +156,13 @@ namespace Momentarily.Web.Areas.Frontend.Controller
                 {
                     if (result.IsMobileVerified == false)
                     {
-                        TwilioSmsSendProviderTest test = new TwilioSmsSendProviderTest();
-                        string OTP = test.GenerateOTP();
-                        var code = _userService.GetCountryCodeByPhoneNumber(result.PhoneNumber);                        bool sent = test.SendOTP(OTP, result.PhoneNumber, result.VC, code);
+                        //TwilioSmsSendProviderTest test = new TwilioSmsSendProviderTest();
+                        //string OTP = test.GenerateOTP();
+                        //bool sent = test.SendOTP(OTP, result.PhoneNumber, result.VC, code);
+
+                        var code = _userService.GetCountryCodeByPhoneNumber(result.PhoneNumber);
+                        string OTP = _twilioNotificationService.GenerateOTP();
+                        bool sent = _twilioNotificationService.SendOTPVerificationCode(result.PhoneNumber, code, result.VC, OTP, user.Id);
                         AccountController.OTP = OTP;
                        return RedirectToAction("OTPMessageSent", "Account", result);
                     }

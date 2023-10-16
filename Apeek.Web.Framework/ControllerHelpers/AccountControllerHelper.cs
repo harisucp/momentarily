@@ -61,6 +61,7 @@ namespace Apeek.Web.Framework.ControllerHelpers
                 GoogleId = model.GoogleId,
                 FacebookId = model.FacebookId,
                 IgnoreMarketingEmails = model.IgnoreMarketingEmails,
+                GeneralUpdate = model.GeneralUpdate,
                 IsMobileVerified=model.IsMobileVerified,
                 IsAdmin = model.IsAdmin,
                 CreatedDate = DateTime.Now

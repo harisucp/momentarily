@@ -73,6 +73,7 @@ namespace Apeek.Core.Services
         Result<User> Register(string userEmail, string pwd, DateTime dateOfBirthday);
         Result<User> Update(int userId, IUserUpdateModel userUpdateModel);
         Result<User> Update(IUserUpdateModel model, int modBy);
+        Result<User> UpdateGeneralUpdateColumn(int userId);
         Result<User> Register(IRegisterModel model, Func<User> modelToEntityMapper);
         Result<User> ValidatePhonenumber(IRegisterModel model, Func<User> modelToEntityMapper);
         Result<UserUpdateModel> GetUserUpdateModel(int userId);
