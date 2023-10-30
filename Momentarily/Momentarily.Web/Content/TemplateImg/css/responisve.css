@@ -138,6 +138,12 @@
 	#search_button img {
 		width: 16px;
 	}
+	#bell_button img {
+		width: 16px;
+	}
+	#message_button img {
+		width: 16px;
+	}
 	.topHeader .navbar-nav>li:first-child>a {
 		padding: 4px 0;
 	}

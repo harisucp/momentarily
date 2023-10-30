@@ -13,6 +13,7 @@ namespace Apeek.ViewModels.Mappers.Imp
         }
         public UserNotificationViewModel Map(UserNotification source, UserNotificationViewModel dest)
         {
+            dest.Id = source.Id;
             dest.Text = source.Text;
             dest.Url = source.Url;
             return dest;

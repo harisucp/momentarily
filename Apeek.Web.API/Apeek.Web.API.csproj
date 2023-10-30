@@ -168,6 +168,14 @@
       <Project>{DFE859F5-F3E4-40AE-8733-C86C96DA4B93}</Project>
       <Name>Apeek.Web.Framework</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Momentarily\Momentarily.UI.Service\Momentarily.UI.Service.csproj">
+      <Project>{F1A9F0A0-97B0-4AD2-9938-7EAEAE14A79A}</Project>
+      <Name>Momentarily.UI.Service</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Momentarily\Momentarily.ViewModels\Momentarily.ViewModels.csproj">
+      <Project>{2A4330D8-2735-452E-BF30-A3E7CAF599D2}</Project>
+      <Name>Momentarily.ViewModels</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

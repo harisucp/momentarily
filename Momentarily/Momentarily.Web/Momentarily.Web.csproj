@@ -436,6 +436,7 @@
     <Content Include="Areas\Frontend\Views\CAMaster\Import.cshtml" />
     <Content Include="Areas\Frontend\Views\AdminDashboard\UserReviews.cshtml" />
     <Content Include="Areas\Frontend\Views\SendHelp\Index.cshtml" />
+    <Content Include="Areas\Frontend\Views\Notification\Index.cshtml" />
     <None Include="bundleconfig.json" />
     <None Include="Content\css\account.scss" />
     <Content Include="Content\css\account.css">
@@ -748,12 +749,15 @@
     <Content Include="Content\TemplateImg\OtherImages\Kitchen.svg" />
     <Content Include="Content\TemplateImg\OtherImages\logo.png" />
     <Content Include="Content\TemplateImg\OtherImages\menu-bar.png" />
+    <Content Include="Content\TemplateImg\OtherImages\Message.png" />
     <Content Include="Content\TemplateImg\OtherImages\Motorized.svg" />
     <Content Include="Content\TemplateImg\OtherImages\Motorized1.svg" />
+    <Content Include="Content\TemplateImg\OtherImages\Notification.png" />
     <Content Include="Content\TemplateImg\OtherImages\Outdoors.svg" />
     <Content Include="Content\TemplateImg\OtherImages\productimage1.jpg" />
     <Content Include="Content\TemplateImg\OtherImages\productimage2.jpg" />
     <Content Include="Content\TemplateImg\OtherImages\profile-icon.png" />
+    <Content Include="Content\TemplateImg\OtherImages\Search.png" />
     <Content Include="Content\TemplateImg\OtherImages\searchicon.png" />
     <Content Include="Content\TemplateImg\OtherImages\share.png" />
     <Content Include="Content\TemplateImg\OtherImages\sharerimage-bkp.png" />
@@ -3293,6 +3297,7 @@
     <Compile Include="Areas\Frontend\Controller\covidController.cs" />
     <Compile Include="Areas\Frontend\Controller\ListingController.cs" />
     <Compile Include="Areas\Frontend\Controller\MessageController.cs" />
+    <Compile Include="Areas\Frontend\Controller\NotificationController.cs" />
     <Compile Include="Areas\Frontend\Controller\PaymentController.cs" />
     <Compile Include="Areas\Frontend\Controller\SearchController.cs" />
     <Compile Include="Areas\Frontend\Controller\AccountController.cs" />

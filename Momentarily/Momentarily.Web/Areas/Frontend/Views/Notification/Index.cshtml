@@ -1,0 +1,82 @@
+﻿
+@model Apeek.Common.IShape<List<Apeek.Entities.Entities.UserNotification>>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Frontend/Views/Shared/_AccountMenuLayout.cshtml";
+}
+<link href="~/Content/CustomCssFiles/ListingPage.css" rel="stylesheet" />
+<div class="content">
+    <div class="account listing">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9 col-md-offset-3">
+                    <div class="listing-container">
+                        <div class="title-block separated-block">
+                            <h1 class="left-align">Notifications</h1>
+                            @if (Model.ViewModel.Count() == 0)
+                            {
+                                <a href="#" id="add-new-button1" class="btn right-align disabled" style="padding-top: 24px;">Mark all as read</a>
+                            }
+                            else
+                            {
+                        <a href="@Url.Action("MarkAllRead","Notification")" id="add-new-button1" class="btn right-align" style="padding-top: 24px;">Mark all as read</a>
+                            }
+                        </div>
+                        @if (Model.ViewModel.Count() == 0)
+                        {
+                            <div class="list-empty">You have no Notifications!</div>
+                        }
+                        else
+                        {
+                            <div class="list">
+                                @foreach (var item in Model.ViewModel)
+                                {
+                                    <div class="item clearfix" style="display: flex; align-items: center;">
+                                        <div class="left-align left-col-listing">
+                                            <div>
+                                                <a href="@item.Url" class="mark-read" style="color: #000000;" data-id="@item.Id" data-url="@item.Url" data-target="mark-read-link">@item.Text</a>
+                                            </div>
+                                        </div>
+                                        <div class="right-align" style="color: #f03a3a;">
+                                            <a href="@Url.Action("MarkRead", "Notification", new { id = item.Id })" style="padding-top: 0px;">Mark as read</a>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    @@media (min-width: 992px) {
+        .account .list .item {
+            padding: 0px 30px 0px !important;
+        }
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        $('.mark-read').click(function (event) {
+            event.preventDefault();
+            var id = $(this).data('id');
+            var url = $(this).data('url');
+            var target = $(this).data('target');
+            $.ajax({
+                url: '@Url.Action("MarkRead", "Notification")',
+                type: 'POST',
+                data: { id: id },
+                success: function (data) {
+                },
+                error: function (error) {
+                }
+            });
+            window.location.href = url;
+        });
+    });
+</script>
+

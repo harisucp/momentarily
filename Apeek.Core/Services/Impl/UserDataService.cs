@@ -535,5 +535,10 @@ namespace Apeek.Core.Services.Impl
                 _repBookingRank.Update(goodBookingRank);                result = true;            }, null, LogSource.PersonService);            return result;
         }
 
+        public bool UpdateIsViewedNotification(int id)
+        {
+            bool result = false;            Uow.Wrap(u =>            {                var good = _repGood.Table.Where(x => x.Id == id).FirstOrDefault();                good.IsViewed = true;
+                _repGood.SaveOrUpdate(good);                result = true;            }, null, LogSource.PersonService);            return result;
+        }
     }
 }

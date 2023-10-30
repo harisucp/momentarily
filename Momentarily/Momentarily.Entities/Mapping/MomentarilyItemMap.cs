@@ -20,6 +20,7 @@ namespace Momentarily.Entities.Mapping
             Map(x => x.RentPeriodMonth, "rent_period_month");
             Map(x => x.AgreeToDeliver, "agree_to_deliver");
             Map(x => x.AgreeToShareImmediately, "agree_to_share_immediately");
+            Map(x => x.IsViewed, "is_viewed");
             HasOne(x => x.GoodLocation);
             HasOne(x => x.StartEndDate);
             HasMany(x => x.GoodImages)

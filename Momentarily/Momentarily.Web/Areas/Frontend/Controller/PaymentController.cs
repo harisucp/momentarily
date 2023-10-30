@@ -23,6 +23,7 @@ using RestSharp;
 using Apeek.Web.Framework.ControllerHelpers;
 using Apeek.Common.Logger;
 using Apeek.NH.Repository.Repositories;
+using Apeek.ViewModels.Models;
 //using PayPal.Api;
 namespace Momentarily.Web.Areas.Frontend.Controller
 {
@@ -42,6 +43,7 @@ namespace Momentarily.Web.Areas.Frontend.Controller
         private readonly AccountControllerHelper<MomentarilyRegisterModel> _helper;
         protected readonly IRepositoryGoodRequest _repGoodRequest;
         private readonly ITwilioNotificationService _twilioNotificationService;
+        private readonly IUserNotificationService _userNotificationService;
 
         public PaymentController(IMomentarilyGoodRequestService goodRequestService, IMomentarilyUserMessageService userMessageService,
             IPaymentService paymentService, ISendMessageService sendMessageService,
@@ -50,7 +52,8 @@ namespace Momentarily.Web.Areas.Frontend.Controller
             IPinPaymentStoreDataService pinPaymentStoreDataService,
             IMomentarilyItemDataService itemDataService,
             IRepositoryGoodRequest repGoodRequest,
-            ITwilioNotificationService twilioNotificationService
+            ITwilioNotificationService twilioNotificationService,
+            IUserNotificationService userNotificationService
             )
         {
             _goodRequestService = goodRequestService;
@@ -66,6 +69,7 @@ namespace Momentarily.Web.Areas.Frontend.Controller
             _helper = new AccountControllerHelper<MomentarilyRegisterModel>();
             _repGoodRequest = repGoodRequest;
             _twilioNotificationService = twilioNotificationService;
+            _userNotificationService = userNotificationService;
         }
         [Authorize]
         [HttpGet]
@@ -281,6 +285,21 @@ namespace Momentarily.Web.Areas.Frontend.Controller
                        
                         _twilioNotificationService.PaymentConfirmation(borrowerPhoneNumber, borrowerCountryCode, borrowerInfo.Id, getUserRequestResult.Obj.CustomerCost.ToString(), getUserRequestResult.Obj.GoodName);
                         _twilioNotificationService.PaymentConfirmation(sharerPhoneNumber, sharerCountryCode, sharerInfo.Id, getUserRequestResult.Obj.CustomerCost.ToString(), getUserRequestResult.Obj.GoodName);
+
+                        var userNotificationBorrower = new UserNotificationCreateModel
+                        {
+                            UserId = borrowerInfo.Id,
+                            Text = $"Payment of ${getUserRequestResult.Obj.CustomerCost.ToString()} for { getUserRequestResult.Obj.GoodName} is successful.",
+                            Url = $"{HttpContext.Request.Url.GetLeftPart(UriPartial.Authority)}/Booking"
+                        };
+                        _userNotificationService.AddNotification(userNotificationBorrower);
+                        var userNotificationSharer = new UserNotificationCreateModel
+                        {
+                            UserId = sharerInfo.Id,
+                            Text = $"Payment of ${getUserRequestResult.Obj.CustomerCost.ToString()} for { getUserRequestResult.Obj.GoodName} is successful.",
+                            Url = $"{HttpContext.Request.Url.GetLeftPart(UriPartial.Authority)}/Listing/RentedItems"
+                        };
+                        _userNotificationService.AddNotification(userNotificationSharer);
 
                         var sendInvoceDetail = _sendMessageService.SendPaymentEmailTemplateInvoiceDetail(executedPayment, getUserRequestResult, item.Obj.GoodImageUrl, sharerInfo, borrowerInfo, sharerPhone, borrowerPhone, getPickupLocation);                        var sendInvoceDetailForOwner = _sendMessageService.SendPaymentEmailTemplateInvoiceDetailForOwnerEmail(executedPayment, getUserRequestResult, item.Obj.GoodImageUrl, sharerInfo, borrowerInfo, sharerPhone, borrowerPhone, getPickupLocation);                        int borrowerId = getUserRequestResult.Obj.UserId;                        string borrowerName = getUserRequestResult.Obj.UserName;                        string borrowerEmail = getUserRequestResult.Obj.UserEmail;
                         //string promoCode = "PR0ABCD12";

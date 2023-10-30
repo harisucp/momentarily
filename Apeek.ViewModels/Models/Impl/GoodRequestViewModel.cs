@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Apeek.Entities.Entities;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Apeek.ViewModels.Models
@@ -62,6 +63,7 @@ namespace Apeek.ViewModels.Models
         public string CouponCode { get; set; }
         public bool IsUsedCoupon { get; set; }
         public int ReasonId { get; set; }
+        public bool IsViewed { get; set; }
         public FinalFeedbackVM finalFeedbackVM { get; set; }
     }
 
