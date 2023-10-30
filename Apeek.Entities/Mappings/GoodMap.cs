@@ -14,6 +14,7 @@ namespace Apeek.Entities.Mappings
             Map(x => x.Price, "price");
             Map(x => x.PricePerWeek, "price_per_week"); 
             Map(x => x.IsArchive, "is_archive");
+            Map(x => x.IsViewed, "is_viewed");
             HasOne(x => x.GoodLocation);
             HasMany(x => x.GoodImages)
                 .KeyColumn("good_id")
@@ -21,6 +22,4 @@ namespace Apeek.Entities.Mappings
                 .Fetch.Join();
         }   
     }
-
-
 }

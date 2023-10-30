@@ -32,13 +32,17 @@ namespace Apeek.Core.Services
         //List<Good> GetAvailableItems();
         double GetTotalEarning();
 
-        List<User> Getnewborrowerslist();        List<User> GetTotalborrowerslist();        List<User> GetnewLenderslist();        List<User> GetTotalLenderslist();
+        List<User> Getnewborrowerslist();
+        List<User> GetTotalborrowerslist();
+        List<User> GetnewLenderslist();
+        List<User> GetTotalLenderslist();
 
-        List<SharedUsers> GetDLLLenderslist();        List<SharedUsers> GetDLLBorrowersList();
+        List<SharedUsers> GetDLLLenderslist();
+        List<SharedUsers> GetDLLBorrowersList();
         string GetCountryCodeByPhoneNumber(string number);
         BookingRankViewModal GetUserReviews(int userid);
 
         bool GetupdateGoodBookingRank(int id);
-
+        bool UpdateIsViewedNotification(int id);
     }
 }

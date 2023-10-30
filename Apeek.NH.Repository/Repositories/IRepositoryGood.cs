@@ -13,5 +13,6 @@ namespace Apeek.NH.Repository.Repositories
 
         List<User> getnewLenderslist();        List<User> gettotalLenderslist();
         List<SharedUsers> getdllLenderslist();        List<SharedUsers> getdllborrowerslist();
+        bool UpdateIsViewedNotification(int id);
     }
 }

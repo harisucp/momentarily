@@ -35,6 +35,6 @@ namespace Apeek.Entities.Entities
         public virtual string CouponCode { get; set; }
         public virtual double PendingAmount { get; set; }
         public virtual bool IsUsedCoupon { get; set; }
-
+        public virtual bool IsViewed { get; set; }
     }
 }

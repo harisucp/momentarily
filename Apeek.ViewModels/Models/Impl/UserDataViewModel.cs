@@ -4,5 +4,6 @@
     {
         public int Id { get; set; }
         public int UnreadMessagesCount { get; set; }
+        public int UserNotification { get; set; }
     }
 }

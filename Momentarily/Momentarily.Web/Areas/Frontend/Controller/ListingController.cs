@@ -43,12 +43,13 @@ namespace Momentarily.Web.Areas.Frontend.Controller
         private readonly AccountControllerHelper<MomentarilyRegisterModel> _helper;
         private readonly ISendMessageService _sendMessageService;
         private readonly ITwilioNotificationService _twilioNotificationService;
+        private readonly IUserNotificationService _userNotificationService;
 
         public ListingController(IMomentarilyItemDataService itemDataService,
             IMomentarilyItemTypeService typeService, ICategoryService categoryService,
             IMomentarilyGoodRequestService goodRequestService, IMomentarilyUserMessageService userMessageService,
             ISendMessageService emailMessageService, IAccountDataService accountDataService, IPaymentService paymentService,
-            IMomentarilyItemDataService goodItemService, ISendMessageService sendMessageService, ITwilioNotificationService twilioNotificationService)
+            IMomentarilyItemDataService goodItemService, ISendMessageService sendMessageService, ITwilioNotificationService twilioNotificationService, IUserNotificationService userNotificationService)
         {
             _itemDataService = itemDataService;
             _typeService = typeService;
@@ -62,6 +63,7 @@ namespace Momentarily.Web.Areas.Frontend.Controller
             _braintreePaymentsService = new BraintreePaymentsService();
             _sendMessageService = sendMessageService;
             _twilioNotificationService = twilioNotificationService;
+            _userNotificationService = userNotificationService;
             _helper = new AccountControllerHelper<MomentarilyRegisterModel>();
         }
         [Authorize]
@@ -223,6 +225,13 @@ namespace Momentarily.Web.Areas.Frontend.Controller
                         requestChangeStatus.Id, QuickUrl);
                     var phoneNumber = _accountDataService.GetUserPhone(user.Id);
                     var countryCode = _accountDataService.GetCountryCodeByPhoneNumber(phoneNumber);
+                    var userNotificationCreateModel = new UserNotificationCreateModel
+                    {
+                        UserId = user.Id,
+                        Text = $"Your booking for {result.Obj.GoodName} is confirmed for {result.Obj.StartDate.ToString("dd/MM/yyyy")} at {result.Obj.StartDate.ToString("hh:mm:ss")}.",
+                        Url = $"{HttpContext.Request.Url.GetLeftPart(UriPartial.Authority)}/Booking"
+                    };
+                    _userNotificationService.AddNotification(userNotificationCreateModel);
                     _twilioNotificationService.BookingConfirmation(phoneNumber, countryCode, user.Id, result.Obj.GoodName, result.Obj.StartDate);
                     _emailMessageService.SendEmailApproveBookingMessage(user.Email, result.Obj.GoodName,
                         QuickUrl.UserRequestAbsoluteUrl(requestChangeStatus.Id),
@@ -255,6 +264,13 @@ namespace Momentarily.Web.Areas.Frontend.Controller
                         }
                         var phoneNumber = _accountDataService.GetUserPhone(resultRequest.Obj.UserId);
                         var countryCode = _accountDataService.GetCountryCodeByPhoneNumber(phoneNumber);
+                        var userNotificationCreateModel = new UserNotificationCreateModel
+                        {
+                            UserId = resultRequest.Obj.OwnerId,
+                            Text = $"Your booking for {resultRequest.Obj.GoodName} on {resultRequest.Obj.StartDate} has been canceled. Check your email for more details.",
+                            Url = $"{HttpContext.Request.Url.GetLeftPart(UriPartial.Authority)}/Booking"
+                        };
+                        _userNotificationService.AddNotification(userNotificationCreateModel);
                         _twilioNotificationService.CancellationAlert(phoneNumber, countryCode, resultRequest.Obj.UserId, resultRequest.Obj.GoodName, resultRequest.Obj.StartDate);
                         _emailMessageService.SendEmailCancelBookingBySharer(resultRequest.Obj.UserId, resultRequest.Obj.UserName, resultRequest.Obj.UserEmail, couponCode);
                     }                }            }
@@ -490,7 +506,7 @@ namespace Momentarily.Web.Areas.Frontend.Controller
                 }
                 //if (!string.IsNullOrWhiteSpace(model.Description))
                 //    model.Description = Regex.Replace(model.Description, @"\r\n?|\n", "<br/>");
-
+                model.IsViewed = false;
                 var result = _itemDataService.SaveUserItem(model, UserId.Value);
 
 

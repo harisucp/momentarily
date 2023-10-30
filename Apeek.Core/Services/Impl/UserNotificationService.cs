@@ -95,5 +95,57 @@ namespace Apeek.Core.Services.Impl
                 Url = quickUrl.UserMessageConversationUrl(authorId)
             });
         }
+
+        public bool SetIsViewedForAllNotification(int userId)
+        {
+            var result = false;
+            try
+            {
+                Uow.Wrap(u =>
+                {
+                    var notifications = _repUserNotification.Table.Where(x => x.UserId == userId && x.IsViewed == false).ToList();
+                    if(notifications.Count() > 0)
+                    {
+                        foreach (var item in notifications)
+                        {
+                            if (item != null)
+                            {
+                                item.IsViewed = true;
+                                _repUserNotification.SaveOrUpdateAudit(item, userId);
+                                result = true;
+                            }
+                        }
+                    }
+                },
+                null,
+                LogSource.UserNotificationService);
+            }
+            catch (Exception ex)
+            {
+                Ioc.Get<IDbLogger>().LogWarning(LogSource.UserNotificationService, string.Format("Set is viewed notification fail. Ex: {0}.", ex));
+            }
+            return result;
+        }
+        public Result<List<UserNotification>> GetNotificationsList(int userId)
+        {
+            var result = new Result<List<UserNotification>>(CreateResult.Error, new List<UserNotification>());
+            try
+            {
+                Uow.Wrap(u =>
+                {
+                    result.Obj = _repUserNotification.Table.Where(p => p.UserId == userId && p.IsViewed != true)
+                    .OrderByDescending(p => p.CreateDate)
+                    .ToList();
+                    result.CreateResult = CreateResult.Success;
+                },
+                null,
+                LogSource.UserNotificationService);
+            }
+            catch (Exception ex)
+            {
+                Ioc.Get<IDbLogger>().LogWarning(LogSource.UserNotificationService, string.Format("Get notifications fail. Ex: {0}.", ex));
+            }
+            return result;
+        }
     }
 }

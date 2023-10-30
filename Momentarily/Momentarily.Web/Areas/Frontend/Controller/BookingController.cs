@@ -15,6 +15,9 @@ using Apeek.Common.Models;
 using System.Globalization;
 using System.Collections.Generic;
 using Apeek.Entities.Entities;
+using System.Security.Policy;
+using Apeek.NH.Repository.Repositories;
+using Momentarily.Entities.Entities;
 
 namespace Momentarily.Web.Areas.Frontend.Controller
 {
@@ -28,9 +31,12 @@ namespace Momentarily.Web.Areas.Frontend.Controller
         private readonly ISendMessageService _emailMessageService;
         private readonly IAccountDataService _accountDataService;
         private readonly ITwilioNotificationService _twilioNotificationService;
+        private readonly IUserNotificationService _userNotificationService;
+        private readonly IUserDataService<MomentarilyItem> _userDataService;
         private readonly PinPaymentService _pinPaymentService;
+
         public BookingController(IMomentarilyGoodRequestService goodRequestService, IMomentarilyItemDataService goodItemService, IPaymentService paymentService, IMomentarilyUserMessageService userMessageService,
-            ISendMessageService emailMessageService, IAccountDataService accountDataService, ITwilioNotificationService twilioNotificationService)
+            ISendMessageService emailMessageService, IAccountDataService accountDataService, ITwilioNotificationService twilioNotificationService,IUserNotificationService userNotificationService, IUserDataService<MomentarilyItem> userDataService)
         {
             _goodRequestService = goodRequestService;
             _goodItemService = goodItemService;
@@ -39,6 +45,8 @@ namespace Momentarily.Web.Areas.Frontend.Controller
             _emailMessageService = emailMessageService;
             _accountDataService = accountDataService;
             _twilioNotificationService = twilioNotificationService;
+            _userNotificationService = userNotificationService;
+            _userDataService = userDataService;
             _pinPaymentService = new PinPaymentService();
         }
         [Authorize]
@@ -54,36 +62,32 @@ namespace Momentarily.Web.Areas.Frontend.Controller
                 var shape = _shapeFactory.BuildShape(null, goodRequests, PageName.UserRequests.ToString());
 
                 var user = _accountDataService.GetUser(UserId.Value);
-       
-                //foreach (var booking in goodRequests)
-                //{
-                //    if (user != null)
-                //    {
-                //        var phoneNumber = _accountDataService.GetUserPhone(user.Id);
-                //        var countryCode = _accountDataService.GetCountryCodeByPhoneNumber(phoneNumber);
-                //        _twilioNotificationService.RentalDueDate(phoneNumber, countryCode, user.Id);
 
-                //    }
-
-                //}
                 if (user != null)
                 {
                     var phoneNumber = _accountDataService.GetUserPhone(user.Id);
                     var countryCode = _accountDataService.GetCountryCodeByPhoneNumber(phoneNumber);
-
+                    
                     foreach (var booking in goodRequests)
                     {
-                        var bookingEndTimeStr = booking.EndTime; // Assuming booking.EndTime is a string
+                        var bookingEndTimeStr = booking.EndTime; 
                         DateTime bookingEndTime;
 
                         if (DateTime.TryParse(bookingEndTimeStr, out bookingEndTime))
                         {
+                            var text = $"Your rental for {booking.GoodName} is due on {bookingEndTime.ToString("yyyy-MM-dd")} at {bookingEndTime.ToString("HH:mm")}. Please prepare for return.";
                             var timeUntilEnd = bookingEndTime - DateTime.Now;
-                            if (timeUntilEnd.TotalHours <= 24)
+                            if (timeUntilEnd.TotalHours <= 24 && booking.IsViewed != true && booking.StatusName != "Pending")
                             {
-                                // Send notification
-                                var text = $"Your rental for {booking.GoodName} is due on {bookingEndTime.ToString("yyyy-MM-dd")} at {bookingEndTime.ToString("HH:mm")}. Please prepare for return.";
                                 _twilioNotificationService.RentalDueDate(phoneNumber, countryCode, user.Id,text);
+                                var userNotificationCreateModel = new UserNotificationCreateModel
+                                {
+                                    UserId = user.Id,
+                                    Text = text,
+                                    Url = $"{HttpContext.Request.Url.GetLeftPart(UriPartial.Authority)}/Booking/Request/{booking.Id}"
+                                };
+                                _userNotificationService.AddNotification(userNotificationCreateModel);
+                                _userDataService.UpdateIsViewedNotification(booking.GoodId);
                             }
                         }
                     }
@@ -131,7 +135,17 @@ namespace Momentarily.Web.Areas.Frontend.Controller
                                                         && getUserRequestResult.Obj.StartDate.Date <= getUserRequestResult.Obj.StartDate.AddDays(1).Date ? true : false;
                 getUserRequestResult.Obj.CanReturn = getUserRequestResult.Obj.StatusId == (int)UserRequestStatus.Received
                                                      && getUserRequestResult.Obj.EndDate.Date <= DateTime.Now.Date ? true : false;
-
+                if(getUserRequestResult.Obj.IsViewed != true)
+                {
+                    var userNotificationCreateModel = new UserNotificationCreateModel
+                    {
+                        UserId = getUserRequestResult.Obj.OwnerId,
+                        Text = $"Your booking for {getUserRequestResult.Obj.GoodName} on {getUserRequestResult.Obj.StartDate} has been requested by {getUserRequestResult.Obj.UserName}.",
+                        Url = $"{HttpContext.Request.Url.GetLeftPart(UriPartial.Authority)}/Listing/Booking/{id}"
+                    };
+                    _userNotificationService.AddNotification(userNotificationCreateModel);
+                    _goodRequestService.UpdateIsViewedNotification(id);
+                }
                 var shape = _shapeFactory.BuildShape(null, getUserRequestResult.Obj, PageName.UserRequest.ToString());               
                 return DisplayShape(shape);
             }
@@ -145,11 +159,23 @@ namespace Momentarily.Web.Areas.Frontend.Controller
                         var payment = _paymentService.GetPaypalPayment(resultRequest.Obj.Id);
                         bool refund = RefundCapturedAmount(payment, resultRequest, Differences);
 
-                        _goodRequestService.CancelUserRequest(UserId.Value, id);                        _goodRequestService.AddCancelledRequest(UserId.Value, id);                    }                    else                    {
+                        _goodRequestService.CancelUserRequest(UserId.Value, id);                        _goodRequestService.AddCancelledRequest(UserId.Value, id);                        var userNotificationCreateModel = new UserNotificationCreateModel
+                        {
+                            UserId = resultRequest.Obj.OwnerId,
+                            Text = $"Your booking for {resultRequest.Obj.GoodName} on {resultRequest.Obj.StartDate} has been canceled. Check your email for more details.",
+                            Url = $"{HttpContext.Request.Url.GetLeftPart(UriPartial.Authority)}/Booking/Request/{id}"
+                        };                        _userNotificationService.AddNotification(userNotificationCreateModel);                    }                    else                    {
                         var _res = _goodRequestService.CancelUserRequestBeforePayment(UserId.Value, id);                        if (_res)
                         {
                             var countryCode = _accountDataService.GetCountryCodeByPhoneNumber(resultRequest.Obj.OwnerPhone);
                             _goodRequestService.AddCancelledRequest(UserId.Value, id);
+                            var userNotificationCreateModel = new UserNotificationCreateModel
+                            {
+                                UserId = resultRequest.Obj.OwnerId,
+                                Text = $"Your booking for {resultRequest.Obj.GoodName} on {resultRequest.Obj.StartDate} has been canceled. Check your email for more details.",
+                                Url = $"{HttpContext.Request.Url.GetLeftPart(UriPartial.Authority)}/Booking"
+                            };
+                            _userNotificationService.AddNotification(userNotificationCreateModel);
                             _twilioNotificationService.CancellationAlert(resultRequest.Obj.OwnerPhone, countryCode, resultRequest.Obj.OwnerId, resultRequest.Obj.GoodName, resultRequest.Obj.StartDate);
                             _emailMessageService.SendEmailCancelBookingByBorrower(resultRequest.Obj.OwnerId, resultRequest.Obj.OwnerName, resultRequest.Obj.OwnerEmail);
                         }

@@ -421,6 +421,14 @@ body.offcanvas .offcanvas-overlay {
     }
     .topHeader .navbar-nav > li a#search_button img { width: 18px;
     }
+    .topHeader .navbar-nav > li a#bell_button { padding: 2px 8px;
+    }
+    .topHeader .navbar-nav > li a#bell_button img { width: 18px;
+    }
+    .topHeader .navbar-nav > li a#message_button { padding: 2px 8px;
+    }
+    .topHeader .navbar-nav > li a#message_button img { width: 18px;
+    }
 }
 
 @media(max-width:767px) {

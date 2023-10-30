@@ -41,7 +41,6 @@ namespace Apeek.Common
     }
     [Flags]
     public enum PageName : ulong    {        Other = 1,        Admin = 1 << 1,        Users = 1 << 2,        AdminPwd = 3 << 1,        Home = 2 << 0,        Create = 2 << 1,        Contactus = 2 << 2,        Location = 2 << 3,        PersonList = 2 << 4,        UserServices = 2 << 5,        UserSettings = 2 << 6,        VerifyUserEmailSent = 2 << 7,        Login = 2 << 8,        LoginMessageSent = 2 << 9,        UserPwd = 2 << 10,        UserEmail = 2 << 11,        UserInfo = 2 << 12,        UserInfoPreview = 2 << 13,        UserAccountAssociations = 2 << 14,        NotFound = 2 << 15,        Service = 2 << 16,        User = 2 << 17,        UsersWithService = 2 << 18,        Register = 2 << 19,        UserProfile = 2 << 20,        UserMessage = 2 << 21,        UserMessageConversation = 2 << 22,        UserRequest = 2 << 23,        UserRequests = 2 << 24,        GoodRequest = 2 << 25,        GoodRequests = 2 << 26,        GoodRequestDecline = 2 << 27,        Listing = 2 << 28,        Search = 2 << 29
-
     }
     public enum Cases
     {

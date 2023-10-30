@@ -202,7 +202,7 @@ namespace Apeek.Core.Services.Impl
                             result.Obj.CouponCode = userRequest.CouponCode;
                             result.Obj.CouponDiscount = userRequest.DiscountAmount;
                             result.Obj.StartTime = userRequest.GoodBooking.StartTime;                            result.Obj.EndTime = userRequest.GoodBooking.EndTime;
-
+                            result.Obj.IsViewed = userRequest.GoodBooking.GoodRequest.IsViewed;
                         }
                         result.Obj.GoodImageUrl = userRequest.Good.GoodImages.ImageUrlNormal(0, ImageFolder.Good.ToString(), false);
                         result.CreateResult = CreateResult.Success;
@@ -265,7 +265,8 @@ namespace Apeek.Core.Services.Impl
                                             GoodImageUrl = (from img in _repositoryGoodImg.Table where img.GoodId == req.GoodId && img.Type == (int)ImageType.Original select img.FileName).FirstOrDefault(),
                                             StatusName = Enum.GetName(typeof(UserRequestStatus), req.StatusId),
                                             CreateDate = req.CreateDate,
-
+                                            GoodId = good.Id,
+                                            IsViewed = good.IsViewed
                                         }).ToList();
                     //var userRequests = _repGoodRequest.Table.Where(p => p.UserId == userId).ToList();
                     if (userRequests.Any())
@@ -1482,6 +1483,12 @@ namespace Apeek.Core.Services.Impl
                 Ioc.Get<IDbLogger>().LogWarning(LogSource.GoodRequestService, string.Format("Failed to add cancelled request:- .", ex));
             }
             return result;
+        }
+
+        public bool UpdateIsViewedNotification(int id)
+        {
+            bool result = false;            Uow.Wrap(u =>            {                var good = _repGoodRequest.Table.Where(x => x.Id == id).FirstOrDefault();                good.IsViewed = true;
+                _repGoodRequest.SaveOrUpdate(good);                result = true;            }, null, LogSource.PersonService);            return result;
         }
     }
 }

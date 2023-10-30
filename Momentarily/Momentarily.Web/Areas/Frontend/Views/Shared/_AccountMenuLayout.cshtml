@@ -15,7 +15,6 @@
                 <div class="container-menu  account-scroll-container">
 
                     <ul class="menu-list left-align">
-
                         <li class="@((IsActiveLink("Index", "Listing") || IsActiveLink("Edit", "Listing") || IsActiveLink("Create", "Listing")  || IsActiveLink("BookingList", "Listing")) ? "active" : "")"><a href="@Url.Action("Index", "Listing")">Manage Listings</a></li>
                         <li class="@((IsActiveLink("Index", "Message") || IsActiveLink("Conversation", "Message") || IsActiveLink("Pay", "Payment")) ? "active" : "")"><a href="@Url.Action("Index", "Message")">My Messages {{shared.hasUnreadMessages()?'('+shared.UserData.UnreadMessagesCount+')':''}}</a></li>
                         <li class="@((IsActiveLink("Index", "Booking") || IsActiveLink("Request", "Booking")) ? "active" : "")"><a href="@Url.Action("Index", "Booking")">Borrowing</a></li>
@@ -23,6 +22,10 @@
                         <li class="@((IsActiveLink("RentedItems", "Listing") || IsActiveLink("Booking", "Listing")) ? "active" : "")"><a href="@Url.Action("RentedItems", "Listing")">Sharing</a></li>
 
                         <li class="@((IsActiveLink(QuickUrl.RouteUserProfile()) || IsActiveLink("UserEmail", "User") || IsActiveLink("UserPwd", "User") || IsActiveLink("BankInfo", "User")) ? "active" : "")"><a href="@QuickUrl.UserProfileUrl()">Account Settings</a></li>
+                        <li class="@(HttpContext.Current.Request.Url.AbsolutePath.Equals("/Notification", StringComparison.OrdinalIgnoreCase) ? "active" : "")">
+                            <a href="@Url.Action("Index", "Notification")">Notifications {{shared.UserNotification()?'('+ shared.UserData.UserNotification+')':''}}</a>
+                        </li>
+
                     </ul>
                     <div scroll-arrow-menu="account-scroll-container"></div>
                 </div>

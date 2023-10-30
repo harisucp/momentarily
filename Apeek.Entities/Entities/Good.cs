@@ -42,7 +42,7 @@ namespace Apeek.Entities.Entities
         public virtual UserGood UserGood { get; set; }
         public virtual IEnumerable<long> GoodShareDates { get; set; }
         public virtual string StartTime { get; set; }        public virtual string EndTime { get; set; }
-
+        public virtual bool IsViewed { get; set; }
         protected string GetPropertyValueByName(string name)
         {
             if (GoodPropertyValues.ContainsKey(name))

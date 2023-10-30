@@ -26,7 +26,6 @@ namespace Apeek.Core.Services
         bool NotResponedGoodRequest();
         bool CloseGoodRequest(int userId, int requestId);
         bool CancelGoodRequest(int userId, int requestId);
-
         bool CancelGoodRequestBeforePayment(int userId, int requestId);
         bool CancelUserRequest(int userId, int requestId);
         bool CancelUserRequestBeforePayment(int userId, int requestId);
@@ -64,6 +63,6 @@ namespace Apeek.Core.Services
         bool CheckCouponForcurrentUserToSendThankYouTemplate(string couponCode,int currentUserId,int requestId);
         bool UpdateGoodRequestForCoupon(int currentUserId, int requestId);
         bool AddCancelledRequest(int userId, int requestId);
-
+        bool UpdateIsViewedNotification(int id);
     }
 }

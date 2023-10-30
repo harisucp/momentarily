@@ -107,5 +107,13 @@ namespace Apeek.NH.Repository.Repositories.Impl
                         UserId = u.Id,
                         Name = string.IsNullOrEmpty(u.FullName) ? "" : u.FullName
                     }).ToList();            foreach (var item in list)            {                int count = listNew.Where(x => x.UserId == item.UserId).Count();                if (count > 0)                {                    continue;                }                listNew.Add(item);            }            return listNew;        }
+
+        public bool UpdateIsViewedNotification(int id)
+        {
+            var good = Table.FirstOrDefault(x => x.Id == id);
+            Update(good);
+            if (good != null) return true;
+            return false;
+        }
     }
 }

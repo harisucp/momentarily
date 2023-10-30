@@ -32,7 +32,8 @@ namespace Apeek.Entities.Mappings
             Map(x => x.CouponCode, "coupon_code");
             Map(x => x.PendingAmount, "pending_amount");
             Map(x => x.IsUsedCoupon, "is_used_coupon");
-            
+            Map(x => x.IsViewed, "is_viewed");
+
             References(x => x.User)
                 .Column("user_id")
                 .Not.LazyLoad()
