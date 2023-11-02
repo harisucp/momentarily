@@ -123,8 +123,14 @@ namespace Apeek.Core.Services.Impl
         {
             return _settings.Find(x => x.Key == SettingKey.EmailRental).Value;
         }
-        public string GetEmailHelp()        {            return _settings.Find(x => x.Key == SettingKey.SmtpUserHelp).Value;        }        public string GetEmailMarketing()
-        {            return _settings.Find(x => x.Key == SettingKey.SmtpUserMarketing).Value;        }
+        public string GetEmailHelp()
+        {
+            return _settings.Find(x => x.Key == SettingKey.SmtpUserHelp).Value;
+        }
+        public string GetEmailMarketing()
+        {
+            return _settings.Find(x => x.Key == SettingKey.SmtpUserMarketing).Value;
+        }
         public bool GetIsProduction()
         {
             return bool.Parse(_settings.Find(x => x.Key == SettingKey.IsProduction).Value);
@@ -351,6 +357,9 @@ namespace Apeek.Core.Services.Impl
             //return null;
             return _settings.Find(x => x.Key == SettingKey.BraintreePrivateKey).Value;
         }
-        public string GetBetaVersion()        {            return _settings.Find(x => x.Key == SettingKey.BetaVersionKey).Value;        }
+        public string GetBetaVersion()
+        {
+            return _settings.Find(x => x.Key == SettingKey.BetaVersionKey).Value;
+        }
     }
 }

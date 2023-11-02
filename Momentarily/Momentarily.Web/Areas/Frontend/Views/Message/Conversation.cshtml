@@ -8,7 +8,65 @@
 
 
 <link href="~/Content/CustomCssFiles/MessagePage.css" rel="stylesheet" />
+<style>
+    .background-container {
+        background-color: #ffff; /*#f5f5f5;*/
+        padding: 20px;
+        border: 1px solid #ccc;
+    }
 
+
+    .message-user {
+        /*text-align: right;*/
+        background-color: #ffffff;
+        color: #fff;
+        margin: 5px;
+        padding: 10px;
+        border-radius: 5px;
+        clear: both;
+        float: right;
+        height: 59px;
+        border-radius: 30px 0px 30px 30px;
+        box-shadow: #f1f1f1 0px 0px 6px 5px;
+    }
+
+    .message-recipient {
+        text-align: left;
+        background-color: #f1f4ff;
+        color: #333;
+        margin: 5px;
+        padding: 10px;
+        border-radius: 5px;
+        clear: both;
+        height: 59px;
+        float: left;
+        border-radius: 0px 15px 15px 20px;
+    }
+
+    .messageStyle {
+        margin-top: 13px;
+    }
+
+    .form-conversation {
+        margin-top: 20px;
+    }
+
+    .margin {
+        margin-top: 5px;
+    }
+    .imgStart{margin-left:-19px !important;}
+
+    .textField {
+        height: 40px;
+        border-radius: 7px;
+    }
+
+    .inputArea {
+        background-color: #ffff;
+        border: none;
+    }
+    .imgContent{margin-top:-3px; display:flex; /*justify-content:unset;*/}
+</style>
 
 @*<link href="~/Content/css/messages.css" rel="stylesheet" />*@
 <div class="content" ng-controller="ConversationController as conversation" ng-cloak>
@@ -46,53 +104,67 @@
                                 {{groupedMessage.date | amCalendar: null : conversation.calendarFormats}}
                             </div>
                             <div ng-repeat="message in groupedMessage.messages" ng-class="conversation.isAuthorsMessage(message) ? 'message-user' : 'message-recipient'">
+                                @* <div ng-repeat="message in groupedMessage.messages" ng-class="conversation.isAuthorsMessage(message) ? 'message-user' : 'message-recipient'">*@
+
+                                @*<div class="main-info">
+            <a href="{{'/User/UserPublicProfile/' + message.AuthorId}}" class="user-image-name" target="_blank">
+                <div class="user-name-msg">{{conversation.isAuthorsMessage(message) ? 'You' : message.AuthorUserName}}</div>
+            </a>
+            <div class="date">{{conversation.convertDate(message.DateCreated) | date: 'hh:mm a'}}</div>
+        </div>*@
                                 <div class="main-info">
-                                    <a href="{{'/User/UserPublicProfile/' + message.AuthorId}}" class="user-image-name" target="_blank">
-                                        <div class="user-name-msg">{{conversation.isAuthorsMessage(message) ? 'You' : message.AuthorUserName}}</div>
+                                    <a href="/User/UserPublicProfile/{{ conversation.isAuthorsMessage(message) ? angularConstants.Messages.SenderId : angularConstants.Messages.ReceiverId }}" class="user-image-name imgContent" target="_blank">
+                                        @*<span class="user-image imgStart"><img src="{{ conversation.isAuthorsMessage(message) ? angularConstants.Messages.SenderImageUrl : angularConstants.Messages.ReceiverImageUrl }}" alt="image" /></span>*@
+                                        <span class="user-image imgStart"><img src="~/Content/Img/profile-thumb.svg" alt="image" /></span>
+                                        <div class="user-name-msg ng-binding margin">{{ conversation.isAuthorsMessage(message) ? angularConstants.Messages.SenderName : angularConstants.Messages.ReceiverName }}</div>
                                     </a>
-                                    <div class="date">{{conversation.convertDate(message.DateCreated) | date: 'hh:mm a'}}</div>
+                                    <div class="date ng-binding margin">{{ time }}</div>
                                 </div>
                                 <div class="message-text messageText">
 
                                     <div class="mymessgaeThumbnail">
                                         <a href="@HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority)/Content/MessageImages{{messageImage}}" target="_blank" class="mymessgaeimages" ng-repeat="messageImage in message.PathList">
                                             <span>
-
-                                                <img ng-src="{{conversation.viewModel.messageUrlPath + messageImage}}" alt="image">
+                                                <img src="~/Content/Img/profile-thumb.svg" alt="image" />
+                                                @*<img ng-src="{{conversation.viewModel.messageUrlPath + messageImage}}" alt="image">*@
                                             </span>
                                         </a>
                                     </div>
+
                                     <div ng-show="!message.IsSystem" ng-bind-html="conversation.trustedHtml(message.Message)" class="text"></div>
                                     <div ng-show="message.IsSystem" ng-bind-html="conversation.replaceQuotes(message.Message)"></div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
-                    <div class="type-message clearfix">
-                        <div class="col-md-10 col-md-offset-2">
-                            <form name="send" runat="server" class="form-conversation coversationSection" ng-submit="conversation.submitForm($event, send)" enctype="multipart/form-data">
-                                <span class="user-image"><img ng-src="{{conversation.viewModel.AuthorImageUrl}}" alt="" /></span>
-                                <div class="form-group">
-                                    <textarea name="message" class="form-control" placeholder="Type your message..." ng-model="conversation.message" ng-maxlength="4000" ng-class="{'error-input': (send.message.$dirty || send.$submitted) && (send.message.$error.required || send.message.$error.maxlength)}" rows="3" required></textarea>
-                                    <span class="error-msg" ng-show="(send.message.$dirty || send.$submitted) && send.message.$error.required">
-                                        Required
-                                    </span>
-                                    <span class="error-msg" ng-show="(send.message.$dirty || send.$submitted) && send.message.$error.maxlength">
-                                        Max length 4000
-                                    </span>
-                                </div>
-                                <div class="chooseFileBtnSection">
-                                    <input type="file" multiple name="file" accept=".png, .jpg, .jpeg .gif" class="form-control" file-upload ng-click="conversation.uploading()" />
-                                    <button type="submit" class="btn btn-green">Send</button>
-                                </div>
-                            </form>
+                    <div class="type-message clearfix inputArea">
+                        <div class="col-md-12">
+                            @*col-md-offset-2*@
+                        <form name="send" runat="server" class="form-conversation coversationSection" ng-submit="conversation.submitForm($event, send)" enctype="multipart/form-data">
+                            @*<span class="user-image"><img ng-src="{{conversation.viewModel.AuthorImageUrl}}" alt="" /></span>*@
+                            <div class="form-group">
+                                @*<textarea name="message" class="form-control" placeholder="Type your message..." ng-model="conversation.message" ng-maxlength="4000" ng-class="{'error-input': (send.message.$dirty || send.$submitted) && (send.message.$error.required || send.message.$error.maxlength)}" rows="3" required></textarea>*@
+                                <input type="text" name="message" class="form-control textField" placeholder="Type your message..." ng-model="conversation.message" ng-maxlength="4000" ng-class="{'error-input': (send.message.$dirty || send.$submitted) && (send.message.$error.required || send.message.$error.maxlength)}" required>
+                                <span class="error-msg" ng-show="(send.message.$dirty || send.$submitted) && send.message.$error.required">
+                                    Required
+                                </span>
+                                <span class="error-msg" ng-show="(send.message.$dirty || send.$submitted) && send.message.$error.maxlength">
+                                    Max length 4000
+                                </span>
+                            </div>
+                            <div class="chooseFileBtnSection">
+                                <input type="file" multiple name="file" accept=".png, .jpg, .jpeg .gif" class="form-control" file-upload ng-click="conversation.uploading()" />
+                                <button type="submit" class="btn btn-green">Send</button>
+                            </div>
+                        </form>
 
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 
 @Scripts.Render("~/Scripts/Messages")
@@ -167,9 +239,9 @@
                         var html =
                             '<div ng-repeat="groupedMessage in conversation.groupedMessages" class="grouped ng-scope">' +
                             '<div  class="ng-scope message-recipient"><div class="main-info" >' +
-                            '<a href="/User/UserPublicProfile/' + result.messagelist[i].AuthorId + '" class="user-image-name" target="_blank">' +
-                            '<div class="user-name-msg ng-binding">' + result.messagelist[i].AuthorUserName + '</div></a>' +
-                            '<div class="date ng-binding" >' + time + '</div ></div > ' +
+                            '<a href="/User/UserPublicProfile/' + result.messagelist[i].AuthorId + '"class="user-image-name margin" target="_blank" style="margin-top:10px;">' +
+                            '<div class="user-name-msg ng-binding margin">' + result.messagelist[i].AuthorUserName + '</div></a>' +
+                            '<div class="date ng-binding margin">' + time + '</div ></div > ' +
                             '<div class="message-text messageText"> ' +
                             imagesection+
                             ' <div ng-show="!' + result.messagelist[i].IsSystem + '"  class="text ng-binding newmsgcolor">' + message + '</div>' +

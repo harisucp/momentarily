@@ -15,9 +15,10 @@
                         </div>
                         @if (Model == null || Model.Count() == 0)
                         {
-                            <div class="list-empty" ng-hide="booking.showBookingsList()">
-                                You have no items booked!
-                            </div>
+                    <div class="list-empty" ng-hide="booking.showBookingsList()">
+                        @*You have no items booked!*@
+                        You do not have any items being shared
+                    </div>
                         }
                         else
                         {

@@ -14,7 +14,8 @@
                             <h1 class="left-align">Borrowed Items</h1>
                         </div>
                         <div class="list-empty" ng-hide="booking.showBookingsList()">
-                            You have no items booked!
+                            @*You have no items booked!*@
+                            You do not have any items being shared
                         </div>
                         <div class="list sharedItemList" ng-show="booking.showBookingsList()">
                             <div ng-repeat="item in booking.items" class="item clearfix">

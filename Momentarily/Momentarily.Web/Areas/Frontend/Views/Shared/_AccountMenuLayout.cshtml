@@ -15,6 +15,9 @@
                 <div class="container-menu  account-scroll-container">
 
                     <ul class="menu-list left-align">
+                        <li class="@((IsActiveLink("Index", "UserDashboard")) ? "active" : "")">
+                            <a href="@Url.Action("Index", "UserDashboard")">My Dashboard</a>
+                        </li>
                         <li class="@((IsActiveLink("Index", "Listing") || IsActiveLink("Edit", "Listing") || IsActiveLink("Create", "Listing")  || IsActiveLink("BookingList", "Listing")) ? "active" : "")"><a href="@Url.Action("Index", "Listing")">Manage Listings</a></li>
                         <li class="@((IsActiveLink("Index", "Message") || IsActiveLink("Conversation", "Message") || IsActiveLink("Pay", "Payment")) ? "active" : "")"><a href="@Url.Action("Index", "Message")">My Messages {{shared.hasUnreadMessages()?'('+shared.UserData.UnreadMessagesCount+')':''}}</a></li>
                         <li class="@((IsActiveLink("Index", "Booking") || IsActiveLink("Request", "Booking")) ? "active" : "")"><a href="@Url.Action("Index", "Booking")">Borrowing</a></li>

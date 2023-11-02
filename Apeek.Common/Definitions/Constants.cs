@@ -144,7 +144,7 @@ namespace Apeek.Common
         public const string UserEmailChanged = "Your email has been changed successfully!";
         public const string UserEmailNoChanged = "Oops! We are unable to change your email...";
         public const string UserEmailNoChangedSameEmails = "Oops! Same email...";
-        public const string UserEmailSendChangeMessage = "We have sent email to {0}.Please, confirm email address change.";
+        public const string UserEmailSendChangeMessage = "We have sent email to {0}. Please check your email and confirm your new email address.";
         public const string ConcatUsSend = "Thank you, your message was sent successfully! One of our team will get back to you shortly.";
         public const string AdminPwdChanged = "You have changed your password successfully!";        public const string AdminPwdNoChanged = "Oops! We are unable to change your password...";
     }
