@@ -54,7 +54,10 @@
     .margin {
         margin-top: 5px;
     }
-    .imgStart{margin-left:-19px !important;}
+
+    .imgStart {
+        margin-left: -19px !important;
+    }
 
     .textField {
         height: 40px;
@@ -65,7 +68,11 @@
         background-color: #ffff;
         border: none;
     }
-    .imgContent{margin-top:-3px; display:flex; /*justify-content:unset;*/}
+
+    .imgContent {
+        margin-top: -3px;
+        display: flex; /*justify-content:unset;*/
+    }
 </style>
 
 @*<link href="~/Content/css/messages.css" rel="stylesheet" />*@
@@ -107,11 +114,11 @@
                                 @* <div ng-repeat="message in groupedMessage.messages" ng-class="conversation.isAuthorsMessage(message) ? 'message-user' : 'message-recipient'">*@
 
                                 @*<div class="main-info">
-            <a href="{{'/User/UserPublicProfile/' + message.AuthorId}}" class="user-image-name" target="_blank">
-                <div class="user-name-msg">{{conversation.isAuthorsMessage(message) ? 'You' : message.AuthorUserName}}</div>
-            </a>
-            <div class="date">{{conversation.convertDate(message.DateCreated) | date: 'hh:mm a'}}</div>
-        </div>*@
+                                        <a href="{{'/User/UserPublicProfile/' + message.AuthorId}}" class="user-image-name" target="_blank">
+                                            <div class="user-name-msg">{{conversation.isAuthorsMessage(message) ? 'You' : message.AuthorUserName}}</div>
+                                        </a>
+                                        <div class="date">{{conversation.convertDate(message.DateCreated) | date: 'hh:mm a'}}</div>
+                                    </div>*@
                                 <div class="main-info">
                                     <a href="/User/UserPublicProfile/{{ conversation.isAuthorsMessage(message) ? angularConstants.Messages.SenderId : angularConstants.Messages.ReceiverId }}" class="user-image-name imgContent" target="_blank">
                                         @*<span class="user-image imgStart"><img src="{{ conversation.isAuthorsMessage(message) ? angularConstants.Messages.SenderImageUrl : angularConstants.Messages.ReceiverImageUrl }}" alt="image" /></span>*@
@@ -141,32 +148,49 @@
                     <div class="type-message clearfix inputArea">
                         <div class="col-md-12">
                             @*col-md-offset-2*@
-                        <form name="send" runat="server" class="form-conversation coversationSection" ng-submit="conversation.submitForm($event, send)" enctype="multipart/form-data">
-                            @*<span class="user-image"><img ng-src="{{conversation.viewModel.AuthorImageUrl}}" alt="" /></span>*@
-                            <div class="form-group">
-                                @*<textarea name="message" class="form-control" placeholder="Type your message..." ng-model="conversation.message" ng-maxlength="4000" ng-class="{'error-input': (send.message.$dirty || send.$submitted) && (send.message.$error.required || send.message.$error.maxlength)}" rows="3" required></textarea>*@
-                                <input type="text" name="message" class="form-control textField" placeholder="Type your message..." ng-model="conversation.message" ng-maxlength="4000" ng-class="{'error-input': (send.message.$dirty || send.$submitted) && (send.message.$error.required || send.message.$error.maxlength)}" required>
-                                <span class="error-msg" ng-show="(send.message.$dirty || send.$submitted) && send.message.$error.required">
-                                    Required
-                                </span>
-                                <span class="error-msg" ng-show="(send.message.$dirty || send.$submitted) && send.message.$error.maxlength">
-                                    Max length 4000
-                                </span>
-                            </div>
-                            <div class="chooseFileBtnSection">
-                                <input type="file" multiple name="file" accept=".png, .jpg, .jpeg .gif" class="form-control" file-upload ng-click="conversation.uploading()" />
-                                <button type="submit" class="btn btn-green">Send</button>
-                            </div>
-                        </form>
+                            <form name="send" runat="server" class="form-conversation coversationSection" ng-submit="conversation.submitForm($event, send)" enctype="multipart/form-data">
+                                @*<span class="user-image"><img ng-src="{{conversation.viewModel.AuthorImageUrl}}" alt="" /></span>*@
+                                <div class="form-group">
+                                    <textarea name="message" id="myTextarea" class="form-control" placeholder="Type your message..." ng-model="conversation.message" ng-maxlength="4000" ng-class="{'error-input': (send.message.$dirty || send.$submitted) && (send.message.$error.required || send.message.$error.maxlength)}" rows="3"></textarea>
+                                    @*<textarea id="myTextarea" class="form-control" placeholder="Type your message..." ng-model="conversation.message" ng-maxlength="4000" ng-class="{'error-input': (send.message.$dirty || send.$submitted) && (send.message.$error.required || send.message.$error.maxlength)}" rows="3" style="position: absolute; left: -9999px;"></textarea>*@
 
+
+                                    @*<input type="text" name="message" class="form-control textField" placeholder="Type your message..." ng-model="conversation.message" ng-maxlength="4000" ng-class="{'error-input': (send.message.$dirty || send.$submitted) && (send.message.$error.required || send.message.$error.maxlength)}" required>*@
+                                    @*<textarea id="myTextarea"></textarea>*@
+                                    <span class="error-msg" ng-show="(send.message.$dirty || send.$submitted) && send.message.$error.required">
+                                        Required
+                                    </span>
+                                    <span class="error-msg" ng-show="(send.message.$dirty || send.$submitted) && send.message.$error.maxlength">
+                                        Max length 4000
+                                    </span>
+                                </div>
+                                <div class="chooseFileBtnSection">
+                                    <input type="file" multiple name="file" accept=".png, .jpg, .jpeg .gif" class="form-control" file-upload ng-click="conversation.uploading()" />
+                                    <button type="submit" class="btn btn-green">Send</button>
+                                </div>
+                            </form>
+
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-</div>
+<script src="https://cdn.tiny.cloud/1/bbqe4nbse6dy58ns697vxatdgs1zzp7c1p1gm2c05cqgthvf/tinymce/5/tinymce.min.js"></script>
 
+<script>
+    tinymce.init({
+        menubar: false,
+        statusbar: false,
+        selector: "#myTextarea",
+        plugins: "autoresize link image lists emoticons", 
+        toolbar: "undo redo | bold italic | emoticons",
+        autoresize_bottom_margin: 10,
+        toolbar_sticky: true 
+    });
+
+</script>
 @Scripts.Render("~/Scripts/Messages")
 @Scripts.Render("~/Scripts/Libs/jquery")
 <script src="~/Scripts/Libs/moment.js"></script>
@@ -219,8 +243,9 @@
                             time = time + ' AM'
                         }
                         var message = (result.messagelist[i].Message);
+                        console.log(message);
                         var host = '@HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority)';
-                        message.replace(/\\/g, "");
+                    message.replace(/\\/g, "");
                         var imagesection = "";
 
                         if (result.messagelist[i].PathList != null || result.messagelist[i].PathList.length > 0) {

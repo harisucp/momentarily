@@ -68,14 +68,28 @@ namespace Momentarily.Web.Areas.Frontend.Controller
         }
         [Authorize]
         [HttpGet]
-        public ActionResult Index()        {            if (!UserId.HasValue || !UserAccess.HasAccess(Privileges.CanViewUsers, UserId))                return RedirectToHome();            var usersItems = _itemDataService.GetUsersItems(UserId.Value).OrderByDescending(x => x.CreateDate).ToList();            var shape = _shapeFactory.BuildShape(null, usersItems, PageName.Listing.ToString());            bool getPaypalInfoUser = _accountDataService.getExsistPaypalInfoOrNotInDb(UserId.Value);            TempData["PaypalUserInfo"] = getPaypalInfoUser;            return DisplayShape(shape);        }
+        public ActionResult Index()
+        {
+            if (!UserId.HasValue || !UserAccess.HasAccess(Privileges.CanViewUsers, UserId))
+                return RedirectToHome();
+            var usersItems = _itemDataService.GetUsersItems(UserId.Value).OrderByDescending(x => x.CreateDate).ToList();
+            var shape = _shapeFactory.BuildShape(null, usersItems, PageName.Listing.ToString());
+
+            bool getPaypalInfoUser = _accountDataService.getExsistPaypalInfoOrNotInDb(UserId.Value);
+            TempData["PaypalUserInfo"] = getPaypalInfoUser;
+            return DisplayShape(shape);
+        }
 
         [Authorize]
         [RedirectUserBlockedFilterAttribute]
         [HttpGet]
         public ActionResult Create()
         {
-            bool getPaypalInfoUser = _accountDataService.getExsistPaypalInfoOrNotInDb(UserId.Value);            if (getPaypalInfoUser != true)            {                return RedirectToAction("Index");            }
+            bool getPaypalInfoUser = _accountDataService.getExsistPaypalInfoOrNotInDb(UserId.Value);
+            if (getPaypalInfoUser != true)
+            {
+                return RedirectToAction("Index");
+            }
             ViewBag.Title = "List Item | momentarily";
             ViewBag.Description = "Make money off items you own. Rent out to thousands of potential users waiting to borrow.";
             if (!UserId.HasValue || !UserAccess.HasAccess(Privileges.CanViewUsers, UserId))
@@ -93,7 +107,8 @@ namespace Momentarily.Web.Areas.Frontend.Controller
                 Types = _typeService.GetAllTypes(),
                 Item = MomentarilyItem.CreateEmpty()
             };
-            newModel.Item.StartTime = "09:00 AM";            newModel.Item.EndTime = "06:00 AM";
+            newModel.Item.StartTime = "09:00 AM";
+            newModel.Item.EndTime = "06:00 AM";
 
             // ViewBag.Categories =new MultiSelectList(newModel.Categories,"Key","Value") ;
             return View("Create", newModel);
@@ -124,7 +139,7 @@ namespace Momentarily.Web.Areas.Frontend.Controller
         [HttpPost]
         public ActionResult Create(MomentarilyItem model)
         {
-            if (UserId != null && UserId.HasValue)
+            if (UserId != null && UserId.HasValue) 
             {
                 bool isblocked = _accountDataService.UserBlocked(UserId.Value);
                 if (isblocked)
@@ -242,8 +257,25 @@ namespace Momentarily.Web.Areas.Frontend.Controller
         }
         [Authorize]
         [HttpGet]
-        public ActionResult CancelBooking(int id)        {            if (!UserId.HasValue || !UserAccess.HasAccess(Privileges.CanViewUsers, UserId))                return RedirectToHome();            var resultRequest = _goodRequestService.GetUserRequest(UserId.Value, id);            if (resultRequest != null && resultRequest.Obj != null && resultRequest.CreateResult == CreateResult.Success)            {                if (resultRequest.Obj.StatusId == 5)//if paid
-                {                    var payment = _paymentService.GetPaypalPayment(resultRequest.Obj.Id);                    bool refund = RefundCapturedAmount(payment.CaptureId, resultRequest);                    _goodRequestService.CancelGoodRequest(UserId.Value, id);                    _goodRequestService.AddCancelledRequest(UserId.Value, id);                }                else                {                     var _res = _goodRequestService.CancelGoodRequestBeforePayment(UserId.Value, id);                    if(_res)
+        public ActionResult CancelBooking(int id)
+        {
+            if (!UserId.HasValue || !UserAccess.HasAccess(Privileges.CanViewUsers, UserId))
+                return RedirectToHome();
+            var resultRequest = _goodRequestService.GetUserRequest(UserId.Value, id);
+            if (resultRequest != null && resultRequest.Obj != null && resultRequest.CreateResult == CreateResult.Success)
+            {
+                if (resultRequest.Obj.StatusId == 5)//if paid
+                {
+                    var payment = _paymentService.GetPaypalPayment(resultRequest.Obj.Id);
+                    bool refund = RefundCapturedAmount(payment.CaptureId, resultRequest);
+                    _goodRequestService.CancelGoodRequest(UserId.Value, id);
+                    _goodRequestService.AddCancelledRequest(UserId.Value, id);
+                }
+                else
+                {
+
+                     var _res = _goodRequestService.CancelGoodRequestBeforePayment(UserId.Value, id);
+                    if(_res)
                     {
                         _goodRequestService.AddCancelledRequest(UserId.Value, id);
                         var cuoponDetail = _accountDataService.GetDetailThankYouCoupon();
@@ -273,9 +305,12 @@ namespace Momentarily.Web.Areas.Frontend.Controller
                         _userNotificationService.AddNotification(userNotificationCreateModel);
                         _twilioNotificationService.CancellationAlert(phoneNumber, countryCode, resultRequest.Obj.UserId, resultRequest.Obj.GoodName, resultRequest.Obj.StartDate);
                         _emailMessageService.SendEmailCancelBookingBySharer(resultRequest.Obj.UserId, resultRequest.Obj.UserName, resultRequest.Obj.UserEmail, couponCode);
-                    }                }            }
+                    }
+                }
+            }
 
-            return RedirectToAction("Booking", new { id = id });        }
+            return RedirectToAction("Booking", new { id = id });
+        }
 
         public ActionResult ReleaseItem(int id)
         {
@@ -420,7 +455,14 @@ namespace Momentarily.Web.Areas.Frontend.Controller
                 result.Obj.CanConfirmReturn = result.Obj.StatusId == (int)UserRequestStatus.Returned
                     && result.Obj.EndDate.Date <= DateTime.Now.Date ? true : false;
 
-                FinalFeedbackVM finalFeedbackVM = new FinalFeedbackVM();                finalFeedbackVM.RequestId = result.Obj.Id;                finalFeedbackVM.NoIssue = true;                finalFeedbackVM.Late = false;                finalFeedbackVM.Damaged = false;                finalFeedbackVM.ReturnDate = DateTime.Now;                finalFeedbackVM.ReturnTime = "09:00 AM";                finalFeedbackVM.Claim = 0.00;
+                FinalFeedbackVM finalFeedbackVM = new FinalFeedbackVM();
+                finalFeedbackVM.RequestId = result.Obj.Id;
+                finalFeedbackVM.NoIssue = true;
+                finalFeedbackVM.Late = false;
+                finalFeedbackVM.Damaged = false;
+                finalFeedbackVM.ReturnDate = DateTime.Now;
+                finalFeedbackVM.ReturnTime = "09:00 AM";
+                finalFeedbackVM.Claim = 0.00;
                 result.Obj.finalFeedbackVM = finalFeedbackVM;
 
 
@@ -445,8 +487,11 @@ namespace Momentarily.Web.Areas.Frontend.Controller
                     dd.Url = "/Content/Images/Good/" + dd.FileName;
                 }
             }
-            else            {
-                ModelState.AddModelError("images", "Please select atleast one image.");                ViewBag.Requires = "Please select atleast one image.";            }
+            else
+            {
+                ModelState.AddModelError("images", "Please select atleast one image.");
+                ViewBag.Requires = "Please select atleast one image.";
+            }
             if (model.RentPeriodDay == false)
             {
                 model.Price = 0;
@@ -487,15 +532,31 @@ namespace Momentarily.Web.Areas.Frontend.Controller
                 ViewBag.Requires = "Location Required";
             }
 
-            if (model.StartTime == null)            {                ModelState.AddModelError("StartTime", "StartTime Required");                ViewBag.Requires = "StartTime Required";            }            else            {                TimeSpan Start = DateTime.ParseExact(model.StartTime, "hh:mm tt", CultureInfo.InvariantCulture).TimeOfDay;                DateTime NewTime = DateTime.Today.Add(Start);                model.EndTime = NewTime.AddHours(21).ToString(@"hh:mm tt", CultureInfo.InvariantCulture);            }
-            if (model.MinimumRentPeriod == 0 || model.MinimumRentPeriod == null)            {                ModelState.AddModelError("MinimumRentPeriod", "Minimum Rent Period Required");                ViewBag.Requires = "Minimum Rent Period Required";            }
+            if (model.StartTime == null)
+            {
+                ModelState.AddModelError("StartTime", "StartTime Required");
+                ViewBag.Requires = "StartTime Required";
+            }
+            else
+            {
+                TimeSpan Start = DateTime.ParseExact(model.StartTime, "hh:mm tt", CultureInfo.InvariantCulture).TimeOfDay;
+                DateTime NewTime = DateTime.Today.Add(Start);
+                model.EndTime = NewTime.AddHours(21).ToString(@"hh:mm tt", CultureInfo.InvariantCulture);
+            }
+            if (model.MinimumRentPeriod == 0 || model.MinimumRentPeriod == null)
+            {
+                ModelState.AddModelError("MinimumRentPeriod", "Minimum Rent Period Required");
+                ViewBag.Requires = "Minimum Rent Period Required";
+            }
             else if ((model.RentPeriodDay || model.RentPeriodWeek) && model.MinimumRentPeriod > 21)
             {
-                ModelState.AddModelError("MinimumRentPeriod", "Maximum 21 days allowed for Minimum Rent Period");                ViewBag.Requires = "Maximum 21 days allowed";
+                ModelState.AddModelError("MinimumRentPeriod", "Maximum 21 days allowed for Minimum Rent Period");
+                ViewBag.Requires = "Maximum 21 days allowed";
             }
             else if (!model.RentPeriodDay && model.RentPeriodWeek && model.MinimumRentPeriod < 7)
             {
-                ModelState.AddModelError("MinimumRentPeriod", "Minimum 7 days allowed for Minimum Rent Period");                ViewBag.Requires = "Minimum 7 days allowed for Minimum Rent Period";
+                ModelState.AddModelError("MinimumRentPeriod", "Minimum 7 days allowed for Minimum Rent Period");
+                ViewBag.Requires = "Minimum 7 days allowed for Minimum Rent Period";
 
             }
             if (ModelState.IsValid)
@@ -578,9 +639,51 @@ namespace Momentarily.Web.Areas.Frontend.Controller
         [Authorize]
         [RedirectUserBlockedFilterAttribute]
         [HttpPost]
-        public ActionResult BookingRequest(RequestViewModel requestModel)        {            if (!UserId.HasValue || !UserAccess.HasAccess(Privileges.CanViewUsers, UserId))                return RedirectToHome();            if (UserId != null && UserId.HasValue)            {                bool isblocked = _accountDataService.UserBlocked(UserId.Value);                if (isblocked)                    return RedirectToAction("BlockedUser", "User");            }            if (ModelState.IsValid)            {
+        public ActionResult BookingRequest(RequestViewModel requestModel)
+        {
+            if (!UserId.HasValue || !UserAccess.HasAccess(Privileges.CanViewUsers, UserId))
+                return RedirectToHome();
+            if (UserId != null && UserId.HasValue)
+            {
+                bool isblocked = _accountDataService.UserBlocked(UserId.Value);
+                if (isblocked)
+                    return RedirectToAction("BlockedUser", "User");
+            }
 
-                bool result = _accountDataService.getExsistPaypalInfoOrNotInDb(UserId.Value);                var getItemResult = _goodItemService.GetItem(requestModel.GoodId);                if (getItemResult.CreateResult == CreateResult.Success)                {                    if (!result)                    {                        TempData["paymentDetailNotFound"] = "False";                        return RedirectToAction("BookingRequest", requestModel);                    }                    requestModel.Deposit = getItemResult.Obj.Deposit;                    var saveGoodRequestResult = _goodRequestService.SaveGoodRequest(UserId.Value, requestModel);                    if (saveGoodRequestResult.CreateResult == CreateResult.Success)                    {                        var goodRequest = saveGoodRequestResult.Obj;                        if (getItemResult.Obj.AgreeToShareImmediately)                        {                            var user = _accountDataService.GetUser(UserId.Value);                            if (user != null)                            {                                _userMessageService.SendBookingGoodRequestMessage(UserId.Value,                                goodRequest.Good.UserGood.User.Id,                                goodRequest.Id, QuickUrl);                            }                            if (_goodRequestService.ApproveGoodRequest(getItemResult.Obj.User.Id, goodRequest.Id))                            {                                return RedirectToAction("Pay", "Payment", new { goodRequestId = goodRequest.Id });                            }                        }                        else                        {                            var user = _accountDataService.GetUser(UserId.Value);
+            if (ModelState.IsValid)
+            {
+
+                bool result = _accountDataService.getExsistPaypalInfoOrNotInDb(UserId.Value);
+                var getItemResult = _goodItemService.GetItem(requestModel.GoodId);
+                if (getItemResult.CreateResult == CreateResult.Success)
+                {
+                    if (!result)
+                    {
+                        TempData["paymentDetailNotFound"] = "False";
+                        return RedirectToAction("BookingRequest", requestModel);
+                    }
+                    requestModel.Deposit = getItemResult.Obj.Deposit;
+                    var saveGoodRequestResult = _goodRequestService.SaveGoodRequest(UserId.Value, requestModel);
+                    if (saveGoodRequestResult.CreateResult == CreateResult.Success)
+                    {
+                        var goodRequest = saveGoodRequestResult.Obj;
+                        if (getItemResult.Obj.AgreeToShareImmediately)
+                        {
+                            var user = _accountDataService.GetUser(UserId.Value);
+                            if (user != null)
+                            {
+                                _userMessageService.SendBookingGoodRequestMessage(UserId.Value,
+                                goodRequest.Good.UserGood.User.Id,
+                                goodRequest.Id, QuickUrl);
+                            }
+                            if (_goodRequestService.ApproveGoodRequest(getItemResult.Obj.User.Id, goodRequest.Id))
+                            {
+                                return RedirectToAction("Pay", "Payment", new { goodRequestId = goodRequest.Id });
+                            }
+                        }
+                        else
+                        {
+                            var user = _accountDataService.GetUser(UserId.Value);
                             //string userEmail = _itemDataService.getUserEmail(UserId.Value);
                             //bool checkExsistSubscriber = _helper.ExsistSubscriber(userEmail);
                             //if (checkExsistSubscriber == false)
@@ -589,7 +692,21 @@ namespace Momentarily.Web.Areas.Frontend.Controller
                             //    //string subscribertURL = "/Home/Index";
                             //    var sendMsgSubscriber = _sendMessageService.SendEmailNewsLetterTemplate(userEmail, subscribertURL);
                             //}
-                            if (user != null)                            {                                _userMessageService.SendBookingGoodRequestMessage(UserId.Value,                                goodRequest.Good.UserGood.User.Id,                                goodRequest.Id, QuickUrl);                                var sendOfferReceived = _emailMessageService.SendPaymentEmailTemplateOfferReceivedForSharer(user, goodRequest, QuickUrl.GoodRequestAbsoluteUrl(goodRequest.Id));                                return RedirectToAction("Request", "Booking", new { id = goodRequest.Id });                            }                        }                    }                }            }            return RedirectToAction("Index", "Listing");        }
+                            if (user != null)
+                            {
+                                _userMessageService.SendBookingGoodRequestMessage(UserId.Value,
+                                goodRequest.Good.UserGood.User.Id,
+                                goodRequest.Id, QuickUrl);
+
+                                var sendOfferReceived = _emailMessageService.SendPaymentEmailTemplateOfferReceivedForSharer(user, goodRequest, QuickUrl.GoodRequestAbsoluteUrl(goodRequest.Id));
+                                return RedirectToAction("Request", "Booking", new { id = goodRequest.Id });
+                            }
+                        }
+                    }
+                }
+            }
+            return RedirectToAction("Index", "Listing");
+        }
         [Authorize]
         [HttpGet]
         public ActionResult BookingDispute(int id)
@@ -720,26 +837,47 @@ namespace Momentarily.Web.Areas.Frontend.Controller
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        [Authorize]        [HttpPost]        public ActionResult FinalFeedback(FinalFeedbackVM model)        {            int userid = 0;
+        [Authorize]
+        [HttpPost]
+        public ActionResult FinalFeedback(FinalFeedbackVM model)
+        {
+            int userid = 0;
             userid = UserId.Value;
-            var getgoodRequestData = _goodRequestService.GetGoodRequest(model.RequestId);            var result = _paymentService.SaveFinalFeedback(model, userid);            string status = "";            if (model.NoIssue == true)
+            var getgoodRequestData = _goodRequestService.GetGoodRequest(model.RequestId);
+            var result = _paymentService.SaveFinalFeedback(model, userid);
+            string status = "";
+            if (model.NoIssue == true)
             {
                 status = "No Issue";
             }
             if (model.Late == true)
             {
                 status = "Returned Late";
-            }            if (model.Damaged == true)
+            }
+            if (model.Damaged == true)
             {
                 status = "Returned Damaged";
             }
             if (model.Late == true && model.Damaged == true)
             {
                 status = "Returned Late And Damaged";
-            }            var user = _accountDataService.GetUser(userid);            if (user != null)
+            }
+            var user = _accountDataService.GetUser(userid);
+            if (user != null)
             {
                 var sent = _sendMessageService.SendFinalConfirmation(getgoodRequestData.Obj.UserEmail, status, getgoodRequestData.Obj.UserName, user.FullName == "" ? user.FirstName + " " + user.LastName:user.FullName);
-            }            if (result)            {                return Json("Success", JsonRequestBehavior.AllowGet);            }            else            {                return Json("Failed", JsonRequestBehavior.AllowGet);            }        }
+            }
+
+            if (result)
+            {
+                return Json("Success", JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json("Failed", JsonRequestBehavior.AllowGet);
+
+            }
+        }
 
 
         public ActionResult RentedItems()

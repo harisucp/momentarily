@@ -312,7 +312,7 @@ namespace Momentarily.Web.Areas.Frontend.Controller
         public ActionResult NewLendersList()
         {
           
-            UserListing obj = new UserListing();
+            UserListing obj = new UserListing(); 
             obj.users = _userService.GetnewLenderslist();
 
             return View(obj);

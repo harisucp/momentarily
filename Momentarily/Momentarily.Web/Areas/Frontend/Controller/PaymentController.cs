@@ -259,7 +259,7 @@ namespace Momentarily.Web.Areas.Frontend.Controller
 
         [Authorize]
         [HttpGet]
-        public ActionResult Pay(int goodRequestId = 0)        {            int currentuserid = 0;
+        public ActionResult Pay(int goodRequestId = 0)         {            int currentuserid = 0;
             if (UserId.HasValue)
             {
                 int.TryParse(Convert.ToString(UserId.Value), out currentuserid);

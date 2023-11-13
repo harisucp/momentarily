@@ -1484,7 +1484,7 @@ namespace Apeek.Core.Services.Impl
             }
             return result;
         }
-
+         
         public bool UpdateIsViewedNotification(int id)
         {
             bool result = false;            Uow.Wrap(u =>            {                var good = _repGoodRequest.Table.Where(x => x.Id == id).FirstOrDefault();                good.IsViewed = true;

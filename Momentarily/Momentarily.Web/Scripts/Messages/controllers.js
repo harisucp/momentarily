@@ -1,4 +1,5 @@
-﻿angular
+﻿
+angular
     .module('MomentarilyApp')
     .controller('MessageController', MessageController)
     .controller('ConversationController', ConversationController);
@@ -33,7 +34,7 @@ function MessageController($http, $window, clrDateTime, MessageService, Messages
     }
 }
 
-ConversationController.$inject = ['$http', '$window', '$sce', '$timeout', '$rootScope', '$filter', 'clrDateTime', 'MessageService', 'Messages','$scope'];
+ConversationController.$inject = ['$http', '$window', '$sce', '$timeout', '$rootScope', '$filter', 'clrDateTime', 'MessageService', 'Messages', '$scope'];
 
 function ConversationController($http, $window, $sce, $timeout, $rootScope, $filter, clrDateTime, MessageService, Messages, $scope) {
 
@@ -57,7 +58,7 @@ function ConversationController($http, $window, $sce, $timeout, $rootScope, $fil
         lastWeek: 'MM.DD.YYYY',
         sameElse: 'MM.DD.YYYY'
     };
-
+    vm.message = '';
     (function () {
         setValues();
         setIsReadMessages();
@@ -86,7 +87,7 @@ function ConversationController($http, $window, $sce, $timeout, $rootScope, $fil
             console.log('Error: ', error);
         };
     }
-    
+
 
     function uploading() {
         vm.Files = [];
@@ -124,27 +125,58 @@ function ConversationController($http, $window, $sce, $timeout, $rootScope, $fil
         return message.AuthorId === vm.viewModel.AuthorId;
     }
 
+    //function submitForm($event, form) {
+
+    //    if (form.$invalid) {
+    //        $event.preventDefault();
+    //        form.$submitted = true;
+    //    } else {
+    //        var receiverId = vm.viewModel.ReceiverId;
+
+    //        var data = {
+    //            "AuthorId": vm.viewModel.AuthorId,
+    //            "ReceiverId": receiverId,
+    //            "Message": protectFromQuotes(vm.message),
+    //            "files": vm.Files
+    //        }
+    //        MessageService.PostMessage(data).then(function () {
+    //            $window.location = "/Message/Conversation?userId=" + receiverId;
+    //        }, function (response) {    
+    //            console.log("trouble\n" + response);
+    //        });
+    //    }
+    //}
+
     function submitForm($event, form) {
-        
+        debugger;
         if (form.$invalid) {
             $event.preventDefault();
             form.$submitted = true;
         } else {
+            var editor = tinyMCE.get('myTextarea');
             var receiverId = vm.viewModel.ReceiverId;
-            
-            var data = {
-                "AuthorId": vm.viewModel.AuthorId,
-                "ReceiverId": receiverId,
-                "Message": protectFromQuotes(vm.message),
-                "files": vm.Files
+
+            // Check if vm.message is defined and is a string
+            if (angular.isDefined(vm.message) && angular.isString(vm.message)) {
+                var data = {
+                    "AuthorId": vm.viewModel.AuthorId,
+                    "ReceiverId": receiverId,
+                    "Message": editor.getContent(),//protectFromQuotes(vm.message),
+                    "files": vm.Files
+                }
+
+                // Use MessageService.PostMessage to send the data to the server
+                MessageService.PostMessage(data).then(function () {
+                    $window.location = "/Message/Conversation?userId=" + receiverId;
+                }, function (response) {
+                    console.log("trouble\n" + response);
+                });
+            } else {
+                console.error("vm.message is undefined or not a string");
             }
-            MessageService.PostMessage(data).then(function () {
-                $window.location = "/Message/Conversation?userId=" + receiverId;
-            }, function (response) {
-                console.log("trouble\n" + response);
-            });
         }
     }
+
 
     function trustedHtml(html) {
         return $sce.trustAsHtml($filter('newlines')(html));

@@ -41,10 +41,11 @@ namespace Apeek.ViewModels.Models
         public string GoodImageUrl { get; set; }
         public double DaysCost { get; set; }
         public double CustomerServiceFee { get; set; }
-        public double CustomerCharity { get; set; }
+        public double CustomerCharity { get; set; } 
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public string StartTime { get; set; }        public string EndTime { get; set; }
+        public string StartTime { get; set; }
+        public string EndTime { get; set; }
         public int Days { get; set; }
         public double Price { get; set; }        
         public double CustomerCost { get; set; }        
@@ -67,7 +68,16 @@ namespace Apeek.ViewModels.Models
         public FinalFeedbackVM finalFeedbackVM { get; set; }
     }
 
-    public class FinalFeedbackVM    {        public int RequestId { get; set; }        public bool NoIssue { get; set; }        public bool Late { get; set; }        public bool Damaged { get; set; }
+    public class FinalFeedbackVM
+    {
+        public int RequestId { get; set; }
+        public bool NoIssue { get; set; }
+        public bool Late { get; set; }
+        public bool Damaged { get; set; }
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
-        public DateTime ReturnDate { get; set; }        public string ReturnTime { get; set; }        public double Claim { get; set; }        public string Description { get; set; }    }
+        public DateTime ReturnDate { get; set; }
+        public string ReturnTime { get; set; }
+        public double Claim { get; set; }
+        public string Description { get; set; }
+    }
 }
