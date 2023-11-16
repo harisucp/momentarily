@@ -14,6 +14,7 @@ namespace Apeek.Core.Services
         Result<UserNotificationViewModel> AddReceiveMessageNotification(int userId, int authorId, QuickUrl quickUrl);
         bool SetIsViewedForAllNotification(int userId);
         Result<List<UserNotification>> GetNotificationsList(int userId);
+        Result<List<UserNotification>> GetReadNotifications(int userId);
 
     }
 }

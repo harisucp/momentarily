@@ -25,6 +25,21 @@ namespace Momentarily.Web.Areas.Frontend.Controller
             var shape = _shapeFactory.BuildShape(null, list.Obj.ToList(), PageName.Listing.ToString());
             return DisplayShape(shape);
         }
+        public ActionResult GetReadNotifications()
+        {
+            var list = _userNotificationService.GetReadNotifications(UserId.Value);
+           // var shape = _shapeFactory.BuildShape(null, list.Obj.ToList(), PageName.Listing.ToString());
+            return RedirectToAction("Index");
+        }
+        public ActionResult GetNotifications(bool isRead)
+        {
+            var list = isRead
+                ? _userNotificationService.GetReadNotifications(UserId.Value)
+                : _userNotificationService.GetNotificationsList(UserId.Value);
+
+            var shape = _shapeFactory.BuildShape(null, list.Obj.ToList(), PageName.Listing.ToString());
+            return PartialView("_NotificationsPartial", shape);
+        }
 
         public ActionResult MarkRead(int id)
         {

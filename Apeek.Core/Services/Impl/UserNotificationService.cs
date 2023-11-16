@@ -147,5 +147,27 @@ namespace Apeek.Core.Services.Impl
             }
             return result;
         }
+
+        public Result<List<UserNotification>> GetReadNotifications(int userId)
+        {
+            var result = new Result<List<UserNotification>>(CreateResult.Error, new List<UserNotification>());
+            try
+            {
+                Uow.Wrap(u =>
+                {
+                    result.Obj = _repUserNotification.Table.Where(p => p.UserId == userId && p.IsViewed == true)
+                    .OrderByDescending(p => p.CreateDate)
+                    .ToList();
+                    result.CreateResult = CreateResult.Success;
+                },
+                null,
+                LogSource.UserNotificationService);
+            }
+            catch (Exception ex)
+            {
+                Ioc.Get<IDbLogger>().LogWarning(LogSource.UserNotificationService, string.Format("Get notifications fail. Ex: {0}.", ex));
+            }
+            return result;
+        }
     }
 }

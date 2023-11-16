@@ -4,6 +4,75 @@
     ViewBag.Title = "Index";
     Layout = "~/Areas/Frontend/Views/Shared/_AccountMenuLayout.cshtml";
 }
+<style>
+    .switch {
+        --button-width: 3.5em;
+        --button-height: 2em;
+        --toggle-diameter: 1.5em;
+        --button-toggle-offset: calc((var(--button-height) - var(--toggle-diameter)) / 2);
+        --toggle-shadow-offset: 10px;
+        --toggle-wider: 3em;
+        --color-grey: #cccccc;
+        --color-green: #4296f4;
+    }
+
+    .slider {
+        display: inline-block;
+        width: var(--button-width);
+        height: var(--button-height);
+        background-color: var(--color-grey);
+        border-radius: calc(var(--button-height) / 2);
+        position: relative;
+        transition: 0.3s all ease-in-out;
+    }
+
+        .slider::after {
+            content: "";
+            display: inline-block;
+            width: var(--toggle-diameter);
+            height: var(--toggle-diameter);
+            background-color: #fff;
+            border-radius: calc(var(--toggle-diameter) / 2);
+            position: absolute;
+            top: var(--button-toggle-offset);
+            transform: translateX(var(--button-toggle-offset));
+            box-shadow: var(--toggle-shadow-offset) 0 calc(var(--toggle-shadow-offset) * 4) rgba(0, 0, 0, 0.1);
+            transition: 0.3s all ease-in-out;
+        }
+
+    .switch input[type="checkbox"]:checked + .slider {
+        /* background-color: var(--color-green);*/
+        background-color: #D43930;
+    }
+
+        .switch input[type="checkbox"]:checked + .slider::after {
+            transform: translateX(calc(var(--button-width) - var(--toggle-diameter) - var(--button-toggle-offset)));
+            box-shadow: calc(var(--toggle-shadow-offset) * -1) 0 calc(var(--toggle-shadow-offset) * 4) rgba(0, 0, 0, 0.1);
+        }
+
+    .switch input[type="checkbox"] {
+        display: none;
+    }
+
+        .switch input[type="checkbox"]:active + .slider::after {
+            width: var(--toggle-wider);
+        }
+
+        .switch input[type="checkbox"]:checked:active + .slider::after {
+            transform: translateX(calc(var(--button-width) - var(--toggle-wider) - var(--button-toggle-offset)));
+        }
+    .slider{
+        margin-top:20px;
+    }
+    /*.margin_top{
+        margin-top:-28px;
+    }*/
+    .texxt_end{
+        text-align:end;
+      
+    }
+
+</style>
 <link href="~/Content/CustomCssFiles/ListingPage.css" rel="stylesheet" />
 <div class="content">
     <div class="account listing">
@@ -13,37 +82,22 @@
                     <div class="listing-container">
                         <div class="title-block separated-block">
                             <h1 class="left-align">Notifications</h1>
-                            @if (Model.ViewModel.Count() == 0)
-                            {
-                                <a href="#" id="add-new-button1" class="btn right-align disabled" style="padding-top: 24px;">Mark all as read</a>
-                            }
-                            else
-                            {
-                        <a href="@Url.Action("MarkAllRead","Notification")" id="add-new-button1" class="btn right-align" style="padding-top: 24px;">Mark all as read</a>
-                            }
+                            @*<label class="switch right-align">
+                                    <input type="checkbox" id="toggleReadNotifications">
+                                    <span class="slider round"></span>
+                                </label>*@
+                           @*<p class="texxt_end">Show Read</p>*@
+                            <label class="switch right-align margin_top">
+                                <input type="checkbox" id="toggleReadNotifications">
+                                <span class="slider"></span>
+                            </label>
                         </div>
-                        @if (Model.ViewModel.Count() == 0)
-                        {
-                            <div class="list-empty">You have no Notifications!</div>
-                        }
-                        else
-                        {
-                            <div class="list">
-                                @foreach (var item in Model.ViewModel)
-                                {
-                                    <div class="item clearfix" style="display: flex; align-items: center;">
-                                        <div class="left-align left-col-listing">
-                                            <div>
-                                                <a href="@item.Url" class="mark-read" style="color: #000000;" data-id="@item.Id" data-url="@item.Url" data-target="mark-read-link">@item.Text</a>
-                                            </div>
-                                        </div>
-                                        <div class="right-align" style="color: #f03a3a;">
-                                            <a href="@Url.Action("MarkRead", "Notification", new { id = item.Id })" style="padding-top: 0px;">Mark as read</a>
-                                        </div>
-                                    </div>
-                                }
+
+                        <div class="list">
+                            <div id="notifications-container">
+
                             </div>
-                        }
+                        </div>
                     </div>
                 </div>
             </div>
@@ -61,22 +115,26 @@
 
 <script>
     $(document).ready(function () {
-        $('.mark-read').click(function (event) {
-            event.preventDefault();
-            var id = $(this).data('id');
-            var url = $(this).data('url');
-            var target = $(this).data('target');
+        function getNotifications(isRead) {
             $.ajax({
-                url: '@Url.Action("MarkRead", "Notification")',
-                type: 'POST',
-                data: { id: id },
+                url: '@Url.Action("GetNotifications", "Notification")',
+                type: 'GET',
+                data: { isRead: isRead },
                 success: function (data) {
+                    $('#notifications-container').html(data);
                 },
                 error: function (error) {
+                    console.error('Error fetching notifications:', error);
                 }
             });
-            window.location.href = url;
+        }
+
+        $('#toggleReadNotifications').change(function () {
+            var isRead = this.checked;
+            getNotifications(isRead);
         });
+
+        getNotifications($('#toggleReadNotifications').prop('checked'));
     });
 </script>
 

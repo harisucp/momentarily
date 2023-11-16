@@ -437,6 +437,7 @@
     <Content Include="Areas\Frontend\Views\AdminDashboard\UserReviews.cshtml" />
     <Content Include="Areas\Frontend\Views\SendHelp\Index.cshtml" />
     <Content Include="Areas\Frontend\Views\Notification\Index.cshtml" />
+    <Content Include="Areas\Frontend\Views\Shared\_NotificationsPartial.cshtml" />
     <None Include="bundleconfig.json" />
     <None Include="Content\css\account.scss" />
     <Content Include="Content\css\account.css">

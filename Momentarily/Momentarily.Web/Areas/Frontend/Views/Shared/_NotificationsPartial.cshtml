@@ -1,0 +1,31 @@
+﻿@model Apeek.Common.IShape<List<Apeek.Entities.Entities.UserNotification>>
+
+@if (Model.ViewModel.Count() == 0)
+{
+    <div class="list-empty">You have no Notifications!</div>
+}
+else
+{
+    <div class="list">
+        <div id="notifications-container">
+            @foreach (var item in Model.ViewModel)
+            {
+                <div class="item clearfix" style="display: flex; align-items: center;">
+                    <div class="left-align left-col-listing">
+                        <div>
+                            <a href="@item.Url" class="mark-read" style="color: #000000;" data-id="@item.Id" data-url="@item.Url" data-target="mark-read-link">@item.Text</a>
+                        </div>
+                    </div>
+                    @if (item.IsViewed != true)
+                    {
+                        <div class="right-align" style="color: #f03a3a;">
+                            <a href="@Url.Action("MarkRead", "Notification", new { id = item.Id })" style="padding-top: 0px;">Mark as read</a>
+                        </div>
+                    }
+
+                </div>
+                <br />
+            }
+        </div>
+    </div>
+}
