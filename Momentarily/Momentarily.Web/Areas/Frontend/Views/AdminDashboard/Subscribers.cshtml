@@ -7,7 +7,7 @@
 
 @using (Html.BeginForm("Subscribers", "AdminDashboard", FormMethod.Post, new { @class = "Admin_dashboard" }))
 {
-    @Html.HiddenFor(x=>x.Status)
+    @Html.HiddenFor(x => x.Status)
     <div class="page-header">
         <div class="row align-items-end">
             <div class="col-lg-8">
@@ -83,7 +83,7 @@
                                                     <td>
                                                         @if (status_ == true)
                                                         {
-                                                            <button type="button"class="label-subscribed" value="subscribed">Subscribed</button>
+                                                            <button type="button" class="label-subscribed" value="subscribed">Subscribed</button>
                                                         }
                                                         else
                                                         {
@@ -91,8 +91,8 @@
                                                         }
                                                     </td>
                                                 </tr>
-                                            count++;
-                                        }
+                                                count++;
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -107,9 +107,9 @@
                             </div>
                         </div>
                     </div>
-                      
-                    </div>
-              
+
+                </div>
+
             </div>
         </div>
     </div>
@@ -123,7 +123,7 @@
 
     </div>
 
-                                                }
+}
 <link href="~/plugins/datatables-bs4/css/dataTables.bootstrap4.css" rel="stylesheet" />
 <script src="~/plugins/jquery/jquery.js"></script>
 <link href="~/Content/ToastMessage/toastr.css" rel="stylesheet" />
@@ -131,6 +131,7 @@
 <script>
     $(document).ready(function () {
         $('#subscriberlist').DataTable({
+           /* responsive: true,  */
             //"paging": true,
             //"lengthChange": false,
             //"searching": false,
@@ -139,7 +140,12 @@
             //"autoWidth": false,
         });
     });
+    $('.minimize-card').click(function () {
+        var cardBlock = $(this).closest('.card').find('.card-block');
+        cardBlock.slideToggle(1000);
 
+        $(this).find('i').toggleClass('icon-minus icon-plus');
+    });
 
     $("#btnExportToCsv").click(function () {
 
@@ -187,8 +193,8 @@
         background-color: #52c062;
         border-radius: 3px;
         font-size: 11.998px;
-        
     }
+
     .label-unsubscribed {
         color: #ffffff;
         font-weight: bold;
@@ -196,9 +202,9 @@
         background-color: #de5351;
         border-radius: 3px;
         font-size: 11.998px;
-       
     }
-   #divLoading {
+
+    #divLoading {
         margin: 0px;
         padding: 0px;
         position: fixed;

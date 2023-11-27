@@ -92,7 +92,8 @@
                 <li class="@((IsActiveLink(" Index", "covid" )||IsActiveLink("PlaceOrder", "covid" )) ? "active" : "" )"><a href="@Url.Action(" Index", "covid" )">COVID-19 Products</a></li>
             </ul>
         </li>*@
-                                        <li><a id="search_button" href="/Search/Map"><img src="~/Content/TemplateImg/OtherImages/searchicon.png" alt="image" /> </a></li>
+                                        @*<li><a id="search_button" href="/Search/Map"><img src="~/Content/TemplateImg/OtherImages/searchicon.png" alt="image" /> </a></li>*@
+                                    <li><a id="search_button" href=""><img src="~/Content/TemplateImg/OtherImages/Search.png" alt="image" /> </a></li>
                                         <li>
                                             <a id="bell_button" class="position-relative" href="@Url.Action("Index", "Notification")">
                                                 <img src="~/Content/TemplateImg/OtherImages/Notification.png" alt="image" />
@@ -119,17 +120,40 @@
                                             <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
                                                 <span> @User.FirstName @User.LastName</span> <span class="fa fa-angle-down"></span>
                                             </a>
+                                            @*<ul class="dropdown-menu">
+            <li class="@((IsActiveLink(QuickUrl.RouteUserProfile()) || IsActiveLink(" UserEmail", "User" ) || IsActiveLink("UserPwd", "User" ) || IsActiveLink("BankInfo", "User" )) ? "active" : "" )"><a href="@QuickUrl.UserProfileUrl()">My Profile</a></li>
+            <li class="@((IsActiveLink(" Index", "UserDashboard" )) ? "active" : "" )"><a href="@Url.Action(" Index", "UserDashboard" )">My Dashboard</a></li>
+            <li class="@((IsActiveLink(" Index", "Listing" ) || IsActiveLink("Edit", "Listing" ) || IsActiveLink("Create", "Listing" ) || IsActiveLink("BookingList", "Listing" )) ? "active" : "" )"><a href="@Url.Action(" Index", "Listing" )">Manage Listings</a></li>
+            <li class="@((IsActiveLink(" Index", "Message" ) || IsActiveLink("Conversation", "Message" ) || IsActiveLink("Pay", "Payment" )) ? "active" : "" )"><a href="@Url.Action(" Index", "Message" )">My Messages {{shared.hasUnreadMessages()?'('+shared.UserData.UnreadMessagesCount+')':''}}</a></li>
+            <li class="@((IsActiveLink(" Index", "Booking" ) || IsActiveLink("Request", "Booking" )) ? "active" : "" )"><a href="@Url.Action(" Index", "Booking" )">Borrowing</a></li>
+            <li class="@((IsActiveLink(" RentedItems", "Listing" )|| IsActiveLink("Booking", "Listing" )) ? "active" : "" )"><a href="@Url.Action(" RentedItems", "Listing" )">Sharing</a></li>
+            <li><a href="@QuickUrl.LogOffUrl()">Log Out </a></li>
+        </ul>*@
                                             <ul class="dropdown-menu">
-                                                <li class="@((IsActiveLink(QuickUrl.RouteUserProfile()) || IsActiveLink(" UserEmail", "User" ) || IsActiveLink("UserPwd", "User" ) || IsActiveLink("BankInfo", "User" )) ? "active" : "" )"><a href="@QuickUrl.UserProfileUrl()">My Profile</a></li>
-                                                <li class="@((IsActiveLink(" Index", "UserDashboard" )) ? "active" : "" )"><a href="@Url.Action(" Index", "UserDashboard" )">My Dashboard</a></li>
-                                                <li class="@((IsActiveLink(" Index", "Listing" ) || IsActiveLink("Edit", "Listing" ) || IsActiveLink("Create", "Listing" ) || IsActiveLink("BookingList", "Listing" )) ? "active" : "" )"><a href="@Url.Action(" Index", "Listing" )">Manage Listings</a></li>
-                                                <li class="@((IsActiveLink(" Index", "Message" ) || IsActiveLink("Conversation", "Message" ) || IsActiveLink("Pay", "Payment" )) ? "active" : "" )"><a href="@Url.Action(" Index", "Message" )">My Messages {{shared.hasUnreadMessages()?'('+shared.UserData.UnreadMessagesCount+')':''}}</a></li>
-                                                <li class="@((IsActiveLink(" Index", "Booking" ) || IsActiveLink("Request", "Booking" )) ? "active" : "" )"><a href="@Url.Action(" Index", "Booking" )">Borrowing</a></li>
-                                                <li class="@((IsActiveLink(" RentedItems", "Listing" )|| IsActiveLink("Booking", "Listing" )) ? "active" : "" )"><a href="@Url.Action(" RentedItems", "Listing" )">Sharing</a></li>
+                                                <li class="@((IsActiveLink(QuickUrl.RouteUserProfile()) || IsActiveLink("UserEmail", "User") || IsActiveLink("UserPwd", "User") || IsActiveLink("BankInfo", "User")) ? "active" : "")">
+                                                    <a href="@QuickUrl.UserProfileUrl()">My Profile</a>
+                                                </li>
+                                                <li class="@((IsActiveLink("Index", "UserDashboard")) ? "active" : "")">
+                                                    <a href="@Url.Action("Index", "UserDashboard")">My Dashboard</a>
+                                                </li>
+                                                <li class="@((IsActiveLink("Index", "Listing") || IsActiveLink("Edit", "Listing") || IsActiveLink("Create", "Listing") || IsActiveLink("BookingList", "Listing")) ? "active" : "")">
+                                                    <a href="@Url.Action("Index", "Listing")">Manage Listings</a>
+                                                </li>
+                                                <li class="@((IsActiveLink("Index", "Message") || IsActiveLink("Conversation", "Message") || IsActiveLink("Pay", "Payment")) ? "active" : "")">
+                                                    <a href="@Url.Action("Index", "Message")">My Messages {{shared.hasUnreadMessages()?'('+shared.UserData.UnreadMessagesCount+')':''}}</a>
+                                                </li>
+                                                <li class="@((IsActiveLink("Index", "Booking") || IsActiveLink("Request", "Booking")) ? "active" : "")">
+                                                    <a href="@Url.Action("Index", "Booking")">Borrowing</a>
+                                                </li>
+                                                <li class="@((IsActiveLink("RentedItems", "Listing") || IsActiveLink("Booking", "Listing")) ? "active" : "")">
+                                                    <a href="@Url.Action("RentedItems", "Listing")">Sharing</a>
+                                                </li>
                                                 <li><a href="@QuickUrl.LogOffUrl()">Log Out </a></li>
                                             </ul>
+
+
                                         </li>
-                                        <li class="becomeNav"><a href="@Url.Action(" Create", "Listing" )" class="btn btn-primary btn-md"> Share </a></li>
+                                        <li class="becomeNav"><a href="@Url.Action("Create", "Listing" )" class="btn btn-primary btn-md"> Share </a></li>
                                         <li class="becomeNav becomeBorrowerCls" id="becomeBorrower"><a class="btn btn-primary btn-sm"> Borrow </a></li>
                                     </ul>
                                 </div>
@@ -652,6 +676,10 @@
             .cookiealert .container p.accept {
                 padding-right: 0px;
             }
+    }
+    .navbar-nav > li > a:hover, .navbar-nav > li > a:focus {
+        background-color: transparent; /* Set the background color to transparent */
+        color: #49525c; /* Set the text color to your desired color on hover */
     }
 </style>
 <script type="text/javascript">

@@ -45,7 +45,7 @@
                 </div>
             </div>
         </div>
-       
+
         <div class="col-xl-3 col-md-6">
             <div class="card bg-c-pink update-card">
                 <div class="card-block">
@@ -139,11 +139,11 @@
                 </div>
                 <div class="card-footer">
                     <a href="/AdminDashboard/Subscribers?status=All" class="small-box-footer parentModulesInnerIndex">
-                            <p class="text-white m-b-0">
-                                More info
-                                <i class="feather icon-arrow-right text-white f-14 m-r-10"></i>
-                            </p>
-                        </a>
+                        <p class="text-white m-b-0">
+                            More info
+                            <i class="feather icon-arrow-right text-white f-14 m-r-10"></i>
+                        </p>
+                    </a>
                 </div>
             </div>
         </div>
@@ -317,7 +317,7 @@
     </div>
 
 
-   
+
 
     <div class="row">
         <div class="col-xl-12 col-md-12" id="idRentedItemsScroll">
@@ -347,20 +347,20 @@
                                     @{ int count3 = 1; }
                                     @for (int i = 0; i < Model.totalLoanedItems.Count(); i++)
                                     {
-                                    <tr>
-                                        <td>
-                                            @count3
-                                        </td>
-                                        <td>
-                                            <a href="/Search/Item/@Model.totalLoanedItems[i].Id" target="_blank" title="@Model.totalLoanedItems[i].ItemName">@Model.totalLoanedItems[i].Id</a>
-                                        </td>
-                                        <td>
-                                            <a href="/Search/Item/@Model.totalLoanedItems[i].Id" target="_blank" title="@Model.totalLoanedItems[i].ItemName">@Model.totalLoanedItems[i].ItemName</a>
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(m => m.totalLoanedItems[i].Count)
-                                        </td>
-                                    </tr>
+                                        <tr>
+                                            <td>
+                                                @count3
+                                            </td>
+                                            <td>
+                                                <a href="/Search/Item/@Model.totalLoanedItems[i].Id" target="_blank" title="@Model.totalLoanedItems[i].ItemName">@Model.totalLoanedItems[i].Id</a>
+                                            </td>
+                                            <td>
+                                                <a href="/Search/Item/@Model.totalLoanedItems[i].Id" target="_blank" title="@Model.totalLoanedItems[i].ItemName">@Model.totalLoanedItems[i].ItemName</a>
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => m.totalLoanedItems[i].Count)
+                                            </td>
+                                        </tr>
                                         count3++;
                                     }
 
@@ -377,7 +377,7 @@
 
     </div>
 
-  
+
 
 </div>
 @*</div>*@

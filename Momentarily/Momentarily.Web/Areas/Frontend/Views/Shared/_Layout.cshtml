@@ -18,6 +18,8 @@
 
     <link href="~/Content/TemplateImg/css/header.css" rel="stylesheet" />
     <link href="~/Content/css/Footerlayout.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-81203338-1"></script>
     @*<script async defer src="//assets.pinterest.com/js/pinit.js"></script>*@
@@ -102,17 +104,17 @@
                                     <ul class="nav navbar-nav navbar-right">
 
                                         @*<li class="active"><a href="@Url.Action("HowItWorks", "Home")">How it Works</a></li>
-        <li><a href="@Url.Action("FAQ", "Home")">Faq</a></li>*@
+                                            <li><a href="@Url.Action("FAQ", "Home")">Faq</a></li>*@
                                         @*<li><a href="@Url.Action("ContactUs", "Home")">Help</a></li>*@
                                         <li><a href="@Url.Action("index", "sendhelp")">Help</a></li>
                                         @*<li class="dropdown dropNav covidMenu afterLoginCovidMenu">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
-                <span> COVID-19</span> <span class="fa fa-angle-down"></span>
-            </a>
-            <ul class="dropdown-menu">
-                <li class="@((IsActiveLink("Index", "covid")||IsActiveLink("PlaceOrder", "covid")) ? "active" : "")"><a href="@Url.Action("Index", "covid")">COVID-19 Products</a></li>
-            </ul>
-        </li>*@
+                                                <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                                                    <span> COVID-19</span> <span class="fa fa-angle-down"></span>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li class="@((IsActiveLink("Index", "covid")||IsActiveLink("PlaceOrder", "covid")) ? "active" : "")"><a href="@Url.Action("Index", "covid")">COVID-19 Products</a></li>
+                                                </ul>
+                                            </li>*@
                                         <li><a id="search_button" href="/Search/Map"><img src="~/Content/TemplateImg/OtherImages/Search.png" alt="image" /> </a></li>
                                         @*<li><a id="search_button" href="/Search/Map"><img src="~/Content/TemplateImg/OtherImages/SearchLogo (1).png" alt="image" /> </a></li>*@
                                         <li>
@@ -242,15 +244,15 @@
                 @*<li><a href="@Url.Action("ContactUs", "Home")">Help</a></li>*@
                 <li><a href="@Url.Action("index", "sendhelp")">Help</a></li>
                 @*<li class="dropdown dropNav covidMenu">
-            <a href="#">
-                <span> COVID-19</span> <span role="button" class="offcanvas-menu-toggler collapsed covidDDMenu" data-toggle="collapse" data-target="#covid-menu-02265" aria-expanded="false" aria-controls="collapse-menu-02">
-                    <i class="fa fa-plus"></i><i class="fa fa-minus"></i>
-                </span>
-            </a>
-            <ul class="dropdown-menu" id="covid-menu-02265" aria-expanded="false">
-                <li class="@((IsActiveLink("Index", "covid")||IsActiveLink("PlaceOrder", "covid")) ? "active" : "")"><a href="@Url.Action("Index", "covid")">COVID-19 Products</a></li>
-            </ul>
-        </li>*@
+                        <a href="#">
+                            <span> COVID-19</span> <span role="button" class="offcanvas-menu-toggler collapsed covidDDMenu" data-toggle="collapse" data-target="#covid-menu-02265" aria-expanded="false" aria-controls="collapse-menu-02">
+                                <i class="fa fa-plus"></i><i class="fa fa-minus"></i>
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu" id="covid-menu-02265" aria-expanded="false">
+                            <li class="@((IsActiveLink("Index", "covid")||IsActiveLink("PlaceOrder", "covid")) ? "active" : "")"><a href="@Url.Action("Index", "covid")">COVID-19 Products</a></li>
+                        </ul>
+                    </li>*@
                 @if (!User.Identity.IsAuthenticated && !(User.IsAdmin))
                 {
                     <li><a href="@QuickUrl.RegisterUrl()"><span class="fa fa-user"></span> Sign up</a></li>
@@ -381,10 +383,12 @@
             width: 100%;
             font-size: 18px;
         }
+
     .topHeader .navbar-nav > li.dropdown.dropNav {
         width: 167px;
     }
-        .covidMenu {
+
+    .covidMenu {
         width: auto !important;
     }
 
@@ -652,6 +656,7 @@
         font-size: 14px;
         border-radius: 50%;
     }
+
     .custom-badge {
         top: 5px;
         position: absolute;
@@ -698,8 +703,17 @@
                 padding-right: 0px;
             }
     }
-    [ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak, .x-ng-cloak {display:none !important}
+
+    [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+        display: none !important
+    }
 </style>
+
+<script>
+    $(document).ready(function () {
+        $('.dropdown-toggle').dropdown();
+    });
+</script>
 
 <script type="text/javascript">
     var cookiePromptTest = false;

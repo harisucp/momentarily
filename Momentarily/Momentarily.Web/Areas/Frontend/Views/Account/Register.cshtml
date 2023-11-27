@@ -188,6 +188,7 @@
                                 }
                                 if (!Model.ViewModel.IsExternal)
                                 {
+                                                           
                                     <div class="form-group">
                                         <div class="g-recaptcha" data-sitekey="@ViewBag.SiteKey"></div>
                                         <div class="link-red" id="errorRecaptcha">
@@ -264,7 +265,16 @@
     }
 </style>
 <script>
+    function initRecaptcha() {
+        grecaptcha.render('g-recaptcha', {
+        'sitekey': '@ViewBag.SiteKey'
+    });
+}
 
+function reloadRecaptcha() {
+    grecaptcha.reset(); 
+    initRecaptcha(); 
+}
     $(document).ready(function () {
         var dob = '@Model.ViewModel.DateOfBirthday';
         if (dob == '01/01/01 12:00:00 AM') {
@@ -436,7 +446,7 @@
                 localStorage.setItem("day", '');
                 localStorage.setItem("month",'');
                 localStorage.setItem("year", '');
-                $('.dateOfBirth').removeAttr("value");  
+                $('.dateOfBirth').removeAttr("value");
         }
         var localday = localStorage.getItem("day");
         var localmonth = localStorage.getItem("month");

@@ -40,12 +40,12 @@ namespace Momentarily.Web.Areas.Frontend.Controller
         private string SignUpListId = "vt9kjw5GnqLH2iyCPZRZFA";
         private string SendybrandEmailAddress = "hello@momentarily.com";
         public static string OTP = "None";
-        private readonly IAccountDataService  _accountDataService;
+        private readonly IAccountDataService _accountDataService;
         private readonly ISendMessageService _sendMessageService;
         private readonly IUserDataService<MomentarilyItem> _userDataService;
         private readonly ITwilioNotificationService _twilioNotificationService;
         private string RedirectUrl = System.Web.HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + "/Account/SaveUser";
-        private string RedirectUrlForLogin = System.Web.HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority)+ "/Account/LoginUser";
+        private string RedirectUrlForLogin = System.Web.HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + "/Account/LoginUser";
         public AccountController(IAccountDataService accountDataService, ISendMessageService sendMessageService, ITwilioNotificationService twilioNotificationService, IUserDataService<MomentarilyItem> userDataService)
         {
             _helper = new AccountControllerHelper<MomentarilyRegisterModel>();
@@ -61,12 +61,12 @@ namespace Momentarily.Web.Areas.Frontend.Controller
         [AllowAnonymous]
         public ActionResult Register()
         {
-           // var validateOTP = _helper.ManageOTPRequests(6364, 3);
+            // var validateOTP = _helper.ManageOTPRequests(6364, 3);
             TempData["NoAccessFooter"] = "NoAccess";
             TempData["password"] = "";
             TempData["confirm"] = "";
             TempData["date"] = "empty";
-            ViewBag.SiteKey   = ConfigurationManager.AppSettings["CaptchaSitekey"];
+            ViewBag.SiteKey = ConfigurationManager.AppSettings["CaptchaSitekey"];
             var model = Activator.CreateInstance<MomentarilyRegisterModel>();
             model.CountryId = 1;
             var CountriesyList = new SelectList(_helper.getAllCountries(), "PhoneCode", "Name");
@@ -80,7 +80,7 @@ namespace Momentarily.Web.Areas.Frontend.Controller
         [HttpPost]
         [AllowAnonymous]
         public ActionResult Register(Shape<MomentarilyRegisterModel> shape)
-            {
+        {
             string EncodedResponse = Request.Form["g-Recaptcha-Response"];
             string SecretKey = ConfigurationManager.AppSettings["CaptchaSecretKey"].ToString();
             int OTPAllowed = Convert.ToInt32(ConfigurationManager.AppSettings["OTPRequestAllowed"]);
@@ -154,7 +154,7 @@ namespace Momentarily.Web.Areas.Frontend.Controller
                         bool saveSubscriber = _helper.saveSubscriber(shape.ViewModel.Email);
                     }
 
-                    int userId = user.Id; 
+                    int userId = user.Id;
                     User retrievedUser = _accountDataService.GetUser(userId);
                     if (retrievedUser != null)
                     {
@@ -177,7 +177,7 @@ namespace Momentarily.Web.Areas.Frontend.Controller
                     sentmodel.PhoneNumber = shape.ViewModel.PhoneNumber;
                     sentmodel.Email = user.Email;
                     sentmodel.IsVerified = false;
-                    sentmodel.IsMobileVerified = false; 
+                    sentmodel.IsMobileVerified = false;
                     return RedirectToAction("OTPMessageSent", sentmodel);
                 }
             }
@@ -190,18 +190,18 @@ namespace Momentarily.Web.Areas.Frontend.Controller
             return View(shape);
         }
 
-		public ActionResult Unsubscribe(int userId)
-		{
-			var user = _accountDataService.GetUser(userId);
-			if (user != null)
-			{
-				_accountDataService.UpdateGeneralUpdateColumn(userId);
-			}
-			return View();
-		}
+        public ActionResult Unsubscribe(int userId)
+        {
+            var user = _accountDataService.GetUser(userId);
+            if (user != null)
+            {
+                _accountDataService.UpdateGeneralUpdateColumn(userId);
+            }
+            return View();
+        }
 
 
-		private string FirstCharToUpper(string input)
+        private string FirstCharToUpper(string input)
         {
             switch (input)
             {
@@ -422,7 +422,7 @@ namespace Momentarily.Web.Areas.Frontend.Controller
                     Session["IsAdmin"] = false;
                     return RedirectToAction("Login");
                 }
-                else if (ContextService.IsUserAuthenticated &&(Convert.ToBoolean(Session["IsAutherised"]) == false || Convert.ToBoolean(Session["IsAdmin"]) == false))
+                else if (ContextService.IsUserAuthenticated && (Convert.ToBoolean(Session["IsAutherised"]) == false || Convert.ToBoolean(Session["IsAdmin"]) == false))
                 {
                     _helper.LogOff();
                     Response.Cookies.Remove("Login");
@@ -451,27 +451,38 @@ namespace Momentarily.Web.Areas.Frontend.Controller
         public ActionResult Login(Shape<LoginModel> shape)
         {
             //var lists=_helper.getCampaignList("hello@momentarily.com");
-           // shape.ViewModel.EmailAddressOrPhoneNum = shape.ViewModel.EmailAddressOrPhoneNum.Trim();
+            // shape.ViewModel.EmailAddressOrPhoneNum = shape.ViewModel.EmailAddressOrPhoneNum.Trim();
             if (ContextService.IsUserAuthenticated)
                 return Redirect(QuickUrl.UserProfileUrl());
-            var loginResult = _helper.Login(shape, ReturnUrl, ModelState);
+            var loginResult = _helper.Login(shape, ReturnUrl, ModelState);  
             if (loginResult != null && loginResult.LoginStatus != LoginStatus.Fail)
             {
-                if (shape.ViewModel.RememberMe)
+                if (loginResult.User.IsBlocked !=true)
                 {
-                    HttpCookie cookie = new HttpCookie("Login");
-                    cookie.Values.Add("EmailID", shape.ViewModel.EmailAddressOrPhoneNum);
-                    cookie.Values.Add("Password", shape.ViewModel.Password);
-                    cookie.Expires = DateTime.Now.AddDays(15);
-                    Response.Cookies.Add(cookie);
-                }
-                var redirectTo = ReturnUrl;
-                if (loginResult.LoginStatus != LoginStatus.SuccessWithTempPwd)
+                    if (shape.ViewModel.RememberMe)
+                    {
+                        HttpCookie cookie = new HttpCookie("Login");
+                        cookie.Values.Add("EmailID", shape.ViewModel.EmailAddressOrPhoneNum);
+                        cookie.Values.Add("Password", shape.ViewModel.Password);
+                        cookie.Expires = DateTime.Now.AddDays(15);
+                        Response.Cookies.Add(cookie);
+                    }
+                    var redirectTo = ReturnUrl;
+                    if (loginResult.LoginStatus != LoginStatus.SuccessWithTempPwd)
+                        return AuthenticateUserWithPrivilagesAndRedirect(loginResult.User.Id, redirectTo);
+                    redirectTo = QuickUrl.UserPwdUrl();
+                    if (string.IsNullOrWhiteSpace(loginResult.User.Email))
+                        redirectTo = QuickUrl.UserEmailUrl(new List<KeyValuePair<string, string>> { new KeyValuePair<string, string>(QS.source, "tmp_pwd") });
                     return AuthenticateUserWithPrivilagesAndRedirect(loginResult.User.Id, redirectTo);
-                redirectTo = QuickUrl.UserPwdUrl();
-                if (string.IsNullOrWhiteSpace(loginResult.User.Email))
-                    redirectTo = QuickUrl.UserEmailUrl(new List<KeyValuePair<string, string>> { new KeyValuePair<string, string>(QS.source, "tmp_pwd") });
-                return AuthenticateUserWithPrivilagesAndRedirect(loginResult.User.Id, redirectTo);
+                }
+                else
+                {
+                    //TempData["NoAccessFooter"] = "NoAccess";
+                    //shape.Message = "Email and password do not match.";.
+                    TempData["NoAccessFooter"] = "NoAccess";
+                    shape.Message = "Your account is blocked please contact hello@momentarily.com.";
+                }
+                
             }
             //var Result = _helper.GetBlocked(shape, ReturnUrl, ModelState);
 
@@ -555,7 +566,7 @@ namespace Momentarily.Web.Areas.Frontend.Controller
             var shape = _shapeFactory.BuildShape(null, model, PageName.LoginMessageSent.ToString());
             return View("RegisterMessageSent", shape);
         }
-        
+
         public dynamic MatchOTP(string otp, string Vcode)
         {
             if (otp == OTP)
@@ -568,14 +579,14 @@ namespace Momentarily.Web.Areas.Frontend.Controller
             }
         }
 
-        public JsonResult ResendOTP(string vc,string number)
+        public JsonResult ResendOTP(string vc, string number)
         {
             Result<User> validateOTP = new Result<User>();
             try
             {
                 int OTPAllowed = Convert.ToInt32(ConfigurationManager.AppSettings["OTPRequestAllowed"]);
                 int userId = _accountDataService.GetUser(vc).Id;
-                 validateOTP = _helper.ManageOTPRequests(userId, OTPAllowed);
+                validateOTP = _helper.ManageOTPRequests(userId, OTPAllowed);
                 if (validateOTP.Success)
                 {
                     //TwilioSmsSendProviderTest test = new TwilioSmsSendProviderTest();
@@ -588,13 +599,13 @@ namespace Momentarily.Web.Areas.Frontend.Controller
                     if (sent) _accountDataService.UpdateOTPRequests(userId);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 validateOTP.Success = false;
                 validateOTP.StatusCode = "OTP_004";
-                validateOTP.Message = validateOTP.StatusCode+"-Something went wrong ! Please contact to administrator";
+                validateOTP.Message = validateOTP.StatusCode + "-Something went wrong ! Please contact to administrator";
             }
-            return Json(validateOTP,JsonRequestBehavior.AllowGet);
+            return Json(validateOTP, JsonRequestBehavior.AllowGet);
         }
         [AllowAnonymous]
         [ChildActionOnly]
@@ -828,7 +839,7 @@ namespace Momentarily.Web.Areas.Frontend.Controller
                 dynamic me = fb.Get("me?fields=link,first_name,currency,last_name,email,gender,locale,timezone,verified,picture,age_range");
                 if (me != null)
                 {
-                    var loginResult = _helper.GetFacebookUser(Convert.ToString(me.id),Convert.ToString(me.email));
+                    var loginResult = _helper.GetFacebookUser(Convert.ToString(me.id), Convert.ToString(me.email));
                     if (loginResult != null)
                     {
                         var redirectTo = ReturnUrl;
@@ -885,10 +896,11 @@ namespace Momentarily.Web.Areas.Frontend.Controller
                     //var sendlaunched = _accountDataService.SendLaunchedEmail(trimEmail);
                     return Json(message, JsonRequestBehavior.AllowGet);
                 }
-                else {
+                else
+                {
                     return Json("Already subscribed.");
                 }
-               
+
             }
             catch
             {
