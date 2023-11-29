@@ -369,7 +369,7 @@ namespace Momentarily.Web.Areas.Frontend.Controller
             //int.TryParse(shape.ViewModel.PaymentType, out selectPaymentTpe);
             var PaymentTypeListNew = new SelectList(_helper.getPaymentTypes(), "Id", "GlobalCodeName", shape.ViewModel.PaymentType);            ViewBag.PaymentType = PaymentTypeListNew;            return DisplayShape(shape);        }
         [Authorize]
-        public ActionResult UserPublicProfile(int id)
+        public ActionResult UserPublicProfile(int? id)
         {
             if (!_helper.UserHasAccess())
                 return RedirectToHome();

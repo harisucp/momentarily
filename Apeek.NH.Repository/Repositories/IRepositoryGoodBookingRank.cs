@@ -6,7 +6,7 @@ namespace Apeek.NH.Repository.Repositories
 {
     public interface IRepositoryGoodBookingRank : IRepositoryAudit<GoodBookingRank>, IDependency
     {
-        IQueryable<GoodBookingRank> GetRankFromSeekers(int userId);
-        IQueryable<GoodBookingRank> GetRankFromSharers(int userId);
+        IQueryable<GoodBookingRank> GetRankFromSeekers(int? userId);
+        IQueryable<GoodBookingRank> GetRankFromSharers(int? userId);
     }
 }

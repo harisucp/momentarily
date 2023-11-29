@@ -13,7 +13,7 @@ namespace Apeek.Core.Services
 {
     public interface IUserDataService<T> : IDependency
     {
-        Result<UserPublicProfile> GetPublicUserProfile(int userId);
+        Result<UserPublicProfile> GetPublicUserProfile(int? userId);
         Result<ListViewModel<ReviewViewModel>> GetSeekersReview(int userId, int page = 1);
         Result<ListViewModel<ReviewViewModel>> GetSharersReview(int userId, int page = 1);
         ListViewModel<ReviewViewModel> GetListReviews(IQueryable<GoodBookingRank> items, int currentPage = 1);

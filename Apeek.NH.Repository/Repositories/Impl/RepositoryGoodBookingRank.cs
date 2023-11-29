@@ -5,7 +5,7 @@ namespace Apeek.NH.Repository.Repositories.Impl
 {
     public class RepositoryGoodBookingRank : RepositoryAudit<GoodBookingRank>, IRepositoryGoodBookingRank
     {
-        public IQueryable<GoodBookingRank> GetRankFromSeekers(int userId)
+        public IQueryable<GoodBookingRank> GetRankFromSeekers(int? userId)
         {
             var ranks = from r in Table
                     join r1 in Table on r.GoodRequestId equals r1.GoodRequestId
@@ -14,7 +14,7 @@ namespace Apeek.NH.Repository.Repositories.Impl
                     select r;
             return ranks;
         }
-        public IQueryable<GoodBookingRank> GetRankFromSharers(int userId)
+        public IQueryable<GoodBookingRank> GetRankFromSharers(int? userId)
         {
             var ranks = from r in Table
                         join r1 in Table on r.GoodRequestId equals r1.GoodRequestId

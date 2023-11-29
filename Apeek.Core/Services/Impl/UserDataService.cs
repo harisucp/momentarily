@@ -43,7 +43,7 @@ namespace Apeek.Core.Services.Impl
             _repositoryCancelledRequest = repositoryCancelledRequest;
             _repSubscriber = repSubscriber;
         }
-        public Result<UserPublicProfile> GetPublicUserProfile(int userId)
+        public Result<UserPublicProfile> GetPublicUserProfile(int? userId)
         {
             var result = new Result<UserPublicProfile>(CreateResult.Error, new UserPublicProfile());
             try
@@ -220,7 +220,7 @@ namespace Apeek.Core.Services.Impl
             });
             return result;
         }
-        private IQueryable<T> GetUserItems(int userId)
+        private IQueryable<T> GetUserItems(int? userId)
         {
             var items = (from g in _repGood.Table
                          join ug in _repGood.TableFor<UserGood>() on g.Id equals ug.GoodId
