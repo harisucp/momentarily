@@ -104,7 +104,7 @@
     <div class="searchContainer1">
         <div class="container">
             <div class="row">
-                <div class="col-sm-12">     
+                <div class="col-sm-12">
                     <div class="proHeading">
                         <h1>Recently Rented Products </h1>
                     </div>
@@ -124,9 +124,12 @@
                                         <a href="/Search/Item/@item.GoodId" title="@item.Name">
                                             <h2>@item.Name</h2>
                                         </a>
+                          
+
                                         @if (item.RentPeriodDay && !item.RentPeriodWeek)
                                         {
                                             <p>$ {{@item.Price| number: 2}} /Per day</p>
+
                                         }
                                         else if (!item.RentPeriodDay && item.RentPeriodWeek)
                                         {
@@ -141,19 +144,19 @@
                                 </div>
                             }
                             @*<div class="item">
-                                    <div class="thumbImage"><img src="~/Content/TemplateImg/OtherImages/car-image2.jpg" alt="image"/></div>
-                                    <div class="thumbDesc">
-                                        <h2>Wooden Box Bed (6.5x5)ft</h2>
-                                        <p>$200/month</p>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <div class="thumbImage"><img src="~/Content/TemplateImg/OtherImages/car-image1.jpg" alt="image"/></div>
-                                    <div class="thumbDesc">
-                                        <h2>Wooden Box Bed (6.5x5)ft</h2>
-                                        <p>$200/month</p>
-                                    </div>
-                                </div>*@
+            <div class="thumbImage"><img src="~/Content/TemplateImg/OtherImages/car-image2.jpg" alt="image"/></div>
+            <div class="thumbDesc">
+                <h2>Wooden Box Bed (6.5x5)ft</h2>
+                <p>$200/month</p>
+            </div>
+        </div>
+        <div class="item">
+            <div class="thumbImage"><img src="~/Content/TemplateImg/OtherImages/car-image1.jpg" alt="image"/></div>
+            <div class="thumbDesc">
+                <h2>Wooden Box Bed (6.5x5)ft</h2>
+                <p>$200/month</p>
+            </div>
+        </div>*@
                         </div>
                     </div>
                 </div>
@@ -432,7 +435,7 @@
                     <div class="copyrightDesc">
                         <ul>
                             <li><a href="/termsofuse">Terms &amp; Conditions</a></li>
-                            <li><a href="/privacypolicy" class="ppBtn"><img src="~/Content/TemplateImg/images/privacy-policy_icon.png" alt="image"/> Privacy Policy</a></li>
+                            <li><a href="/privacypolicy" class="ppBtn"><img src="~/Content/TemplateImg/images/privacy-policy_icon.png" alt="image" /> Privacy Policy</a></li>
 
                         </ul>
                     </div>
@@ -1312,7 +1315,7 @@
         opacity: .8;
         filter: alpha(opacity=70);
         display: none;
-        text-align:center;
+        text-align: center;
     }
 
         #divLoading p {
@@ -1385,7 +1388,7 @@
 
     .modal-backdrop.fade.in {
         /*z-index: 9999;*/
-        z-index:0 !important;
+        z-index: 0 !important;
     }
 
     .modal-dialog.sizeLg .modal-content {
@@ -1449,8 +1452,6 @@
         .modal-dialog.sizeLg {
             margin: 10% auto 0;
         }
-
-
     }
 
     @@media(max-width:767px) {
@@ -1487,7 +1488,6 @@
         }
 
         .waterMark .featureImage:before {
-
             width: 100%;
         }
     }
@@ -1643,7 +1643,7 @@
         margin-top: 0px;
         top: auto;
         text-align: center;
-        bottom:0;
+        bottom: 0;
     }
 
     .cbContent #loading-center-absolute {
@@ -1723,12 +1723,15 @@
             -webkit-transform: scale(0);
         }
     }
+
     .rsSpaceMob {
         margin-bottom: 15px;
     }
+
     .yesNoBtn {
-        text-align:right;
+        text-align: right;
     }
+
         .yesNoBtn button {
             width: auto;
             min-width: 80px;
@@ -1738,33 +1741,39 @@
         margin-top: 0;
     }
 
-    @@media(max-width:767px){
-        input:focus{
-            outline:none;
-            box-shadow:none;
+    @@media(max-width:767px) {
+        input:focus {
+            outline: none;
+            box-shadow: none;
         }
+
         .cbHeader h2 {
             font-size: 20px;
         }
+
         .cbContent p {
             padding: 10px 15px;
         }
+
         .cbContent .col-sm-6:nth-child(odd) {
             padding-right: 15px;
         }
+
         .cbContent .col-sm-6:nth-child(even) {
             padding-left: 15px;
         }
+
         .chatBooatSection button {
             width: auto;
         }
+
         .verificationBtn, .tryAgainVerification {
             text-align: right;
         }
+
         .chatBooat {
             display: none;
         }
-
     }
 
     @@media(max-width:480px) {
@@ -1773,10 +1782,9 @@
             max-height: 340px;
             min-height: 340px;
         }
+
         .chatBooat {
             display: block;
         }
     }
-
-
 </style>

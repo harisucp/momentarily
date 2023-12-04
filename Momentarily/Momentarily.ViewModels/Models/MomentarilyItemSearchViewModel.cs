@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Apeek.ViewModels.Models.Impl;
+using System.Collections.Generic;
 namespace Momentarily.ViewModels.Models
 {
     public class MomentarilyItemSearchViewModel
@@ -7,5 +8,6 @@ namespace Momentarily.ViewModels.Models
         public List<MomentarilyCategoryModel> Categories { get; set; }
         public MomentarilyItemSearchModel SearchModel { get; set; }
         public FilteredGoodsModel Result { get; set; }
+   
     }
 }

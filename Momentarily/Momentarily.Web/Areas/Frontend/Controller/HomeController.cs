@@ -15,6 +15,7 @@ using Apeek.Common.HttpContextImpl;
 using Apeek.Common.Controllers;
 using System.Web;
 using CaptchaMvc.HtmlHelpers;
+using Apeek.ViewModels.Models.Impl;
 
 namespace Momentarily.Web.Areas.Frontend.Controller
 {
@@ -29,6 +30,7 @@ namespace Momentarily.Web.Areas.Frontend.Controller
         private readonly IMomentarilyItemTypeService _typeService;
         private readonly IMomentarilyItemDataService _itemDataService;
         private readonly AccountControllerHelper<MomentarilyRegisterModel> _helper;
+        private readonly UserControllerHelper _UserControllerhelper;
         private readonly ISettingsDataService _settings;
         public HomeController(ICategoryService categoryService, ISendMessageService sendMessageService, ISettingsDataService settingsDataService, IMomentarilyItemTypeService typeService, IMomentarilyItemDataService itemDataService)
         {
@@ -38,20 +40,50 @@ namespace Momentarily.Web.Areas.Frontend.Controller
             _typeService = typeService;
             _itemDataService = itemDataService;
             _helper = new AccountControllerHelper<MomentarilyRegisterModel>();
+            _UserControllerhelper = new UserControllerHelper();
             _settings = new SettingsDataService();
         }
-        public ActionResult Index()        {            GetUpdateContextDetail();            if (Convert.ToBoolean(Session["IsAdmin"]) == true)            {                _helper.LogOff();                Session["IsAdmin"] = false;                Session["IsAutherised"] = false;                return RedirectToAction("Index");            }            ViewBag.Title = "Share & Borrow Items - momentarily";            ViewBag.Description = "Largest community to share or borrow almost any item such as clothing, bikes, office space, and lots more. momentarily is the p2p rental marketplace.";            ViewBag.GoogleSiteVerification = "tG02v-ZqX3p_2nyAe1D9sUG1RSJuHLJ51FGpjBAIuZM";            var model = new MomentarilyItemSearchViewModel()            {                SearchModel = new MomentarilyItemSearchModel(),                Categories = _categoryService.GetAllCategories()                .Where(x => x.IsRoot == false && x.ParentId == 1)                .Select(x => new MomentarilyCategoryModel
-                {                    Id = x.Id,                    Name = x.Name,                    ImagePath = _settingsDataService.GetImgFileServerUrl() + @"/Category/" + x.ImageFileName
+      
+        public ActionResult Index()
+        {
+            GetUpdateContextDetail();
+
+            if (Convert.ToBoolean(Session["IsAdmin"]) == true)
+            {
+                _helper.LogOff();
+                Session["IsAdmin"] = false;
+                Session["IsAutherised"] = false;
+                return RedirectToAction("Index");
+            }
+            ViewBag.Title = "Share & Borrow Items - momentarily";
+            ViewBag.Description = "Largest community to share or borrow almost any item such as clothing, bikes, office space, and lots more. momentarily is the p2p rental marketplace.";
+            ViewBag.GoogleSiteVerification = "tG02v-ZqX3p_2nyAe1D9sUG1RSJuHLJ51FGpjBAIuZM";
+            var model = new MomentarilyItemSearchViewModel()
+            {
+                SearchModel = new MomentarilyItemSearchModel(),
+                Categories = _categoryService.GetAllCategories()
+                .Where(x => x.IsRoot == false && x.ParentId == 1)
+                .Select(x => new MomentarilyCategoryModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    ImagePath = _settingsDataService.GetImgFileServerUrl() + @"/Category/" + x.ImageFileName
                 })
-                .OrderBy(x => x.Name).ToList()            };
+                .OrderBy(x => x.Name).ToList()
+            };
 
             Session["IsAdmin"] = false;
 
 
-            ViewBag.RecentlyRentedItems = _itemDataService.GetMostRecentlyRentedProduct();            ViewBag.FeaturedProduct = _itemDataService.GetMostFeaturedProduct();            TempData["CheckSiteVersion"] = _settings.GetBetaVersion();
+            ViewBag.RecentlyRentedItems = _itemDataService.GetMostRecentlyRentedProduct();
+            ViewBag.FeaturedProduct = _itemDataService.GetMostFeaturedProduct();
+            TempData["CheckSiteVersion"] = _settings.GetBetaVersion();
             var userVerifyId = UserId.HasValue;
             TempData["CheckForCBVerifyAccount"] = userVerifyId;
-            model.Categories = model.Categories.Where(x => x.Name != "All Categories" && x.Name != "Other").ToList();            var shape = _shapeFactory.BuildShape(null, model, PageName.Home.ToString());            return DisplayShape(shape);        }
+            model.Categories = model.Categories.Where(x => x.Name != "All Categories" && x.Name != "Other").ToList();
+            var shape = _shapeFactory.BuildShape(null, model, PageName.Home.ToString());
+            return DisplayShape(shape);
+        }
 
         public void GetUpdateContextDetail()
         {
