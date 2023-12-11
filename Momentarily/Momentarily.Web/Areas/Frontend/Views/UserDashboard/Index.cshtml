@@ -1,4 +1,5 @@
-﻿@model Apeek.ViewModels.Models.Impl.UserDashboardViewModel
+﻿@using Newtonsoft.Json
+@model Apeek.ViewModels.Models.Impl.UserDashboardViewModel
 
 @{
 
@@ -50,6 +51,22 @@
                     </div>
                     <!-- /.info-box-content -->
                 </div>
+
+
+                <!-- /.info-box -->
+            </div>
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box mb-3">
+                    <span class="info-box-icon bg-danger elevation-1"><i class="fa fa-clock-o"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Total Pending Amount</span>
+                        <span class="info-box-number" id="totalPendingAmountId"></span>
+                        @*$ @Model.totalUserPendingAmount.Sum(x => x.Total)*@
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+
+
                 <!-- /.info-box -->
             </div>
             <!-- /.col -->
@@ -77,6 +94,19 @@
                     <div class="info-box-content">
                         <span class="info-box-text">Total spent</span>
                         <span class="info-box-number" id="totalSpendID"></span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box mb-3">
+                    <span class="info-box-icon bg-danger elevation-1"><i class="fa fa-ban"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Total cancelled</span>
+                        <span class="info-box-number" id="totalCancelledID">@Model.TotalCancelledRentals</span>
                     </div>
                     <!-- /.info-box-content -->
                 </div>
@@ -219,278 +249,158 @@
             </div>
 
         </div>
-
-        <!--<div class="row">
+        <div class="row">
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Rating/Reviews</h3>
+                        <h3 class="card-title">
+                            Total Borrowed Items List
+                        </h3>
                     </div>
 
                     <div class="card-body responsive">
-                        <div class="photo-user">
-                            <div class="img-container">
-                                <img src="{{profile.profileData.User.UserProfileImageUrl}}" on-error-src="/Content/Img/profile-thumb.svg" />
-                            </div>
-                        </div>
+
+                        <table class="table table-striped table-bordered bootstrap-datatable datatable responsive" id="id_BorrowedItems">
+                            <thead>
+                                <tr>
+                                    <th>Sr.No</th>
+                                    <th>Product Id</th>
+                                    <th>Name</th>
+                                    <th>Count</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{ int count1 = 1; }
+                                @for (int i = 0; i < Model.totalBorrowersListbyUser.Count(); i++)
+                                {
+                                    <tr>
+                                        <td>
+                                            @count1
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(m => m.totalBorrowersListbyUser[i].Id)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(m => m.totalBorrowersListbyUser[i].ItemName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(m => m.totalBorrowersListbyUser[i].Count)
+                                        </td>
+                                    </tr>
+                                    count1++;
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+     
+        <div class="row">
+            <div class="col-md-3">
+                <div class="panel-white">
+                    <div class="panel-body">
                         <div class="user-name">
-                            {{profile.profileData.User.FirstName}}--> @*{{profile.profileData.User.LastName}}*@
-                        <!--</div>
-                        <div class="rate-block separated-block">
+                            <h4>Name: @Model.Name </h4> @*@Model.Name*@
+                            @*{{profile.profileData.User.FirstName}}*@ @*{{profile.profileData.User.LastName}}*@
+                        </div>
+                        <div class="rate-block separated-block margin-lft">
                             <ng-rate-it ng-model="profile.profileData.Rank" read-only="true"></ng-rate-it>
                             <span class="rate-number">(<span>{{profile.profileData.ReviewCount}}</span>)</span>
                         </div>
-
-                        <div class="cancel_block">
-                            <span ng-if="profile.profileData.TotalRentals<=0">
-                                No rentals yet
-                            </span>
-
-                            <span ng-if="profile.profileData.TotalRentals>0 && profile.profileData.TotalCancelledRentals<=0">
-                                0% Cancellation Rate
-                            </span>
-
-                            <span ng-if="profile.profileData.TotalRentals>0 && profile.profileData.TotalCancelledRentals>0">
-                                {{profile.profileData.CancelledPercentage}}% Cancellation Rate
-                            </span>
-                        </div>
-                        <hr />
-                        <div class="user-description">{{profile.profileData.User.Description}}</div>
-
+                        <h4>Description</h4>
+                        <div class="user-description"> @Model.Description</div>
                     </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-    </div>-->
-
-    <div class="row">
-        <div class="col-md-3">
-            <div class="panel-white">
-                <div class="panel-body">
-                    <div class="photo-user">
-                        <div class="img-container">
-                            <img src="{{profile.profileData.User.UserProfileImageUrl}}" on-error-src="/Content/Img/profile-thumb.svg" />
-
-                        </div>
-                    </div>
-                    <div class="user-name">
-                        {{profile.profileData.User.FirstName}} @*{{profile.profileData.User.LastName}}*@
-                    </div>
-                    <div class="rate-block separated-block">
-                        <ng-rate-it ng-model="profile.profileData.Rank" read-only="true"></ng-rate-it>
-                        <span class="rate-number">(<span>{{profile.profileData.ReviewCount}}</span>)</span>
-                    </div>
-
-                    <div class="cancel_block">
-
-                        <span ng-if="profile.profileData.TotalRentals<=0">
-                            No rentals yet
-                        </span>
-
-                        <span ng-if="profile.profileData.TotalRentals>0 && profile.profileData.TotalCancelledRentals<=0">
-                            0% Cancellation Rate
-                        </span>
-
-                        <span ng-if="profile.profileData.TotalRentals>0 && profile.profileData.TotalCancelledRentals>0">
-                            {{profile.profileData.CancelledPercentage}}% Cancellation Rate
-                        </span>
-                    </div>
-                    <hr />
-                    <div class="user-description">{{profile.profileData.User.Description}}</div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-9 list-items">
-            <div class="row">
-                @* Items *@
-                <div class="col-md-4 item" ng-repeat="item in profile.profileData.Listings.Items">
-                    <div>
-                        <a target="_blank" href="@QuickUrl.SearchItemUrl(){{'/' + item.GoodId}}">
-                            <div class="img-item">
-                                <div class="img-container">
-                                    <img ng-src="{{item.Image || 'empty'}}" on-error-src="/Content/Img/error-bg.png" alt="">
-                                </div>
-                            </div>
-                        </a>
-                        <div class="table-wrapper">
-                            <div class="table-row">
-                                <div class="price">${{item.Price}}</div>
-                                <div class="left-col">
-                                    <div class="title-item">{{item.Name}}</div>
-                                </div>
-                            </div>
-                            <div class="table-row">
-                                <div class="hidden-rate-block">
+            <div class="col-md-9 list-items">
+                <div class="row reviews">
+                    <div class="col-md-12">
+                        <div class="panel-white bordr-0">
+                            <div ng-show="profile.profileData.SeekersReviews.Items.length>0">
+                                @* Seeker *@
+                                <div class="type-review title-block separated-block">
                                     <div class="rate-block">
-                                        <ng-rate-it ng-model="profile.profileData.Rank" read-only="true"></ng-rate-it>
+                                        <ng-rate-it ng-model="profile.profileData.RankSeekers" read-only="true"></ng-rate-it>
+                                        <span class="rate-number">
+                                            (<span>@Model.RankSharers</span>)
+                                        </span>
                                     </div>
+                                    <h2 class="type-review-seekers">
+                                        Reviews from borrowers
+                                    </h2>
                                 </div>
-                                <div class="price-details">per day</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="items-none" ng-hide="profile.profileData.Listings.Items.length>0">
-                    <div class="col-md-12 items-none-block">
-                        <div class="icon"><i class="fa fa-meh-o"></i></div>
-                        <h4>No items.</h4>
-                        <p>This person hasn't listed any items.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row reviews">
-                <div class="col-md-12">
-                    <div class="panel-white">
-                        <div ng-show="profile.profileData.SeekersReviews.Items.length>0">
-                            @* Seeker *@
-                            <div class="type-review title-block separated-block">
-                                <div class="rate-block">
-                                    <ng-rate-it ng-model="profile.profileData.RankSeekers" read-only="true"></ng-rate-it>
-                                    <span class="rate-number">(<span>{{profile.profileData.SeekersCountReview}}</span>)</span>
-                                </div>
-                                <h2 class="type-review-seekers">
-                                    Reviews from borrowers
-                                </h2>
-                            </div>
-                            <div class="panel-body">
-                                <div class="review separated-block" ng-repeat="item in profile.profileData.SeekersReviews.Items">
-                                    <div class="img-user">
-                                        <img ng-show="item.ReviewerImage" ng-src="{{item.ReviewerImage}}" />
-                                    </div>
-                                    <div class="review-body">
-                                        <div class="name-rate-block">
-                                            <div class="name-user pull-left">{{item.ReviewerName}}</div>
-                                            <div class="rate-block pull-right">
-                                                <ng-rate-it ng-model="item.Rank" read-only="true"></ng-rate-it>
-                                                <span class="rate-number">(<span>{{item.Rank}}</span>)</span>
-                                            </div>
+                                <div class="panel-body">
+                                    <div class="review separated-block" ng-repeat="item in profile.profileData.SeekersReviews.Items">
+                                        <div class="img-user">
+                                            <img ng-show="item.ReviewerImage" ng-src="{{item.ReviewerImage}}" />
                                         </div>
-                                        <div class="message"><p>{{item.Message}}</p></div>
-                                        @*<div class="date">{{item.Date | amCalendar}}</div>*@
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="show-more-block" ng-show="profile.showMoreSeekerReview">
-                                <div class="show-more">
-                                    @* display this img when is loading and hide tag a <img class="loading-img" src="/Content/Img/preload.gif" alt=""> *@
-                                    <img class="loading-img" src="/Content/Img/rolling.gif" alt="" ng-show="profile.isSeekerLoading">
-                                    <a ng-click="profile.loadMoreSeekerReview()" ng-hide="profile.isSeekerLoading">Show more</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div ng-show="profile.profileData.SharersReviews.Items.length>0">
-                            @* Sharers *@
-                            <div class="type-review title-block separated-block">
-                                <div class="rate-block">
-                                    <ng-rate-it ng-model="profile.profileData.RankSharers" read-only="true"></ng-rate-it>
-                                    <span class="rate-number">(<span>{{profile.profileData.SharersCountReview}}</span>)</span>
-                                </div>
-                                <h2 class="type-review-seekers">
-                                    Reviews from sharers
-                                </h2>
-                            </div>
-                            <div class="panel-body">
-                                <div class="review separated-block" ng-repeat="item in profile.profileData.SharersReviews.Items">
-                                    <div class="img-user">
-                                        <img ng-show="item.ReviewerImage" ng-src="{{item.ReviewerImage}}" />
-                                    </div>
-                                    <div class="review-body">
-                                        <div class="name-rate-block">
-                                            <div class="name-user pull-left">{{item.ReviewerName}}</div>
-                                            <div class="rate-block pull-right">
-                                                <ng-rate-it ng-model="item.Rank" read-only="true"></ng-rate-it>
-                                                <span class="rate-number">(<span>{{item.Rank}}</span>)</span>
+                                        <div class="review-body">
+                                            <div class="name-rate-block">
+                                                <div class="name-user pull-left">{{item.ReviewerName}}</div>
+                                                <div class="rate-block pull-right">
+                                                    <ng-rate-it ng-model="item.Rank" read-only="true"></ng-rate-it>
+                                                    <span class="rate-number">(<span>@Model.RankSharers</span>)</span>
+                                                </div>
                                             </div>
+                                            <div class="message"><p>{{item.Message}}</p></div>
+                                            @*<div class="date">{{item.Date | amCalendar}}</div>*@
                                         </div>
-                                        <div class="message"><p>{{item.Message}}</p></div>
-                                        @*<div class="date">{{item.Date | amCalendar}}</div>*@
+                                    </div>
+                                </div>
+                                <div class="show-more-block" ng-show="profile.showMoreSeekerReview">
+                                    <div class="show-more">
+                                        @* display this img when is loading and hide tag a <img class="loading-img" src="/Content/Img/preload.gif" alt=""> *@
+                                        <img class="loading-img" src="/Content/Img/rolling.gif" alt="" ng-show="profile.isSeekerLoading">
+                                        <a ng-click="profile.loadMoreSeekerReview()" ng-hide="profile.isSeekerLoading">Show more</a>
                                     </div>
                                 </div>
                             </div>
-                            <div class="show-more-block" ng-show="profile.showModeSharerReview">
-                                <div class="show-more">
-                                    @* display this img when is loading and hide tag a <img class="loading-img" src="/Content/Img/preload.gif" alt=""> *@
-                                    <img class="loading-img" src="/Content/Img/rolling.gif" alt="" ng-show="profile.isSharerLoading">
-                                    <a ng-click="profile.loadMoreSharerReview()" ng-hide="profile.isSharerLoading">Show more</a>
+                            <div ng-show="profile.profileData.SharersReviews.Items.length>0">
+                                @* Sharers *@
+                                <div class="type-review title-block separated-block">
+                                    <div class="rate-block">
+                                        <ng-rate-it ng-model="profile.profileData.RankSharers" read-only="true"></ng-rate-it>
+                                        <span class="rate-number">@*(*@<span>{{profile.profileData.SharersCountReview}}</span>@*)*@</span>
+                                    </div>
+                                    <h2 class="type-review-seekers">
+                                        Reviews from sharers
+                                    </h2>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="review separated-block" ng-repeat="item in profile.profileData.SharersReviews.Items">
+                                        <div class="img-user">
+                                            <img ng-show="item.ReviewerImage" ng-src="{{item.ReviewerImage}}" />
+                                        </div>
+                                        <div class="review-body">
+                                            <div class="name-rate-block">
+                                                <div class="name-user pull-left">{{item.ReviewerName}}</div>
+                                                <div class="rate-block pull-right">
+                                                    <ng-rate-it ng-model="item.Rank" read-only="true"></ng-rate-it>
+                                                    <span class="rate-number">(<span>{{item.Rank}}</span>)</span>
+                                                </div>
+                                            </div>
+                                            <div class="message"><p>{{item.Message}}</p></div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="items-none" ng-hide="profile.profileData.SeekersReviews.Items.length>0 || profile.profileData.SharersReviews.Items.length>0">
-                            <div class="col-md-12 items-none-block">
-                                <div class="icon"><i class="fa fa-comments-o"></i></div>
-                                <h4>No Reviews Yet.</h4>
-                                <p>This user hasn't had a review yet.</p>
+                            <div class="items-none" ng-hide="profile.profileData.SeekersReviews.Items.length>0 || profile.profileData.SharersReviews.Items.length>0">
+                                <div class="col-md-12 items-none-block">
+                                    <div class="icon"><i class="fa fa-comments-o"></i></div>
+                                    <h4>No Reviews Yet.</h4>
+                                    <p>This user hasn't had a review yet.</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-
-
-
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">
-                        Total Borrowed Items List
-                    </h3>
-                </div>
-
-                <div class="card-body responsive">
-
-                    <table class="table table-striped table-bordered bootstrap-datatable datatable responsive" id="id_BorrowedItems">
-                        <thead>
-                            <tr>
-                                <th>Sr.No</th>
-                                <th>Product Id</th>
-                                <th>Name</th>
-                                <th>Count</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @{ int count1 = 1; }
-                            @for (int i = 0; i < Model.totalBorrowersListbyUser.Count(); i++)
-                            {
-                                <tr>
-                                    <td>
-                                        @count1
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(m => m.totalBorrowersListbyUser[i].Id)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(m => m.totalBorrowersListbyUser[i].ItemName)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(m => m.totalBorrowersListbyUser[i].Count)
-                                    </td>
-                                </tr>
-                                count1++;
-                            }
-
-                        </tbody>
-                    </table>
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-
-
-
-
     </div>
 </section>
 <!-- /.content -->
@@ -532,6 +442,12 @@
         display: inline-block;
         padding: 6px 12px;
     }
+    .margin-lft{
+        margin-left:-15px;
+    }
+    .bordr-0{
+        border:none;
+    }
 </style>
 
 
@@ -551,6 +467,10 @@
     //$(document).on('click', '#becomeBorrower', function () {
     //    alert(1234)
     //});
+        var angularConstants = {};
+    angularConstants = {
+        profileData: JSON.parse('@Html.Raw(HttpUtility.JavaScriptStringEncode(JsonConvert.SerializeObject(Model.userPublicProfile)))')
+    };
 
 
     $(document).ready(function () {
@@ -569,14 +489,23 @@
 
     function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
-    var userEarning = numberWithCommas('@Model.totalUserEarning');
-    var userSpend = numberWithCommas('@Model.totalUserSpend');
+        }
+        var userEarning = numberWithCommas('@Model.totalUserEarning');
+        var userSpend = numberWithCommas('@Model.totalUserSpend');
+        var totalCancelled = numberWithCommas('@Model.TotalCancelledRentals')
+        var pendingAmount = numberWithCommas('@Model.totalUserPendingAmount.Sum(x=>x.Total)');
+        var pendingAmount = numberWithCommas('@Model.totalUserPendingAmount.Sum(x=>x.Total)')
         var finaluserEarning = '$ ' + userEarning;
         var finaluserSpend = '$ ' + userSpend;
+        var finalTotalPendingAmount = '$ ' + pendingAmount;
+
         $("#totalEarnedID").html(finaluserEarning);
         $("#totalSpendID").html(finaluserSpend);
+        $('#totalPendingAmountId').html(finalTotalPendingAmount);
+
     });
+
+
 
 
     window.onload = function () {

@@ -1185,6 +1185,31 @@ namespace Momentarily.UI.Service.Services.Impl
             return resultnew;
         }
 
+
+        public List<MostRentedItems> TotalPendingAmount(int? userId)
+        {
+            List<MostRentedItems> resultnew = new List<MostRentedItems>();
+
+            Uow.Wrap(uow =>
+            {
+                resultnew = (from goodreq in _repGoodRequest.Table
+                             join good in _repGood.Table
+                             on goodreq.GoodId equals good.Id
+                             where goodreq.CreateBy == userId && (goodreq.StatusId == 5 || goodreq.StatusId == 2)
+                             select new MostRentedItems
+                             {
+
+                                 Id = good.Id,
+                                 ItemName = good.Name,
+                                 Total = goodreq.PendingAmount
+
+                             }).ToList();
+
+            }, null, LogSource.GoodService);
+            return resultnew;
+        }
+
+
         public List<ProductsList> GetProductList(DateTime startRentalDate, DateTime endRentalDate, string searchShareName, string searchBorrowerName, int categoryId, string ItemName, int amountRangeId)
         {
             List<ProductsList> Products = new List<ProductsList>();

@@ -32,6 +32,7 @@ namespace Momentarily.UI.Service.Services
         List<MostRentedItems> gettotalborrowerslistbyUser(int? userId);
         List<MostRentedItems> TotalUserEarning(int? userId);
         List<MostRentedItems> TotalUserSpent(int? userId);
+        List<MostRentedItems> TotalPendingAmount(int? userId);
 
         List<MostRentedItems> TotalUserEarningByMonth(int? userId);
         List<MostRentedItems> TotalUserSpentByMonth(int? userId);

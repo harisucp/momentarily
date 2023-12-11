@@ -88,27 +88,31 @@ namespace Momentarily.Web.Areas.Frontend.Controller
             if (result.CreateResult == CreateResult.Success)
             {
                 // Assign relevant properties from the result to the viewModel
-                
+
 
                 // Add other properties as needed
                 obj = _momentarilyItemDataService.GetTotalLoanedItemList(_userID);
                 obj.totalBorrowersListbyUser = _momentarilyItemDataService.gettotalborrowerslistbyUser(_userID);
                 obj.totalBorrowersCountbyUser = obj.totalBorrowersListbyUser.Sum(x => x.Count);
+                obj.totalUserPendingAmount = _momentarilyItemDataService.TotalPendingAmount(_userID);
 
                 obj.totalUserEarningListbyUser = _momentarilyItemDataService.TotalUserEarning(_userID);
-                obj.totalUserEarning = obj.totalUserEarningListbyUser.Sum(x => x.Total);
+                obj.totalUserEarning = obj.totalUserEarningListbyUser.Sum(x => x.Total); // Summing up the Total property
                 //var dt = Math.Round(totalUserEarning, 2);
                 //obj.totalUserEarning = Math.Round(totalUserEarning, 2);
-                obj.totalUserSpendListbyUser = _momentarilyItemDataService.TotalUserSpent(_userID);
                 obj.totalUserSpendListbyUser = _momentarilyItemDataService.TotalUserSpent(_userID);
                 obj.totalUserSpend = obj.totalUserSpendListbyUser.Sum(x => x.Total);
                 obj.totalUserEarningByMonth = _momentarilyItemDataService.TotalUserEarningByMonth(_userID);
                 obj.totalUserSpendByMonth = _momentarilyItemDataService.TotalUserSpentByMonth(_userID);
 
-                obj.RankSeekers = (int)result.Obj.Rank; // Adjust property names as needed
-                obj.ReviewCount = result.Obj.ReviewCount; // Adjust property names as needed
-                obj.TotalRentals = result.Obj.TotalRentals; // Adjust property names as needed
-                obj.TotalCancelledRentals = result.Obj.TotalCancelledRentals; // Adjust property names as needed
+                obj.RankSeekers = (int)result.Obj.Rank;
+                obj.ReviewCount = result.Obj.ReviewCount; 
+                obj.TotalRentals = result.Obj.TotalRentals; 
+                obj.TotalCancelledRentals = result.Obj.TotalCancelledRentals;
+                var name = result.Obj.User.FirstName + " " + result.Obj.User.LastName;
+                obj.Name = name;//result.Obj.User.FirstName;
+                obj.Description = result.Obj.User.Description;
+                obj.RankSharers = result.Obj.RankSharers;
                 return View(obj);
            
             }

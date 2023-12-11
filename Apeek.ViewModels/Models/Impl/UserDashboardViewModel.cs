@@ -6,12 +6,15 @@ using System.Threading.Tasks;
 
 namespace Apeek.ViewModels.Models.Impl
 {
-   public class UserDashboardViewModel
+    public class UserDashboardViewModel
     {
-       public int mostloanedItemsCount { get; set; }
-       public List<MostRentedItems> mostloanedItems { get; set; }
+        public int mostloanedItemsCount { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public List<MostRentedItems> mostloanedItems { get; set; }
 
         public int totalBorrowersCountbyUser { get; set; }
+        public double totalPendingAmount { get; set; }
         public List<MostRentedItems> totalBorrowersListbyUser { get; set; }
 
         public double totalUserEarning { get; set; }
@@ -19,6 +22,7 @@ namespace Apeek.ViewModels.Models.Impl
 
         public double totalUserSpend { get; set; }
         public List<MostRentedItems> totalUserSpendListbyUser { get; set; }
+        public List<MostRentedItems> totalUserPendingAmount { get; set; }
         public List<MostRentedItems> totalUserEarningByMonth { get; set; }
 
         public List<MostRentedItems> totalUserSpendByMonth { get; set; }
