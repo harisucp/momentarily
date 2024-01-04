@@ -115,11 +115,11 @@
                                                     <li class="@((IsActiveLink("Index", "covid")||IsActiveLink("PlaceOrder", "covid")) ? "active" : "")"><a href="@Url.Action("Index", "covid")">COVID-19 Products</a></li>
                                                 </ul>
                                             </li>*@
-                                        <li><a id="search_button" href="/Search/Map"><img src="~/Content/TemplateImg/OtherImages/Search.png" alt="image" /> </a></li>
+                                        <li><a id="search_button" href="/Search/Map"><img class="search_button" src="~/Content/TemplateImg/OtherImages/Search.png" alt="image" /> </a></li>
                                         @*<li><a id="search_button" href="/Search/Map"><img src="~/Content/TemplateImg/OtherImages/SearchLogo (1).png" alt="image" /> </a></li>*@
                                         <li>
                                             <a id="bell_button" class="position-relative" href="@Url.Action("Index", "Notification")">
-                                                <img src="~/Content/TemplateImg/OtherImages/Notification.png" alt="image" />
+                                                <img class="notification_button" src="~/Content/TemplateImg/OtherImages/Notification.png" alt="image" />
                                                 <span class="badge badge-danger custom-badge">{{shared.UserNotification()?''+shared.UserData.UserNotification+'':''}}</span>
                                             </a>
                                         </li>
@@ -372,6 +372,14 @@
 
 </html>
 <style>
+    .search_button {
+        height: 23px;
+        margin-top: 1px;
+    }
+
+    .notification_button {
+        height: 23px;
+    }
     .betaSignUpBtn {
         max-width: 600px;
         margin: 20px auto;
