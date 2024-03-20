@@ -65,6 +65,8 @@ namespace Apeek.ViewModels.Models
         public int ReasonId { get; set; }
         public bool IsViewed { get; set; }
         public FinalFeedbackVM finalFeedbackVM { get; set; }
+        public bool? ConfirmDelivery { get; set; }
+        public bool? ReturnConfirm { get; set; }
     }
 
     public class FinalFeedbackVM    {        public int RequestId { get; set; }        public bool NoIssue { get; set; }        public bool Late { get; set; }        public bool Damaged { get; set; }

@@ -110,7 +110,7 @@
                                     <td>
                                         <a target="_blank" href="@Url.Action("UserPublicProfile", "User", new {id = Model.ViewModel.OwnerId})">{{request.item.OwnerName}}</a>&nbsp;&nbsp;
 
-                                        <a href="@Url.Action("Conversation", "Message", new {userId = Model.ViewModel.OwnerId})" class = "label-subscribed btn btn-primary" title="Send Message">
+                                        <a href="@Url.Action("Conversation", "Message", new {userId = Model.ViewModel.OwnerId})" class="label-subscribed btn btn-primary" title="Send Message">
                                             <i class="fa fa-envelope" aria-hidden="true"></i>
                                         </a>
                                     </td>
@@ -223,9 +223,45 @@
                 </div>
             </div>
         </div>
+
         <div class="row" ng-if="request.item.StatusId != 1">
             <div class="col-md-9 col-md-offset-3 ">
                 <div class="request-container">
+                    <div class="approve-decline" style="padding: 10px 0px 10px;">
+                        <div id="startPickup" style="display:none;padding: 10px 0px 10px;">
+                            <a href="@Url.Action("Location", "Booking", new {id = Model.ViewModel.Id})" class="btn btn-red">
+                                Start Pickup
+                            </a>
+                        </div>
+                        <div id="trackLocation" style="display:none;padding: 10px 0px 10px;">
+                            <a href="@Url.Action("Location", "Booking", new {id = Model.ViewModel.Id})" class="btn btn-red">
+                                Track Location
+                            </a>
+                        </div>
+                        <div id="returntrackLocation" style="display:none;padding: 10px 0px 10px;">
+                            <a href="@Url.Action("Location", "Booking", new {id = Model.ViewModel.Id})" class="btn btn-red">
+                                Track Location
+                            </a>
+                        </div>
+                        <div id="deliveryNotStarted" style="display:none;padding: 10px 0px 10px;">
+                            Delivery time has not started yet.
+                        </div>
+                        <div id="rideTimeCompleted" style="display:none;padding: 10px 0px 10px;">
+                            Rental time has been completed.
+                        </div>
+                        <div id="startReturn" style="display:none;padding: 10px 0px 10px;">
+                            <a href="@Url.Action("Return", "Booking", new {id = Model.ViewModel.Id})" class="btn btn-red">
+                                Start Return
+                            </a>
+                        </div>
+                        <div id="returnNotStarted" style="display:none;padding: 10px 0px 10px;">
+                            Return time has not started yet.
+                        </div>
+                        <div id="rentSuccessfully" style="display:none;padding: 10px 0px 10px;">
+                            Rental has been successfully completed.
+                        </div>
+                    </div>
+                    
                     <apeek-map style="min-height: 500px"
                                items="[request.item]"
                                search-location="request.item.ShippingAddress || request.item.Location"
@@ -240,7 +276,6 @@
         </div>
     </div>
 </div>
-
 
 @Scripts.Render("~/Scripts/Booking")
 <style>
@@ -258,4 +293,97 @@
     var angularConstants = {
         Request: JSON.parse('@Html.Raw(HttpUtility.JavaScriptStringEncode(Json.Encode(Model)))')
     };
+</script>
+<script>
+    debugger;
+    function isTodayAndWithin30Min(startDate, startTime, endDate, endTime) {
+        var startDateTime = parseCombinedDateTime(startDate, startTime);
+        var endDateTime = parseCombinedDateTime(endDate, endTime);
+        var now = new Date();
+        if (now >= startDateTime && now <= endDateTime) {
+            return true;
+        } else {
+            return false;
+        }
+    };
+
+    var startDate = "@Model.ViewModel.StartDate";
+    var startTime = "@Model.ViewModel.StartTime";
+    var endDate = "@Model.ViewModel.EndDate";
+    var endTime = "@Model.ViewModel.EndTime";
+    var applyForDelivery = "@Model.ViewModel.ApplyForDelivery";
+    var returnConfirm = "@Model.ViewModel.ReturnConfirm";
+    var deliveryConfirm = "@Model.ViewModel.ConfirmDelivery";
+
+    var todaysDate = new Date();
+    var endDateTime = parseCombinedDateTime(endDate, endTime);
+    var startDateTime = parseCombinedDateTime(startDate, startTime);
+
+
+    if (deliveryConfirm === "False") {
+        if (todaysDate <= endDateTime && todaysDate >= startDateTime) {
+            if (applyForDelivery === "True") {
+                document.getElementById("trackLocation").style.display = "block";
+            } else if (applyForDelivery === "False") {
+                document.getElementById("startPickup").style.display = "block";
+            }
+        } else {
+            if (todaysDate > endDateTime) {
+                document.getElementById("rideTimeCompleted").style.display = "block";
+            } else {
+                document.getElementById("deliveryNotStarted").style.display = "block";
+            }
+        }
+    } else if (deliveryConfirm === "True")
+    {
+        var yesterday = getYesterday();
+        console.log(yesterday);
+        console.log(todaysDate <= endDateTime );
+        console.log(todaysDate >= startDateTime);
+        console.log(yesterday < endDateTime);
+        console.log(todaysDate <= endDateTime && todaysDate >= startDateTime && yesterday < endDateTime);
+        if (todaysDate <= endDateTime && todaysDate >= startDateTime && yesterday < endDateTime)
+        {
+            if (applyForDelivery === "True") {
+                document.getElementById("returntrackLocation").style.display = "block";
+            }
+            else if (returnConfirm === "False" && applyForDelivery === "False") {
+                document.getElementById("startReturn").style.display = "block";
+            }
+            else if (returnConfirm === "True" && deliveryConfirm === "True") {
+                document.getElementById("rentSuccessfully").style.display = "block";
+            }
+        }
+        else
+        {
+            if (todaysDate > endDateTime) {
+                document.getElementById("rideTimeCompleted").style.display = "block";
+            }
+            else {
+                document.getElementById("returnNotStarted").style.display = "block";
+            }
+        }
+    }
+
+    function getYesterday() {
+        let d = new Date();
+        d.setDate(d.getDate() - 1);
+        return d;
+    }
+
+    function parseCombinedDateTime(startDate, startTime) {
+        var startDateParts = startDate.split('/');
+        var startTimeParts = startTime.split(':');
+        var month = parseInt(startDateParts[0]) - 1;
+        var day = parseInt(startDateParts[1]);
+        var year = parseInt(startDateParts[2]);
+        var hours = parseInt(startTimeParts[0]);
+        var minutes = parseInt(startTimeParts[1]);
+        if (startTime.includes('AM') && hours === 12) {
+            hours = 0;
+        } else if (startTime.includes('PM') && hours !== 12) {
+            hours += 12;
+        }
+        return new Date(year, month, day, hours, minutes);
+    }
 </script>

@@ -24,6 +24,9 @@ using PayPal.Api;
 
 using Apeek.Web.Framework.ControllerHelpers;
 using System.Globalization;
+using Newtonsoft.Json.Linq;
+using System.Threading.Tasks;
+using System.Net.Http;
 
 namespace Momentarily.Web.Areas.Frontend.Controller
 {
@@ -44,12 +47,12 @@ namespace Momentarily.Web.Areas.Frontend.Controller
         private readonly ISendMessageService _sendMessageService;
         private readonly ITwilioNotificationService _twilioNotificationService;
         private readonly IUserNotificationService _userNotificationService;
-
+        private readonly ILiveLocationService _liveLocationService;
         public ListingController(IMomentarilyItemDataService itemDataService,
             IMomentarilyItemTypeService typeService, ICategoryService categoryService,
             IMomentarilyGoodRequestService goodRequestService, IMomentarilyUserMessageService userMessageService,
             ISendMessageService emailMessageService, IAccountDataService accountDataService, IPaymentService paymentService,
-            IMomentarilyItemDataService goodItemService, ISendMessageService sendMessageService, ITwilioNotificationService twilioNotificationService, IUserNotificationService userNotificationService)
+            IMomentarilyItemDataService goodItemService, ISendMessageService sendMessageService, ITwilioNotificationService twilioNotificationService, IUserNotificationService userNotificationService, ILiveLocationService liveLocationService)
         {
             _itemDataService = itemDataService;
             _typeService = typeService;
@@ -64,6 +67,7 @@ namespace Momentarily.Web.Areas.Frontend.Controller
             _sendMessageService = sendMessageService;
             _twilioNotificationService = twilioNotificationService;
             _userNotificationService = userNotificationService;
+            _liveLocationService = liveLocationService;
             _helper = new AccountControllerHelper<MomentarilyRegisterModel>();
         }
         [Authorize]
@@ -406,6 +410,16 @@ namespace Momentarily.Web.Areas.Frontend.Controller
                 if (_goodRequestService.CanSharerStartDispute(result.Obj.StatusId, result.Obj.EndDate))
                 {
                     result.Obj.CanStartDispute = true;
+                }
+                var liveLocation = _liveLocationService.GetByRequestId(id);
+                if(liveLocation == null)
+                {
+                    result.Obj.ReturnConfirm = false;
+                    result.Obj.ConfirmDelivery = false;
+                } else
+                {
+                    result.Obj.ConfirmDelivery = liveLocation.DeliveryConfirm;
+                    result.Obj.ReturnConfirm = liveLocation.ReturnConfirm;
                 }
 
                 //if (result.Obj.CouponCode != null && result.Obj.CouponDiscount != 0)
@@ -786,5 +800,279 @@ namespace Momentarily.Web.Areas.Frontend.Controller
             }
             return couponCode;
         }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<ActionResult> Location(int id)
+       {
+            if (!UserId.HasValue || !UserAccess.HasAccess(Privileges.CanViewUsers, UserId) || id == 0)
+                return RedirectToHome();
+            var getUserRequestResult = _goodRequestService.GetUserRequest(UserId.Value, id);
+            var momentarilyItem = _goodItemService.GetItem(getUserRequestResult.Obj.GoodId);
+
+            if (DateTime.Now <= getUserRequestResult.Obj.EndDate && DateTime.Now >= getUserRequestResult.Obj.StartDate)
+            {
+                var Obj = new LiveLocation();
+
+                var checkRequest = _liveLocationService.checkRequest(id);
+                if (getUserRequestResult.Obj.ApplyForDelivery)
+                {
+                    if (checkRequest != true)
+                    {
+                        var userNotificationCreateModel = new UserNotificationCreateModel
+                        {
+                            UserId = getUserRequestResult.Obj.UserId,
+                            Text = $"Sharer has started the ride.Click here to track location.",
+                            Url = $"{HttpContext.Request.Url.GetLeftPart(UriPartial.Authority)}/Booking/Location/{id}"
+                        };
+                        _userNotificationService.AddNotification(userNotificationCreateModel);
+
+                        var borrowerCoordinates = await GetCoordinatesAsync(getUserRequestResult.Obj.ShippingAddress);
+
+                        Obj = _liveLocationService.AddLocation(getUserRequestResult.Obj.UserId, id, getUserRequestResult.Obj.OwnerId, momentarilyItem.Obj.Latitude, momentarilyItem.Obj.Longitude, borrowerCoordinates.Item1, borrowerCoordinates.Item2, DeliverBy.SHARER);
+                    }
+                    else
+                    {
+                        Obj = _liveLocationService.GetByRequestId(id);
+                    }
+                }
+                else
+                {
+                    Obj = _liveLocationService.GetByRequestId(id);
+                }
+                LocationViewModel locationViewModel = new LocationViewModel();
+                if (Obj != null)
+                {
+                    locationViewModel = new LocationViewModel
+                    {
+                        SharerLatitude = Obj.SharerLatitude,
+                        SharerLongitude = Obj.SharerLongitude,
+                        BorrowerLatitude = Obj.BorrowerLatitude,
+                        BorrowerLongitude = Obj.BorrowerLongitude,
+                        LocationId = Obj.LocationId,
+                        DeliverBy = Obj.DeliverBy.ToString(),
+                        RideStarted = Obj.RideStarted,
+                        RequestId = Obj.GoodRequestId,
+                        ReturnConfirm = Obj.ReturnConfirm,
+                        DeliveryConfirm = Obj.DeliveryConfirm
+                    };
+                }
+                var shape = _shapeFactory.BuildShape(null, locationViewModel, PageName.UserRequest.ToString());
+                return DisplayShape(shape);
+            }
+            else
+            {
+                if (DateTime.Now > getUserRequestResult.Obj.EndDate)
+                {
+                    var userNotificationCreateModel = new UserNotificationCreateModel
+                    {
+                        UserId = UserId.Value,
+                        Text = $"Rental time has been completed.",
+                        Url = $"{HttpContext.Request.Url.GetLeftPart(UriPartial.Authority)}/Listing/Booking/{id}"
+                    };
+                    _userNotificationService.AddNotification(userNotificationCreateModel);
+                } else
+                {
+                    var userNotificationCreateModel = new UserNotificationCreateModel
+                    {
+                        UserId = UserId.Value,
+                        Text = $"Delivery time has not started yet.",
+                        Url = $"{HttpContext.Request.Url.GetLeftPart(UriPartial.Authority)}/Listing/Booking/{id}"
+                    };
+                    _userNotificationService.AddNotification(userNotificationCreateModel);
+                }
+                return RedirectToAction("Booking", new { id = id });
+            }
+        }
+
+        [HttpPost, ActionName("Location")]
+        public JsonResult PostLocation(string locationId)
+        {
+            var liveLocation = _liveLocationService.fetchLocation(locationId);
+            return Json(new { lat = liveLocation.BorrowerLatitude, lng = liveLocation.BorrowerLongitude });
+        }
+
+        [HttpPost, ActionName("UpdateLocation")]
+        public JsonResult UpdateLocation(string locationId, double lat, double lng)
+        {
+            var liveLocation = _liveLocationService.UpdateSharerLocation(locationId, UserId.Value, Convert.ToDouble(lat), Convert.ToDouble(lng));
+            return Json(new { status = "success" });
+        }
+
+        [HttpGet]
+        public ActionResult ConfirmDelivery(int id)
+        {
+            var liveLocation = _liveLocationService.ConfirmDelivery(id);
+            return RedirectToAction("Booking", new { id = id });
+        }
+
+        [HttpGet]
+        public ActionResult ReturnConfirm(int id)
+        {
+            var liveLocation = _liveLocationService.ReturnConfirm(id);
+            return RedirectToAction("Booking", new { id = id });
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<ActionResult> Return(int id)
+        {
+            if (!UserId.HasValue || !UserAccess.HasAccess(Privileges.CanViewUsers, UserId) || id == 0)
+                return RedirectToHome();
+            var getUserRequestResult = _goodRequestService.GetUserRequest(UserId.Value, id);
+
+            var momentarilyItem = _goodItemService.GetItem(getUserRequestResult.Obj.GoodId);
+
+            var liveLocation = _liveLocationService.GetByRequestId(id);
+
+            var Obj = new LiveLocation();
+
+            var yesterday = DateTime.Now.AddDays(-1);
+
+            var checkRequest = _liveLocationService.checkRequest(id);
+
+            if (liveLocation.ReturnConfirm == false && liveLocation.DeliveryConfirm == true)
+            {
+                if (DateTime.Now <= getUserRequestResult.Obj.EndDate && DateTime.Now >= getUserRequestResult.Obj.StartDate && yesterday < DateTime.Now)
+                {
+                    if (getUserRequestResult.Obj.ApplyForDelivery)
+                    {
+                        if (checkRequest != true)
+                        {
+                            var userNotificationCreateModel = new UserNotificationCreateModel
+                            {
+                                UserId = getUserRequestResult.Obj.UserId,
+                                Text = $"Sharer has started the ride.Click here to track location.",
+                                Url = $"{HttpContext.Request.Url.GetLeftPart(UriPartial.Authority)}/Booking/Return/{id}"
+                            };
+                            _userNotificationService.AddNotification(userNotificationCreateModel);
+
+                            var borrowerCoordinates = await GetCoordinatesAsync(getUserRequestResult.Obj.ShippingAddress);
+
+                            Obj = _liveLocationService.AddLocation(getUserRequestResult.Obj.UserId, id, getUserRequestResult.Obj.OwnerId, momentarilyItem.Obj.Latitude, momentarilyItem.Obj.Longitude, borrowerCoordinates.Item1, borrowerCoordinates.Item2, DeliverBy.SHARER);
+                        }
+                        else
+                        {
+                            var userNotificationCreateModel = new UserNotificationCreateModel
+                            {
+                                UserId = getUserRequestResult.Obj.UserId,
+                                Text = $"Sharer has started the ride.Click here to track location.",
+                                Url = $"{HttpContext.Request.Url.GetLeftPart(UriPartial.Authority)}/Booking/Return/{id}"
+                            };
+                            _userNotificationService.AddNotification(userNotificationCreateModel);
+
+                            Obj = _liveLocationService.GetByRequestId(id);
+                        }
+                    } else
+                    {
+                        Obj = _liveLocationService.GetByRequestId(id);
+                    }
+
+                    LocationViewModel locationViewModel = new LocationViewModel();
+
+                    if (Obj != null)
+                    {
+                        locationViewModel = new LocationViewModel
+                        {
+                            SharerLatitude = Obj.SharerLatitude,
+                            SharerLongitude = Obj.SharerLongitude,
+                            BorrowerLatitude = Obj.BorrowerLatitude,
+                            BorrowerLongitude = Obj.BorrowerLongitude,
+                            LocationId = Obj.LocationId,
+                            DeliverBy = Obj.DeliverBy.ToString(),
+                            RideStarted = Obj.RideStarted,
+                            RequestId = Obj.GoodRequestId,
+                            ReturnConfirm = Obj.ReturnConfirm,
+                            DeliveryConfirm = Obj.DeliveryConfirm
+                        };
+                    }
+
+                    var shape = _shapeFactory.BuildShape(null, locationViewModel, PageName.UserRequest.ToString());
+                    return DisplayShape(shape);
+                }
+                else
+                {
+                    if (yesterday > getUserRequestResult.Obj.EndDate)
+                    {
+                        var userNotificationCreateModel = new UserNotificationCreateModel
+                        {
+                            UserId = UserId.Value,
+                            Text = $"Rental time has been completed.",
+                            Url = $"{HttpContext.Request.Url.GetLeftPart(UriPartial.Authority)}/Listing/Booking/{id}"
+                        };
+                        _userNotificationService.AddNotification(userNotificationCreateModel);
+                    }
+                    else
+                    {
+                        var userNotificationCreateModel = new UserNotificationCreateModel
+                        {
+                            UserId = UserId.Value,
+                            Text = $"Return time has not started yet.",
+                            Url = $"{HttpContext.Request.Url.GetLeftPart(UriPartial.Authority)}/Listing/Booking/{id}"
+                        };
+                        _userNotificationService.AddNotification(userNotificationCreateModel);
+                    }
+                    return RedirectToAction("Booking", new { id = id });
+                }
+            }
+            else if (liveLocation.ReturnConfirm == true && liveLocation.DeliveryConfirm == true)
+            {
+                var userNotificationCreateModel = new UserNotificationCreateModel
+                {
+                    UserId = UserId.Value,
+                    Text = $"Rental has been successfully completed.",
+                    Url = $"{HttpContext.Request.Url.GetLeftPart(UriPartial.Authority)}/Listing/Booking/{id}"
+                };
+                _userNotificationService.AddNotification(userNotificationCreateModel);
+                return RedirectToAction("Booking", new { id = id });
+            }
+            else 
+            {
+                var userNotificationCreateModel = new UserNotificationCreateModel
+                {
+                    UserId = UserId.Value,
+                    Text = $"You cannot start return. The Item is not delivered yet.",
+                    Url = $"{HttpContext.Request.Url.GetLeftPart(UriPartial.Authority)}/Listing/Booking/{id}"
+                };
+                _userNotificationService.AddNotification(userNotificationCreateModel);
+                return RedirectToAction("Booking", new { id = id });
+            }
+        }
+
+        private async Task<(double, double)> GetCoordinatesAsync(string location)
+        {
+            var encodedLocation = Uri.EscapeDataString(location);
+            var url = $"https://maps.googleapis.com/maps/api/geocode/json?address={encodedLocation}&key=AIzaSyB_ex7ilBX-t85Ytd3AG4hbeK6XlAjClmE";
+
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Clear();
+                HttpResponseMessage response = await client.GetAsync(url);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception("Failed to retrieve geocoding data.");
+                }
+
+                var content = await response.Content.ReadAsStringAsync();
+                var jsonObject = JObject.Parse(content);
+
+                var results = jsonObject["results"];
+                if (results.HasValues)
+                {
+                    var result = results[0];
+                    var geometry = result["geometry"];
+                    var locationObj = geometry["location"];
+                    var lat = (double)locationObj["lat"];
+                    var lng = (double)locationObj["lng"];
+                    return (lat, lng);
+                }
+                else
+                {
+                    throw new Exception("No results found for the provided location.");
+                }
+            }
+        }
+
     }
 }

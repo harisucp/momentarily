@@ -1,0 +1,227 @@
+﻿@model Apeek.Common.IShape<Apeek.ViewModels.Models.LocationViewModel>
+
+@{
+    ViewBag.Title = "Location";
+    Layout = "~/Areas/Frontend/Views/Shared/_AccountMenuLayout.cshtml";
+}
+<style>
+    #mymap {
+        min-height: 500px;
+    }
+</style>
+<div class="content">
+    <div class="container account booking-request">
+        <div class="row">
+            <div class="col-md-9 col-md-offset-3 ">
+                <div id="confirmPickup" style="display:none;padding: 10px 0px 10px;">
+                    <a href="@Url.Action("ReturnConfirm", "Booking", new {id = Model.ViewModel.RequestId})" class="btn btn-red">
+                        Confirm Return
+                    </a>
+                </div>
+                <div id="mymap">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBP9cfi8Ngb5bgwFu253vGDaaTihNMGjXg&loading=async&callback=initMap"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script defer>
+    debugger;
+    var rideStarted = "@Model.ViewModel.RideStarted";
+    var deliverBy = "@Model.ViewModel.DeliverBy";
+    var returnConfirm = "@Model.ViewModel.ReturnConfirm";
+    var deliveryConfirm = "@Model.ViewModel.DeliveryConfirm";
+
+    if (deliveryConfirm === "True" && returnConfirm === "False")
+    {
+        if (deliverBy === "BORROWER") {
+            document.getElementById("confirmPickup").style.display = "block";
+            var map;
+            var geocoder;
+            var pickupLatitude = @Model.ViewModel.SharerLatitude;
+            var pickupLongitude = @Model.ViewModel.SharerLongitude;
+            var pickupMarker;
+            var currentMarker;
+            var currentLatitude;
+            var currentLongitude;
+            var destinationLatLng;
+            var directionsService;
+            var directionsDisplay;
+
+            const watchID = navigator.geolocation.watchPosition(success);
+            console.log(watchID);
+            function success(pos) {
+                var crd = pos.coords;
+                currentLatitude = crd.latitude;
+                currentLongitude = crd.longitude;
+                updateLiveLocation(currentLatitude, currentLongitude);
+            };
+
+            function initMap() {
+                directionsService = new google.maps.DirectionsService();
+                directionsDisplay = new google.maps.DirectionsRenderer();
+                map = new google.maps.Map(document.getElementById('mymap'), {
+                    zoom: 13,
+                    center: {
+                        lat: pickupLatitude,
+                        lng: pickupLongitude
+                    },
+                    mapTypeId: google.maps.MapTypeId.ROADMAP,
+                    draggable: true
+                });
+                directionsDisplay.setMap(map);
+
+                pickupMarker = new google.maps.Marker({
+                    position: { lat: pickupLatitude, lng: pickupLongitude },
+                    map: map,
+                    title: 'Pickup Location',
+                    draggable: true,
+                    zoomControl: true
+                });
+
+                currentLatitude = pickupLatitude;
+                currentLongitude = pickupLongitude;
+
+                setInterval(updateCurrentLocation, 9000);
+
+                destinationLatLng = new google.maps.LatLng(pickupLatitude, pickupLongitude);
+            }
+
+            function updateCurrentLocation() {
+                if (currentMarker) {
+                    currentMarker.setPosition({ lat: currentLatitude, lng: currentLongitude });
+                } else {
+                    currentMarker = new google.maps.Marker({
+                        position: { lat: currentLatitude, lng: currentLongitude },
+                        map: map,
+                        title: 'Current Location',
+                        draggable: true,
+                        zoomControl: true
+                    });
+                }
+
+                updateLiveLocation(currentLatitude, currentLongitude);
+
+                calculateAndDisplayRoute();
+
+                if (currentLatitude === pickupLatitude && currentLongitude === pickupLongitude) {
+                    alert("You have reached the destination!");
+                }
+            }
+
+            function calculateAndDisplayRoute() {
+                directionsService.route({
+                    origin: { lat: currentLatitude, lng: currentLongitude },
+                    destination: destinationLatLng,
+                    travelMode: google.maps.TravelMode.DRIVING
+                }, function (result, status) {
+                    if (status === google.maps.DirectionsStatus.OK) {
+                        directionsDisplay.setDirections(result);
+                    } else {
+                        console.error('Directions request failed due to ' + status);
+                    }
+                });
+            }
+
+            function updateLiveLocation(lat, lng) {
+                var locationId = "@Model.ViewModel.LocationId";
+                console.log(`Update Hit ${lat} ${lng}`);
+                $.ajax({
+                    url: `/Booking/UpdateLocation?locationId=${locationId}&lat=${lat}&lng=${lng}`,
+                    type: 'POST',
+                    async: true,
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log(data.status);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.error("AJAX Error:", textStatus, errorThrown);
+                    }
+                });
+            }
+        }
+        else if (deliverBy === "SHARER") {
+            var map;
+            var sourceMarker;
+            var destinationMarker;
+            var destinationLatLng;
+            var directionsService;
+            var directionsDisplay;
+            var borrowerLatitude = @Model.ViewModel.BorrowerLatitude;
+            var borrowerLongitude = @Model.ViewModel.BorrowerLongitude;
+
+            function updateLiveLocation() {
+                var locationId = "@Model.ViewModel.LocationId";
+                $.ajax({
+                    url: `/Booking/Location?locationId=${locationId}`,
+                    type: 'POST',
+                    async: true,
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    success: function (data) {
+                        destinationLatLng = new google.maps.LatLng(data.lat, data.lng);
+                        updateDestinationMarker();
+                        calculateAndDisplayRoute();
+                    },
+                    error: function () {
+                        console.log("error");
+                    }
+                });
+            }
+
+            function initMap() {
+                directionsService = new google.maps.DirectionsService();
+                directionsDisplay = new google.maps.DirectionsRenderer();
+
+
+                map = new google.maps.Map(document.getElementById('mymap'), {
+                    zoom: 13,
+                    center: { lat: borrowerLatitude, lng: borrowerLongitude },
+                    mapTypeId: google.maps.MapTypeId.ROADMAP,
+                    draggable: true
+                });
+
+                sourceMarker = new google.maps.Marker({
+                    position: { lat: borrowerLatitude, lng: borrowerLongitude },
+                    map: map,
+                    title: 'Your Location',
+                    draggable: true,
+                    zoomControl: true
+                });
+
+                directionsDisplay.setMap(map);
+
+                destinationMarker = new google.maps.Marker({
+                    map: map,
+                    title: 'Rider Location',
+                    draggable: true,
+                    zoomControl: true
+                });
+
+                setInterval(updateLiveLocation, 9000);
+            }
+
+            function calculateAndDisplayRoute() {
+                directionsService.route({
+                    origin: sourceMarker.getPosition(),
+                    destination: destinationMarker.getPosition(),
+                    travelMode: google.maps.TravelMode.DRIVING
+                }, function (result, status) {
+                    if (status === google.maps.DirectionsStatus.OK) {
+                        directionsDisplay.setDirections(result);
+                    } else {
+                        console.log('Directions request failed due to ' + status);
+                    }
+                });
+            }
+
+            function updateDestinationMarker() {
+                destinationMarker.setPosition(destinationLatLng);
+            }
+        }
+    }
+</script>

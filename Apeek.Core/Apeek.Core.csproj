@@ -134,6 +134,7 @@
     <Compile Include="Services\IGoodService.cs" />
     <Compile Include="Services\IHealthDataService.cs" />
     <Compile Include="Services\IImageDataService.cs" />
+    <Compile Include="Services\ILiveLocationService.cs" />
     <Compile Include="Services\Impl\AuditService.cs" />
     <Compile Include="Services\Impl\CAMasterBulkEmailService.cs" />
     <Compile Include="Services\Impl\CategoryService.cs" />
@@ -160,6 +161,7 @@
     <Compile Include="Services\Impl\Img\UpdateUserImage.cs" />
     <Compile Include="Services\Impl\Img\UpdateGoodImage.cs" />
     <Compile Include="Services\Impl\Img\WriteImage.cs" />
+    <Compile Include="Services\Impl\LiveLocationService.cs" />
     <Compile Include="Services\Impl\PayPalPaymentService.cs" />
     <Compile Include="Services\Impl\StockDataService.cs" />
     <Compile Include="Services\Impl\TwilioNotificationService.cs" />

@@ -121,6 +121,7 @@
     <Compile Include="Models\Impl\ExternalLogin.cs" />
     <Compile Include="Models\Impl\GoodRequestRankInsertModel.cs" />
     <Compile Include="Models\Impl\GoodRequestReviews.cs" />
+    <Compile Include="Models\Impl\LocationViewModel.cs" />
     <Compile Include="Models\Impl\MostRentedItems.cs" />
     <Compile Include="Models\Impl\PaymentResult.cs" />
     <Compile Include="Models\Impl\PriceViewModel.cs" />

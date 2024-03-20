@@ -148,6 +148,7 @@
     <Compile Include="Entities\HistoryUser.cs" />
     <Compile Include="Entities\IpAddressBlackList.cs" />
     <Compile Include="Entities\IUserImg.cs" />
+    <Compile Include="Entities\LiveLocation.cs" />
     <Compile Include="Entities\Location.cs" />
     <Compile Include="Entities\LocationLang.cs" />
     <Compile Include="Entities\LocationServiceContent.cs" />
@@ -244,6 +245,7 @@
     <Compile Include="Mappings\HistoryPhoneNumberMap.cs" />
     <Compile Include="Mappings\HistoryUserMap.cs" />
     <Compile Include="Mappings\IpAddressBlackListMap.cs" />
+    <Compile Include="Mappings\LiveLocationMap.cs" />
     <Compile Include="Mappings\LocationLangMap.cs" />
     <Compile Include="Mappings\LocationMap.cs" />
     <Compile Include="Mappings\LocationServiceContentMap.cs" />

@@ -82,6 +82,7 @@
     <Compile Include="Common\RepositoryHelper.cs" />
     <Compile Include="Repositories\IGoodShareDateRepository.cs" />
     <Compile Include="Repositories\Impl\GoodShareDateRepository.cs" />
+    <Compile Include="Repositories\Impl\RepositoryLiveLocation.cs" />
     <Compile Include="Repositories\Impl\RepositoryTwilioLogMessages.cs" />
     <Compile Include="Repositories\Impl\RepositoryCancelledRequest.cs" />
     <Compile Include="Repositories\Impl\RepositorySendyList.cs" />
@@ -123,6 +124,7 @@
     <Compile Include="Repositories\Impl\RepositoryWebhookReponse.cs" />
     <Compile Include="Repositories\Impl\RepositoryTwilioMessage.cs" />
     <Compile Include="Repositories\IRepositoryCancelledRequest.cs" />
+    <Compile Include="Repositories\IRepositoryLiveLocation.cs" />
     <Compile Include="Repositories\IRepositorySendyList.cs" />
     <Compile Include="Repositories\IRepositoryCAMasterBulkEmail.cs" />
     <Compile Include="Repositories\IRepositoryChatAnswers.cs" />
