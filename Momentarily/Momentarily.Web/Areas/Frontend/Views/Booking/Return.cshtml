@@ -85,7 +85,7 @@
                 currentLatitude = pickupLatitude;
                 currentLongitude = pickupLongitude;
 
-                setInterval(updateCurrentLocation, 9000);
+                setInterval(updateCurrentLocation, 2000);
 
                 destinationLatLng = new google.maps.LatLng(pickupLatitude, pickupLongitude);
             }
@@ -202,7 +202,7 @@
                     zoomControl: true
                 });
 
-                setInterval(updateLiveLocation, 9000);
+                setInterval(updateLiveLocation, 2000);
             }
 
             function calculateAndDisplayRoute() {

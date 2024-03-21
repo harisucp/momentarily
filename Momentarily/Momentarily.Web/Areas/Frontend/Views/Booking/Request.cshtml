@@ -295,7 +295,6 @@
     };
 </script>
 <script>
-    debugger;
     function isTodayAndWithin30Min(startDate, startTime, endDate, endTime) {
         var startDateTime = parseCombinedDateTime(startDate, startTime);
         var endDateTime = parseCombinedDateTime(endDate, endTime);
@@ -337,12 +336,10 @@
     } else if (deliveryConfirm === "True")
     {
         var yesterday = getYesterday();
-        console.log(yesterday);
-        console.log(todaysDate <= endDateTime );
-        console.log(todaysDate >= startDateTime);
-        console.log(yesterday < endDateTime);
-        console.log(todaysDate <= endDateTime && todaysDate >= startDateTime && yesterday < endDateTime);
-        if (todaysDate <= endDateTime && todaysDate >= startDateTime && yesterday < endDateTime)
+
+        const twentyFourHoursBeforeEndDateTime = new Date(endDateTime.getTime() - (24 * 60 * 60 * 1000));
+
+        if (todaysDate <= endDateTime && todaysDate >= startDateTime && todaysDate >= twentyFourHoursBeforeEndDateTime)
         {
             if (applyForDelivery === "True") {
                 document.getElementById("returntrackLocation").style.display = "block";

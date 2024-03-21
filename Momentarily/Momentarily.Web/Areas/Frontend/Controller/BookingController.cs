@@ -462,11 +462,13 @@ namespace Momentarily.Web.Areas.Frontend.Controller
             
             var yesterday = DateTime.Now.AddDays(-1);
 
+            TimeSpan timeDifference = DateTime.Now - getUserRequestResult.Obj.EndDate;
+
             var checkRequest = _liveLocationService.checkRequest(id);
 
             if (liveLocation.ReturnConfirm == false && liveLocation.DeliveryConfirm == true)
             {
-                if (DateTime.Now <= getUserRequestResult.Obj.EndDate && DateTime.Now >= getUserRequestResult.Obj.StartDate && yesterday < DateTime.Now)
+                if (DateTime.Now <= getUserRequestResult.Obj.EndDate && DateTime.Now >= getUserRequestResult.Obj.StartDate && timeDifference.TotalHours <= 24 && yesterday < DateTime.Now)
                 {
                     if (getUserRequestResult.Obj.ApplyForDelivery == true)
                     {
