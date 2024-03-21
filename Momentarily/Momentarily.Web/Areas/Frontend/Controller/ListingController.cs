@@ -27,6 +27,7 @@ using System.Globalization;
 using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 using System.Net.Http;
+using System.Configuration;
 
 namespace Momentarily.Web.Areas.Frontend.Controller
 {
@@ -48,6 +49,8 @@ namespace Momentarily.Web.Areas.Frontend.Controller
         private readonly ITwilioNotificationService _twilioNotificationService;
         private readonly IUserNotificationService _userNotificationService;
         private readonly ILiveLocationService _liveLocationService;
+        private string GoogleApiKey = ConfigurationManager.AppSettings["Google.ApiKey"];
+
         public ListingController(IMomentarilyItemDataService itemDataService,
             IMomentarilyItemTypeService typeService, ICategoryService categoryService,
             IMomentarilyGoodRequestService goodRequestService, IMomentarilyUserMessageService userMessageService,
@@ -1044,7 +1047,7 @@ namespace Momentarily.Web.Areas.Frontend.Controller
         private async Task<(double, double)> GetCoordinatesAsync(string location)
         {
             var encodedLocation = Uri.EscapeDataString(location);
-            var url = $"https://maps.googleapis.com/maps/api/geocode/json?address={encodedLocation}&key=AIzaSyB_ex7ilBX-t85Ytd3AG4hbeK6XlAjClmE";
+            var url = $"https://maps.googleapis.com/maps/api/geocode/json?address={encodedLocation}&key={GoogleApiKey}";
 
             using (var client = new HttpClient())
             {

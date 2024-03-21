@@ -25,6 +25,7 @@ using System.Web;
 using System.Net.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Configuration;
 
 namespace Momentarily.Web.Areas.Frontend.Controller
 {
@@ -42,6 +43,7 @@ namespace Momentarily.Web.Areas.Frontend.Controller
         private readonly IUserDataService<MomentarilyItem> _userDataService;
         private readonly PinPaymentService _pinPaymentService;
         private readonly ILiveLocationService _liveLocationService;
+        private string GoogleApiKey = ConfigurationManager.AppSettings["Google.ApiKey"];
         public BookingController(IMomentarilyGoodRequestService goodRequestService, IMomentarilyItemDataService goodItemService, IPaymentService paymentService, IMomentarilyUserMessageService userMessageService,
             ISendMessageService emailMessageService, IAccountDataService accountDataService, ITwilioNotificationService twilioNotificationService, IUserNotificationService userNotificationService, IUserDataService<MomentarilyItem> userDataService, ILiveLocationService liveLocationService)
         {
