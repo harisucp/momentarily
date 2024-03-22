@@ -239,7 +239,7 @@
                             </a>
                         </div>
                         <div id="returntrackLocation" style="display:none;padding: 10px 0px 10px;">
-                            <a href="@Url.Action("Location", "Booking", new {id = Model.ViewModel.Id})" class="btn btn-red">
+                            <a href="@Url.Action("Return", "Booking", new {id = Model.ViewModel.Id})" class="btn btn-red">
                                 Track Location
                             </a>
                         </div>
@@ -295,6 +295,7 @@
     };
 </script>
 <script>
+    debugger;
     function isTodayAndWithin30Min(startDate, startTime, endDate, endTime) {
         var startDateTime = parseCombinedDateTime(startDate, startTime);
         var endDateTime = parseCombinedDateTime(endDate, endTime);
@@ -341,13 +342,13 @@
 
         if (todaysDate <= endDateTime && todaysDate >= startDateTime && todaysDate >= twentyFourHoursBeforeEndDateTime)
         {
-            if (applyForDelivery === "True") {
+            if (applyForDelivery === "True" && returnConfirm === "False") {
                 document.getElementById("returntrackLocation").style.display = "block";
             }
             else if (returnConfirm === "False" && applyForDelivery === "False") {
                 document.getElementById("startReturn").style.display = "block";
             }
-            else if (returnConfirm === "True" && deliveryConfirm === "True") {
+            else if (returnConfirm === "True") {
                 document.getElementById("rentSuccessfully").style.display = "block";
             }
         }
